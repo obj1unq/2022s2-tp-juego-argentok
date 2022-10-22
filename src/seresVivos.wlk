@@ -21,7 +21,7 @@ class Mortal inherits Solido {
 		game.removeVisual(self)
 	}
 	
-	method recivirDanio(dmg) {
+	method recibirDanio(dmg) {
 		vida -= dmg
 	}
 	
@@ -29,7 +29,9 @@ class Mortal inherits Solido {
 	
 	method danio()
 	
-	method estaEnfrente()
+	method estaEnfrente() {
+		
+	}
 }
 
 
@@ -38,24 +40,40 @@ object hero inherits Mortal {
 	var property position = game.center()
 	var property image = "pepita.png"
 	const inventario = []
-	const equipo = []
+	var armaduraEquipada = null
+	var armaEquipada = null
 	
 	
+	method armaEquipada(arma) {
+		armaEquipada = arma 
+	}
 	
+	method armaduraEquipada(armadura) {
+		armaduraEquipada = armadura 
+	}
 
 	method agarrarItem(item) {
 		item.serAgarrado()
 		inventario.add(item)
 	}
 	
+	method equiparItem(item) {
+	 
+	}
+	
 	override method danio() {
-		equipo.sum(arma => arma.puntosDeDanio())
+		return armaEquipada.puntosDeDanio()
+	}
+	
+	method armadura() {
+		return armaduraEquipada.puntosDeArmadura()
 	}
 	
 	override method atacar() {
 		//acá va a ir el visual para el sprite de atacar
-		estaEnfrente().recivirDanio(self.danio())
+		estaEnfrente().recibirDanio(self.danio())
 	}
+	
 	
 }
 
