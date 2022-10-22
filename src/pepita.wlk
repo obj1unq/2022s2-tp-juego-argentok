@@ -1,9 +1,15 @@
 import wollok.game.*
 
-object pepita {
+object hero inherits Mortal {
+	
+	var property position = game.center()
+	var property image = "pepita.png"
+	var inventario = []
+	
+	
 
-	method position() = game.center()
-
-	method image() = "pepita.png"
-
+	method agarrarItem() {
+		item.serAgarrado()
+	}
 }
+

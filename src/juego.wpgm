@@ -1,8 +1,10 @@
 import wollok.game.*
 import pepita.*
 
+
 program juego {
-	game.title("Juego Base")
-	game.addVisual(pepita)
+	
+	game.title("Argentok")
+	game.addVisualCharacter(hero)
 	game.start()
 }
