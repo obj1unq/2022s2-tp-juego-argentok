@@ -1,6 +1,27 @@
+import wollok.game.*
+import items.*
+import comandos.*
+import seresVivos.*
 
-test "testX" {
 
-	assert.that(true)
+ 
+describe "Prubas a Tito el heroe" {
+	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada())
+	
+	method initialize() {
+		
+		game.width(5)
+		game.height(5)
+	}
+/*
+	test "Tito tiene adelante a enemigo" {
+		assert.equals([enemigo], tito.estaEnfrente(derecha))
+	}
 
+	test "Tito golpea a un Enemigo" {
+		tito.atacar()
+		assert.equals(200, enemigo.vida())
+	}
+*/
+	
 }

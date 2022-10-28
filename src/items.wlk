@@ -1,6 +1,6 @@
 class Item  {
 	
-	var valor
+	//var valor
 	
 }
 
@@ -14,7 +14,7 @@ class Equipamento inherits Item {
 	
 }
 
-class Armas inherits Equipamento {
+class Arma inherits Equipamento {
 	
 	var puntosDeDanio
 	
@@ -27,3 +27,5 @@ class Armadura inherits Equipamento {
 	
 	method puntosDeArmadura() = puntosDeArmadura
 }
+
+
