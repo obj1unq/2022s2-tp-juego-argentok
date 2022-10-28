@@ -1,10 +1,11 @@
 import wollok.game.*
 import seresVivos.*
+import comandos.*
 
 
 program juego {
 	
 	game.title("Argentok")
-	game.addVisualCharacter(hero)
+	pistaDePrueba.prueba1()
 	game.start()
 }
