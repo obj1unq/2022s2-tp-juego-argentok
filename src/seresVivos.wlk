@@ -71,7 +71,7 @@ object hero inherits Mortal {
 	
 	override method atacar() {
 		//acá va a ir el visual para el sprite de atacar
-		estaEnfrente().recibirDanio(self.danio())
+		//estaEnfrente().recibirDanio(self.danio())
 	}
 	
 	

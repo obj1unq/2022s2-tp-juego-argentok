@@ -4,12 +4,14 @@ class Item  {
 	
 }
 
-class Recurso inherits Item {
+class Recurso inherits Item 
+{
 	
 	
 }
 
-class Equipamento inherits Item {
+class Equipamento inherits Item 
+{
 	
 	
 }
