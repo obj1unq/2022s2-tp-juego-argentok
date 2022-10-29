@@ -2,40 +2,37 @@ import wollok.game.*
 import items.*
 import comandos.*
 
-class Solido {
+
+class Mortal {
 	
+	var property vida = 0
+	var ultimaDireccion = null
 	var property position = game.center()
 	var property image = "pepita.png"
 	
+	method solido() = true
+	
 	method puedoPasar(direccion) {
-		return self.siguientePosicionEsVacia(direccion) and self.validarEjeX(direccion) and self.validarEjeY(direccion)
+		return self.noHaySolidosAdelante(direccion) and self.validarEjeX(direccion) and self.validarEjeY(direccion)
 	}
 
-	method siguientePosicionEsVacia(direccion) {
-		return game.getObjectsIn(direccion.siguiente(self.position())).isEmpty()
+	method noHaySolidosAdelante(direccion) {
+		return self.losSolidos(game.getObjectsIn(direccion.siguiente(self.position()))).isEmpty()
 	}
 	
+	method losSolidos(lista) {
+		return lista.filter({cosa => cosa.solido()})
+	}
 	
 	// los números finales a los siguientes metodos deben ser cambiados dependiendo el tamaño que tenga el mapa 
 	method validarEjeX(direccion) {
-		// return direccion.siguiente(self.position()).x() != -1 and direccion.siguiente(self.position()).x() != 10
 		return direccion.siguiente(position).x().between(0, 4)
 	}
 
 	method validarEjeY(direccion) {
-		// return direccion.siguiente(self.position()).y() != -1 and direccion.siguiente(self.position()).y() != 10
 		return direccion.siguiente(position).y().between(0, 4)		
 	}
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-}
-
-
-class Mortal inherits Solido {
-	
-	var property vida = 0
-	var ultimaDireccion = derecha
-	
-	
 	
 	method morir() {
 		if (vida <= 0) {
@@ -47,6 +44,8 @@ class Mortal inherits Solido {
 		game.removeVisual(self)
 	}
 	
+	method gameOver(){}
+	
 	method recibirDanio(dmg) {
 		vida -= dmg
 	}
@@ -55,12 +54,15 @@ class Mortal inherits Solido {
 	
 	method danio()
 	
-	method estaEnfrente(direccion) {
-		return game.getObjectsIn(direccion.siguiente(self.position()))
+	method estaEnfrente() {
+		return game.getObjectsIn(ultimaDireccion.siguiente(self.position()))
 	}
 	
 	method mover(direccion)
 	
+	method ultimaDireccion(direccion) {
+		ultimaDireccion = direccion
+	} 
 	
 }
 
@@ -71,9 +73,7 @@ class Heroe inherits Mortal {
 	const farim = [0,0,0,0,0] 
 	var armaduraEquipada = null
 	var armaEquipada = null
-	
-	
-	
+
 	
 	override method mover(direccion) {
 		if (self.puedoPasar(direccion)) {
@@ -81,10 +81,6 @@ class Heroe inherits Mortal {
 		}
 		self.ultimaDireccion(direccion)
 	}
-	
-	method ultimaDireccion(direccion) {
-		ultimaDireccion = direccion
-	} 
 	
 	method armaEquipada(arma) {
 		armaEquipada = arma 
@@ -94,11 +90,14 @@ class Heroe inherits Mortal {
 		armaduraEquipada = armadura 
 	}
 
-	method agarrarItem(item) {
-		item.serAgarrado()
-		inventario.add(item)
+	method interactuar(cosa) {
+		cosa.serInteractuado(self)
 	}
 	
+	method agarrarItem(item) {
+		inventario.add(item)
+	}
+	 
 	method equiparItem(item) {
 	 
 	}
@@ -114,23 +113,20 @@ class Heroe inherits Mortal {
 	
 	override method atacar() {
 		//acá va a ir el visual para el sprite de atacar
-		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
+		self.estaEnfrente().first().recibirDanio(self.danio())
 	}
 }
 
-//esto esa asi solamente con fines de prueba
-object enemigo {
+
+class Enemigo inherits Mortal {
 	
-	var property position = game.at(2,2)
-	var vida = 300
-	var property image = "pepita.png"
 	
-	method recibirDanio(dmg) {
-		vida -= dmg
-		if (vida <= 0) game.removeVisual(self)
+	override method recibirDanio(dmg) {
+		super(dmg)
+		self.morir() 
 	}
 	
-	method vida() = vida
+	override method mover(asd){}
+	override method atacar(){}
+	override method danio() {}
 }
-
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

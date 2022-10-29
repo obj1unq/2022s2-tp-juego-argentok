@@ -1,7 +1,19 @@
+import wollok.game.*
+import seresVivos.*
+import comandos.*
+
 class Item  {
 	
-	//var valor
+	var valor = 0
+	var property image = "wheat.png"
+	const property position = game.at(3,3)
 	
+	method solido() = false
+	
+	method serInteractuado(personaje){
+		personaje.agarrarItem(self)
+		game.removeVisual(self)
+	}
 }
 
 class Recurso inherits Item {
