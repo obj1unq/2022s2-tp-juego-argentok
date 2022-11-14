@@ -1,10 +1,20 @@
 import wollok.game.*
 import seresVivos.*
+import construccion.*
 
 
 program juego {
 	
+	game.height(10)
+	game.width(20)
+	game.boardGround("fondo.png")
 	game.title("Argentok")
 	game.addVisualCharacter(hero)
+	game.addVisual(casaDeHero)
+	game.addVisual(casaDePesca)
+	game.addVisual(casaDeArmas)
+	game.addVisual(casaDeMago)
+	
 	game.start()
+	// game.boardGround("fondo.jpg")
 }

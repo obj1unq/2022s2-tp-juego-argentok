@@ -39,7 +39,7 @@ class MateriaPrima inherits Solido
 class Piedra inherits MateriaPrima
 {
 	
-	//vida = vida1
+	//vida =	 vida1
 	
 	method vida()
 	{

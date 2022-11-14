@@ -1,4 +1,5 @@
-class Item  {
+class Item  
+{
 	
 	var valor
 	

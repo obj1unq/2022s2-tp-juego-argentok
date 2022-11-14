@@ -38,7 +38,7 @@ class Mortal inherits Solido {
 object hero inherits Mortal {
 	
 	var property position = game.center()
-	var property image = "pepita.png"
+	var property image = "hero.png"
 	const inventario = []
 	var armaduraEquipada = null
 	var armaEquipada = null
@@ -76,4 +76,6 @@ object hero inherits Mortal {
 	
 	
 }
+
+
 
