@@ -13,8 +13,7 @@ class Construccion inherits Solido {
 
 object casaDePesca inherits Construccion{
 	
-	const property image = "casaDePesca.png"
-	const property position = game.at(15, 6)   
+	// Esto deberia de estar en clase construccion e invocarlo con un new supongo
 	
 	
 	method serUtilizado()
@@ -24,9 +23,7 @@ object casaDePesca inherits Construccion{
 }
 
 object casaDeArmas inherits Construccion{
-	
-	const property image = "casaDeArmas.png"
-	const property position = game.at(17, 4)   
+
 	
 	method serUtilizado()
 	{
@@ -36,8 +33,6 @@ object casaDeArmas inherits Construccion{
 
 object casaDeHero inherits Construccion{
 	
-	const property image = "casaDeHero.png"
-	const property position = game.at(2, 6)   
 	
 	method serUtilizado()
 	{
@@ -49,9 +44,7 @@ object casaDeHero inherits Construccion{
 
 object casaDeMago inherits Construccion{
 	
-	const property image = "casaDeMago.png"
-	const property position = game.at(1, -1)   
-	
+
 	method serUtilizado()
 	{
 		
