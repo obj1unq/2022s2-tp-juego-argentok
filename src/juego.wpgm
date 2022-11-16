@@ -20,14 +20,14 @@ program juego {
 	casaDeHero.image("casaDeHero.png") 
 	casaDeHero.position(game.at(2, 6)  )
 	game.addVisual(casaDeHero)
-	casaDeHero.image("casaDePesca.png") 
-	casaDeHero.position(game.at(2, 6)  )
-	game.addVisual(casaDePesca)
-	casaDeHero.image("casaDeArmas.png") 
-	casaDeHero.position(game.at(2, 6)  )
+	//casaDePesca.image("casaDePesca.png") 
+	// casaDeHero.position(game.at(1, 2)  ) mejor que este en otra parte del mapa
+	//game.addVisual(casaDePesca)
+	casaDeArmas.image("casaDeArmas.png") 
+	casaDeArmas.position(game.at(15, 6)  )
 	game.addVisual(casaDeArmas)
-	casaDeHero.image("casaDeMago.png") 
-	casaDeHero.position(game.at(2, 6)  )
+	casaDeMago.image("casaDeMago.png") 
+	casaDeMago.position(game.at(2, 0)  )
 	game.addVisual(casaDeMago)
 	
 	
