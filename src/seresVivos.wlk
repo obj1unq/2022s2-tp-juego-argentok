@@ -67,6 +67,10 @@ class Mortal inherits Solido {
 
 class Heroe inherits Mortal {
 	
+	// var property position = game.center()
+	// var property image = "hero.png"
+	
+	
 	const inventario = []
 	const farim = [0,0,0,0,0] 
 	var armaduraEquipada = null
@@ -114,9 +118,16 @@ class Heroe inherits Mortal {
 	
 	override method atacar() {
 		//acá va a ir el visual para el sprite de atacar
+
+		//estaEnfrente().recibirDanio(self.danio())
 		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
+
 	}
 }
+
+
+
+
 
 //esto esa asi solamente con fines de prueba
 object enemigo {
@@ -133,4 +144,4 @@ object enemigo {
 	method vida() = vida
 }
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

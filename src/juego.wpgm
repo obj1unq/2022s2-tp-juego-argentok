@@ -1,11 +1,38 @@
 import wollok.game.*
 import seresVivos.*
+import construccion.*
 import comandos.*
+
 
 
 program juego {
 	
+	game.height(10)
+	game.width(20)
+	game.boardGround("fondo.png")
 	game.title("Argentok")
+	
+	const hero = new Heroe(image ="hero.png", position = game.center() )
+	game.addVisualCharacter(hero)
+	
+	// No se como implementar todas estas instancias, supongo que en el metodo o clase que invoque a LOS NIVELES
+	
+	casaDeHero.image("casaDeHero.png") 
+	casaDeHero.position(game.at(2, 6)  )
+	game.addVisual(casaDeHero)
+	casaDeHero.image("casaDePesca.png") 
+	casaDeHero.position(game.at(2, 6)  )
+	game.addVisual(casaDePesca)
+	casaDeHero.image("casaDeArmas.png") 
+	casaDeHero.position(game.at(2, 6)  )
+	game.addVisual(casaDeArmas)
+	casaDeHero.image("casaDeMago.png") 
+	casaDeHero.position(game.at(2, 6)  )
+	game.addVisual(casaDeMago)
+	
+	
+	
 	pistaDePrueba.prueba1()
 	game.start()
+
 }

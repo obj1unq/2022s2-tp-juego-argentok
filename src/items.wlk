@@ -1,15 +1,18 @@
-class Item  {
+class Item  
+{
 	
 	//var valor
 	
 }
 
-class Recurso inherits Item {
+class Recurso inherits Item 
+{
 	
 	
 }
 
-class Equipamento inherits Item {
+class Equipamento inherits Item 
+{
 	
 	
 }
