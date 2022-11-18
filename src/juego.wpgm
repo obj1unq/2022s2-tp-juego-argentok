@@ -8,31 +8,11 @@ import comandos.*
 program juego {
 	
 	game.height(10)
-	game.width(20)
-	game.boardGround("fondo.png")
-	game.title("Argentok")
+	game.width(15)
 	
-	const hero = new Heroe(image ="hero.png", position = game.center() )
-	game.addVisualCharacter(hero)
-	
-	// No se como implementar todas estas instancias, supongo que en el metodo o clase que invoque a LOS NIVELES
-	
-	casaDeHero.image("casaDeHero.png") 
-	casaDeHero.position(game.at(2, 6)  )
-	game.addVisual(casaDeHero)
-	//casaDePesca.image("casaDePesca.png") 
-	// casaDeHero.position(game.at(1, 2)  ) mejor que este en otra parte del mapa
-	//game.addVisual(casaDePesca)
-	casaDeArmas.image("casaDeArmas.png") 
-	casaDeArmas.position(game.at(15, 6)  )
-	game.addVisual(casaDeArmas)
-	casaDeMago.image("casaDeMago.png") 
-	casaDeMago.position(game.at(2, 0)  )
-	game.addVisual(casaDeMago)
-	
-	
-	
+	game.title("Argentok")	
 	pistaDePrueba.prueba1()
 	game.start()
+
 
 }

@@ -19,12 +19,12 @@ class Solido {
 	// los números finales a los siguientes metodos deben ser cambiados dependiendo el tamaño que tenga el mapa 
 	method validarEjeX(direccion) {
 		// return direccion.siguiente(self.position()).x() != -1 and direccion.siguiente(self.position()).x() != 10
-		return direccion.siguiente(position).x().between(0, 4)
+		return direccion.siguiente(position).x().between(0, 14)
 	}
 
 	method validarEjeY(direccion) {
 		// return direccion.siguiente(self.position()).y() != -1 and direccion.siguiente(self.position()).y() != 10
-		return direccion.siguiente(position).y().between(0, 4)		
+		return direccion.siguiente(position).y().between(0, 9)		
 	}
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
