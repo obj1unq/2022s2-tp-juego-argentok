@@ -5,13 +5,18 @@ import escenarios.*
 
 
 object configuracion {
-
+	
+	const nuevoMago = new Heroe(faime=[15,18,30,0,0], image="Mago.png", oro = 0)
+	const nuevoGuerrero = new Heroe(faime=[20,18,15,0,0], image="Peleador.png", oro = 0)
+	
 	method comandos(heroe) {
 		keyboard.left().onPressDo({ heroe.mover(izquierda)})
 		keyboard.right().onPressDo({ heroe.mover(derecha)})
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
+		keyboard.m().onPressDo({nuevoMago})
+		keyboard.g().onPressDo({nuevoGuerrero})
 	}
 
 

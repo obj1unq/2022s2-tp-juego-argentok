@@ -73,9 +73,10 @@ class Heroe inherits Mortal {
 	
 	
 	const inventario = []
-	const farim = [0,0,0,0,0] 
+	const faime = [0,0,0,0,0] //fuerza, agilidad, inteligencia, mana, experiencia
 	var armaduraEquipada = null
 	var armaEquipada = null
+	var property oro
 	
 	
 	
@@ -109,11 +110,11 @@ class Heroe inherits Mortal {
 	}
 	
 	override method danio() {
-		return armaEquipada.puntosDeDanio() + 10 * farim.first()
+		return armaEquipada.puntosDeDanio() + 10 * faime.first()
 	}
 	
 	method armadura() {
-		return armaduraEquipada.puntosDeArmadura() + 5 * farim.get(2)
+		return armaduraEquipada.puntosDeArmadura() + 5 * faime.get(2)
 	}
 	
 	
@@ -123,6 +124,16 @@ class Heroe inherits Mortal {
 		//estaEnfrente().recibirDanio(self.danio())
 		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
 
+	}
+	
+	method dejarItemEnUnaCasa(item, casa){
+		inventario.remove(item)
+		casa.depositar(item)
+	}
+	
+	method agarrarItemEnUnaCasa(item, casa){
+		casa.retirar(item)
+		inventario.add(item)
 	}
 	
 	// METODOS DE CAMBIO DE MAPA
