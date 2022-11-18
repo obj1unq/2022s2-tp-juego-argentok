@@ -67,3 +67,4 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	}
 }
 
+
