@@ -115,7 +115,7 @@ class CasaDeArmaduras inherits Casas {
 	
 
 	override method puedeInteractuar(serVivo){
-		return !(serVivo == guerrero)
+		return !(serVivo == guerrero) 
 	}
 
 	override method comprar(item){

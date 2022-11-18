@@ -3,7 +3,7 @@ import items.*
 import comandos.*
 import escenarios.*
 
-class Solido {
+class Solido { 
 	
 	var property position = game.center()
 	var property image = "pepita.png"
