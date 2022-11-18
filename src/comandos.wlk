@@ -14,6 +14,7 @@ object configuracion {
 		keyboard.a().onPressDo({ heroe.atacar()})
 	}
 
+
 }
 
 object derecha {

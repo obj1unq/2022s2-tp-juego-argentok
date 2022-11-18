@@ -1,6 +1,7 @@
 import wollok.game.*
 import items.*
 import comandos.*
+import escenarios.*
 
 class Solido {
 	
@@ -123,6 +124,19 @@ class Heroe inherits Mortal {
 		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
 
 	}
+	
+	// METODOS DE CAMBIO DE MAPA
+	
+	// TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
+	
+	/* 
+	
+	method cambioDeMapa(direccion){
+		if (game.getObjectsIn(direccion.siguiente(self.position())) == #{}){
+			
+		}
+	}
+	*/
 }
 
 

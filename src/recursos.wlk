@@ -2,7 +2,7 @@ import seresVivos.*
 import wollok.game.*
 
 
-class MateriaPrima inherits Solido
+class Recurso inherits Solido
 {
 	
 	var vida
@@ -36,7 +36,7 @@ class MateriaPrima inherits Solido
 }
 
 
-class Piedra inherits MateriaPrima
+class Piedra inherits Recurso
 {
 	
 	//vida =	 vida1
