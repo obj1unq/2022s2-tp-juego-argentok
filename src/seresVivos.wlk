@@ -126,15 +126,31 @@ class Heroe inherits Mortal {
 
 	}
 	
-	method dejarItemEnUnaCasa(item, casa){
+	method dejarItemEnUnaCasa(item, casa){ 
 		inventario.remove(item)
 		casa.depositar(item)
 	}
 	
-	method agarrarItemEnUnaCasa(item, casa){
+	method agarrarItemDeUnaCasa(item, casa){
 		casa.retirar(item)
 		inventario.add(item)
 	}
+	
+	method reservarOro(cantOro){
+		self.validarOroDisponible(cantOro)
+		oro =- cantOro
+	}
+	method validarOroDisponible(cantOro) {
+		if (oro < cantOro){
+			self.error("No tenes esa cantidad de oro para depositar")
+		}
+	}
+	
+	method ganarOroPorVenta(cantOro){
+		oro =+ cantOro
+	}
+	
+
 	
 	// METODOS DE CAMBIO DE MAPA
 	
@@ -152,7 +168,45 @@ class Heroe inherits Mortal {
 
 
 
+object guerrero inherits Heroe(oro=0) {
+	
+	method usarCasaDeMagia(casa){
+		//deshabilitar botones, el guerrero no puede usar esta casa!
+		//mostrar mensaje de que no puede acceder
+	}
+	
+	method usarCasaDeArmaduras(){
+		//habilitar botones
+	}
+	
+	method usarBanco(){
+		//habilitar botones
+	}
+	
+	method usarMercado(){
+		//habilitar botones
+	}
+}
 
+object mago inherits Heroe(oro=0) {
+	
+	method usarCasaDeMagia(casa){
+		//habilitar botones
+	}
+	
+	method usarCasaDeArmaduras(){
+		//deshabilitar botones, el mago no puede usar esta casa!
+		//mostrar mensaje de que no puede acceder
+	}
+	
+	method usarBanco(){
+		//habilitar botones
+	}
+	
+	method usarMercado(){
+		//habilitar botones
+	}
+}
 
 //esto esa asi solamente con fines de prueba
 object enemigo {

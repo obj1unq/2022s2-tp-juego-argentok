@@ -33,14 +33,14 @@ class Armadura inherits Equipamento {
 	method puntosDeArmadura() = puntosDeArmadura
 }
 
-class Casas {
+class Casa {
 	var property inventario = []
 	//uso lista porque puede que hayan repetidos y los quiero conservar -- revisable
 	var property image 
 	
-	method comprar(item)
+	method comprar(serVivo, item)
 	
-	method vender(item)
+	method vender(serVivo, item)
 	
 	method depositar(item){
 		inventario.add(item)
@@ -51,9 +51,7 @@ class Casas {
 		inventario.remove(item)
 	}
 	
-	method puedeInteractuar(serVivo){
-		return true
-	}//tiene que validar que si es mago interactue solo con casaDeMagia y si es guerrero solo con casaDeArmaduras
+	method puedeInteractuar(serVivo)
 	
 	method validarExistencia(item) {
 		if(not inventario.contains(item)){
@@ -63,7 +61,7 @@ class Casas {
 }
 
 
-class Banco inherits Casas {
+class Banco inherits Casa {
 	
 	var property boveda = 0 // en la boveda va el oro
 	
@@ -71,11 +69,16 @@ class Banco inherits Casas {
 		return "Banco.png"
 	}
 	
+	override method puedeInteractuar(serVivo){
+		serVivo.usarBanco()
+	}
+	
 	method consultarOro(serVivo){
 		game.say(self, "Tenes " + serVivo.oro() + "monedas de oro")
 	}
 	
-	method depositarOro(cantOro){
+	method depositarOro(cantOro, serVivo){
+		serVivo.reservarOro(cantOro)
 		boveda =+ cantOro
 	}
 	
@@ -91,52 +94,69 @@ class Banco inherits Casas {
 	}
 	
 	
+	
+	
 }
 
-class CasaDeMagia inherits Casas {
+class CasaDeMagia inherits Casa {
 	
-	
+	override method image(){
+		return "Magia.png"
+	}
 	
 	override method puedeInteractuar(serVivo){
-		return !(serVivo == mago)
+		serVivo.usarCasaDeMagia()
 	}
 	
-	override method comprar(item){
+	//las acciones de compra y venta son desde la casa, o sea, la casa es la que vende/compra
+	override method comprar(serVivo, item){
+		self.validarCompraVenta(item, serVivo)
+		serVivo.dejarItemEnUnaCasa(item, self) //el ser vivo ya no tiene el item y ahora lo tiene la casa
 		
 	}
 	
-	override method vender(item){
+	override method vender(serVivo, item){
+		serVivo.agarrarItemDeUnaCasa(item, self) //el ser vivo agarra el item y la casa ya no lo tiene mas
+		serVivo.ganarOroPorVenta(item.valor())
+		//aca podria haber un mensaje visual diciendo Vendiste tal cosa sumas tanto oro
 }
 
-}
-
-
-class CasaDeArmaduras inherits Casas {
+//no valido que exista el item porque damos por sentado que todos los mercados tienen todos los items disponibles
+	method validarCompraVenta(item, serVivo) {
+		if(item.valor() > serVivo.oro()){
+			self.error("No tenes oro suficiente para comprar este item")
+		}
+	}
+	
 	
 
+}
+
+
+class CasaDeArmaduras inherits CasaDeMagia {
+	
+	override method image(){
+		return "Armaduras.png"
+	}
 	override method puedeInteractuar(serVivo){
-		return !(serVivo == guerrero) 
+		serVivo.usarCasaDeArmaduras()
 	}
 
-	override method comprar(item){
-		
-	}
-	
-	override method vender(item){
-}
+
 
 }
 
 
 
-class Mercado inherits Casas {
+class Mercado inherits CasaDeMagia {
 	
-	override method comprar(item){
-		
+	override method image(){
+		return "Mercado.png"
+	}	
+	
+	override method puedeInteractuar(serVivo){
+		serVivo.usarMercado()
 	}
-	
-	override method vender(item){
 
-}
 	
 }
