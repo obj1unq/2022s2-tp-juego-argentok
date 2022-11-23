@@ -12,6 +12,7 @@ object configuracion {
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
+		
 	}
 
 
@@ -68,8 +69,8 @@ object pistaDePrueba {
 		game.cellSize(32)
 		
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
-		configuracion.comandos(tito)
 		game.addVisual(tito)
+		configuracion.comandos(tito)
 		//game.addVisual(enemigo)
 		mapaActual.mapa(explanada)
 		mapaActual.inicializarMapa()
