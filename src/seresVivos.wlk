@@ -81,10 +81,35 @@ class Mortal inherits Solido {
 	method mover(direccion)
 	
 	
-	
-	
 }
 
+class Enemigo inherits Mortal {
+	
+	const property direcciones = [derecha, izquierda, abajo, arriba]
+	var recibiDanio = false
+	
+	
+	override method recibirDanio(dmg) {
+		vida -= dmg
+		if (vida <= 0) game.removeVisual(self)
+	}
+	
+	override method atacar(){
+		game.onTick(1000, "atacar" , direcciones.forEach({direccion => self.estaEnfrente(direccion).first().recibirDanio(self.danio())}))
+	}
+	
+//	method atacarDirecciones(){
+//		 direcciones.forEach({direccion => self.estaEnfrente(direccion).first().recibirDanio(self.danio())})
+//	}
+	
+	override method danio(){
+		return 150
+	}
+	
+	method moverLineal()
+	// es para moverse en sentido de guardia
+	
+}
 
 class Heroe inherits Mortal {
 	
@@ -173,19 +198,6 @@ class Heroe inherits Mortal {
 
 
 
-//esto esa asi solamente con fines de prueba
-object enemigo {
-	
-	var property position = game.at(2,2)
-	var vida = 300
-	var property image = "pepita.png"
-	
-	method recibirDanio(dmg) {
-		vida -= dmg
-		if (vida <= 0) game.removeVisual(self)
-	}
-	
-	method vida() = vida
-}
+
 
 
