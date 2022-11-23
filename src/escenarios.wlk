@@ -153,12 +153,18 @@ object explanada inherits Escenario (construcciones = #{construccionBanco, const
 		
 		//(_mapa, mapaLimite, _image, _position) 
 		
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,0))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,1))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,2))
 		self.colocarLimite(self, explanada2, "Transparente.png", game.at(15,3))
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,4))
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,5))
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,6))
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,7))
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,8))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,9))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,10))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,11))
 		
 	}
 	
