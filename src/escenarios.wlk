@@ -188,13 +188,61 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 		game.addVisual(tito)
 		configuracion.comandos(tito)
-		//game.boardGround("Explanada2.png")
+		
+		//
+		
+
+		game.boardGround("Explanada2.png")
 		
 		
+		// Seteo Mar
+		self.colocarSolido("Mar.png", game.at(2,0))
+		self.colocarSolido("Mar.png", game.at(3,0))
+		self.colocarSolido("Mar.png", game.at(4,0))
+		self.colocarSolido("Mar.png", game.at(3,1))
+		self.colocarSolido("Mar.png", game.at(4,1))
+		self.colocarSolido("Mar.png", game.at(3,2))
+		self.colocarSolido("Mar.png", game.at(4,2))
+		self.colocarSolido("Mar.png", game.at(3,3))
+		self.colocarSolido("Mar.png", game.at(4,3))
+		self.colocarSolido("Mar.png", game.at(5,3))
+		self.colocarSolido("Mar.png", game.at(6,3))
+		self.colocarSolido("Mar.png", game.at(7,3))
+		self.colocarSolido("Mar.png", game.at(10,3))
+		self.colocarSolido("Mar.png", game.at(11,3))
+		self.colocarSolido("Mar.png", game.at(12,3))
+		self.colocarSolido("Mar.png", game.at(12,2))
+		self.colocarSolido("Mar.png", game.at(12,1))
+		self.colocarSolido("Mar.png", game.at(13,1))
+		self.colocarSolido("Mar.png", game.at(13,0))
+		
+		// seteo montaña comienzo
+		
+		self.colocarSolido("Elevacion.png", game.at(5,9))
+		self.colocarSolido("Elevacion.png", game.at(6,8))
+		self.colocarSolido("Elevacion.png", game.at(7,8))
+		self.colocarSolido("Elevacion.png", game.at(8,9))
+		self.colocarSolido("Elevacion.png", game.at(9,9))
+		self.colocarSolido("Elevacion.png", game.at(10,9))
+		self.colocarSolido("Elevacion.png", game.at(11,9))
+		self.colocarSolido("Elevacion.png", game.at(12,8))
+		self.colocarSolido("Elevacion.png", game.at(13,9))
 		
 	}
 	
 	override method setearDecoraciones(){
+		
+		
+		// vallas
+		self.colocarSolido("Valla.png", game.at(1,9))
+		self.colocarSolido("Valla.png", game.at(2,9))
+		self.colocarSolido("Valla.png", game.at(3,9))
+		
+		//  lapidas
+		
+		self.colocarSolido("Lapida.png", game.at(7,0))
+		self.colocarSolido("Lapida.png", game.at(8,0))
+		self.colocarSolido("Lapida.png", game.at(10,0))
 		
 		
 		
@@ -209,10 +257,17 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	
 	override method setearRecursos(){
 		
-		const arbol1 = new Arbol(vida = arbolVida1)
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(8,8))
+		game.addVisual(arbol1)
+		
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(5,0))
 		game.addVisual(arbol1)
 		
 		
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(4,9))
+		game.addVisual(arbol1)
+		
+	
 		
 	}
 		
