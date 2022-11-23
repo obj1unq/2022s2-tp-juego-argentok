@@ -2,6 +2,7 @@ import construccion.*
 import wollok.game.*
 import seresVivos.*
 import recursos.*
+import comandos.*
 
 
 
@@ -30,6 +31,7 @@ class Escenario{
 	const decoraciones
 	const enemigos
 	const recursos
+	var property positionAlComenzar = game.at(0,1)
 	
 	//const property decoraciones
 	var property image
@@ -183,7 +185,10 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	override method setearEsceneario(){
 		
 		super()
-		game.boardGround("Explanada2.png")
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
+		game.addVisual(tito)
+		configuracion.comandos(tito)
+		//game.boardGround("Explanada2.png")
 		
 		
 		
@@ -206,6 +211,9 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		
 		const arbol1 = new Arbol(vida = arbolVida1)
 		game.addVisual(arbol1)
+		
+		
+		
 	}
 		
 		
