@@ -1,6 +1,7 @@
 import construccion.*
 import wollok.game.*
 import seresVivos.*
+import recursos.*
 
 
 
@@ -13,10 +14,12 @@ object mapaActual{
 	}
 	
 	method cambiarMapa(_mapa){
-		// segun con lo que colisionas cambias de mapa? 
 		
-		mapa =  _mapa // colision.mapa() tambien podria ser con un metodo polimorfico que asumo deberian poder usar todas las cosas con las que se puede colisionar?
+		
+		self.mapa(_mapa)
 		self.inicializarMapa()
+		
+		//self.setearMapa(mapa)
 	}
 }
 
@@ -24,43 +27,75 @@ object mapaActual{
 class Escenario{
 	
 	const construcciones
-	//const property decoraciones
-	const property image
+	const decoraciones
+	const enemigos
+	const recursos
 	
-	method setearEsceneario()
+	//const property decoraciones
+	var property image
+	var property heroPrimeroPosicion
+	
+	/*falta const de escenario, deco, recu y limi */
+	 // esto se reutiliza, probablemente pueda definir el metodo aca
 	method setearDecoraciones()
 	method setearLimites()
 	method setearRecursos()
 	
-	method colocarSolido(_image, _position)
-	{
+	method colocarSolido(_image, _position){
 		const solido = new Solido(image = _image, position = _position)
 		game.addVisual(solido)
 	}
 	
+	method colocarLimite(_mapa, mapaLimite, _image, _position){
+		// revisar si podria reutilizar colocar solido, creo que no
+		// Revisar si realmente los parametors mapaDelQUesLimtie y mapa se necesitan ambos
+		
+		const limite = new limiteHaciaMapa(image = _image, position = _position, mapa = _mapa, mapaDelQueEsLimite = mapaLimite) 
+		game.addVisual(limite)
+	}
+	
+ 
+	
+	method setearEsceneario(){
+		game.clear()
+		self.setearRecursos()
+		self.setearDecoraciones()
+		self.setearLimites()
+		self.setearRecursos()
+	}
+	
+	
+	 
 }
 
-// ESTE OBJETO LO USARIA PARA CREAR LIMITES DE MAPA
-
 class limiteHaciaMapa{
+	
+	// Revisar si realmente los parametors mapaDelQUesLimtie y mapa se necesitan ambos
+	
 	
 	const property mapaDelQueEsLimite
 	const image = "Transparente32Bits"
 	const property position
+	const property mapa
 	
 	
-}
-
-object limiteHaciaExplanada2{
-
+	method cambiarMapa(_mapa){
+		
+		mapaActual.cambiarMapa(_mapa)
 	
-	method nuevo(_position, limiteHacia)
-	{
-			const limite = new limiteHaciaMapa(mapaDelQueEsLimite = limiteHacia, position = _position )
+	
 	}
+	
+	method accionAlSerColisionado(){
+		self.cambiarMapa(mapaDelQueEsLimite)
+	}
+	
+	
+	
 }
 
-object explanada inherits Escenario (construcciones = #{construccionBanco, construccionMercado, construccionArmadura, construccionMagia}, image = "Explanada.png"){
+
+object explanada inherits Escenario (construcciones = #{construccionBanco, construccionMercado, construccionArmadura , construccionMagia}, image = "Explanada.png", heroPrimeroPosicion = game.at(2,3), enemigos = #{}, decoraciones= #{}, recursos =  #{}){
 	
 	
 	
@@ -116,9 +151,15 @@ object explanada inherits Escenario (construcciones = #{construccionBanco, const
 		
 		*/
 		
-	
-	
-	
+		//(_mapa, mapaLimite, _image, _position) 
+		
+		self.colocarLimite(self, explanada2, "Transparente.png", game.at(15,3))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,4))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,5))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,6))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,7))
+		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,8))
+		
 	}
 	
 	override method setearRecursos(){
@@ -131,14 +172,13 @@ object explanada inherits Escenario (construcciones = #{construccionBanco, const
 	
 }
 
-object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png"){
+object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", heroPrimeroPosicion = game.at(2,3), enemigos = #{}, decoraciones= #{}, recursos =  #{}){
 		
 	override method setearEsceneario(){
-		game.boardGround(self.image())
-		construcciones.forEach({construccion => game.addVisual(construccion)}) 
-		self.setearDecoraciones()
-		self.setearLimites()
-		self.setearRecursos()
+		
+		super()
+		game.boardGround("Explanada2.png")
+		
 		
 		
 	}
@@ -158,6 +198,8 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	
 	override method setearRecursos(){
 		
+		const arbol1 = new Arbol(vida = arbolVida1)
+		game.addVisual(arbol1)
 	}
 		
 		

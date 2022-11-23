@@ -5,6 +5,11 @@ import escenarios.*
 
 class Solido {
 	
+	/*
+	No creo que este bien que mortal herede de solido, hay metodos que la mayorai de solidos no van a usar como validar los ejes o siguiente posicion es vacia.
+	Tambien mi idea es que cada solido pueda devolver .mapa() que me retorne de que mapa
+	*/
+	
 	var property position = game.center()
 	var property image = "pepita.png"
 	
@@ -14,6 +19,10 @@ class Solido {
 
 	method siguientePosicionEsVacia(direccion) {
 		return game.getObjectsIn(direccion.siguiente(self.position())).isEmpty()
+	}
+	
+	method objetosEnDireccion(direccion){
+		return game.getObjectsIn(direccion.siguiente(self.position()))
 	}
 	
 	
@@ -28,15 +37,24 @@ class Solido {
 		return direccion.siguiente(position).y().between(0, 9)		
 	}
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	
+	method accionAlSerColisionado(){
+		// no lo puedo hacer abstracto porque instancio varias veces a solido
+	}
+	
+	
+
 }
 
 
 class Mortal inherits Solido {
 	
+	
+	
 	var property vida = 0
 	var ultimaDireccion = derecha
-	
-	
+
 	
 	method morir() {
 		if (vida <= 0) {
@@ -63,6 +81,8 @@ class Mortal inherits Solido {
 	method mover(direccion)
 	
 	
+	
+	
 }
 
 
@@ -81,9 +101,18 @@ class Heroe inherits Mortal {
 	
 	
 	override method mover(direccion) {
+		
+		
+		
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
 		}
+		else{
+			self.objetosEnDireccion(direccion).forEach({objeto => objeto.accionAlSerColisionado()})
+			
+		}
+		
+		
 		self.ultimaDireccion(direccion)
 	}
 	
@@ -134,9 +163,10 @@ class Heroe inherits Mortal {
 	method cambioDeMapa(direccion){
 		if (game.getObjectsIn(direccion.siguiente(self.position())) == #{}){
 			
-		}
+		
 	}
 	*/
+	
 }
 
 

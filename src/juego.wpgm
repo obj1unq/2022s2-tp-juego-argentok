@@ -12,7 +12,9 @@ program juego {
 	
 	game.title("Argentok")	
 	pistaDePrueba.prueba1()
+
 	game.start()
+	
 
 
 }
