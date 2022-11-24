@@ -60,6 +60,8 @@ class Escenario{
 	
 	method setearEsceneario(){
 		game.clear()
+		//pruebaCambioMapa.cambiarMapa(self.image())
+		game.boardGround(self.image())
 		self.setearRecursos()
 		self.setearDecoraciones()
 		self.setearLimites()
@@ -102,11 +104,12 @@ object explanada inherits Escenario (construcciones = #{construccionBanco, const
 	
 	
 	override method setearEsceneario(){
-		game.boardGround(self.image())
+		super()
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
+		game.addVisual(tito)
+		configuracion.comandos(tito)
 		construcciones.forEach({construccion => game.addVisual(construccion)}) 
-		self.setearDecoraciones()
-		self.setearLimites()
-		self.setearRecursos()
+		
 		
 		
 	}
@@ -168,6 +171,8 @@ object explanada inherits Escenario (construcciones = #{construccionBanco, const
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,10))
 		self.colocarLimite(self, explanada2,"Transparente.png", game.at(15,11))
 		
+		
+		
 	}
 	
 	override method setearRecursos(){
@@ -188,11 +193,12 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 		game.addVisual(tito)
 		configuracion.comandos(tito)
+		pruebaCambioMapa.cambiarMapa("Explanada2")
 		
 		//
 		
 
-		game.boardGround("Explanada2.png")
+		game.boardGround("2.png")
 		
 		
 		// Seteo Mar
@@ -251,7 +257,19 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	
 	override method setearLimites(){
 		
-
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,0))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,1))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,2))
+		self.colocarLimite(self, explanada, "Transparente.png", game.at(-1,3))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,4))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,5))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,6))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,7))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,8))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,9))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,10))
+		self.colocarLimite(self, explanada,"Transparente.png", game.at(-1,11))
+		
 		
 	}
 	
@@ -275,5 +293,47 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		
 }
 
+object construccionBancoInterior inherits  Escenario (construcciones = #{}, image = "Tienda1.png", heroPrimeroPosicion = game.at(2,3), enemigos = #{}, decoraciones= #{}, recursos =  #{}){
+	override method setearEsceneario(){
+		
+		super()
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(5,0), armaEquipada = tester.espada())
+		game.addVisual(tito)
+		configuracion.comandos(tito)
+		
+		
+		
+	}
+	
+	override method setearDecoraciones(){
+		
+		
+		
+		
+		
+		
+	}
+	
+	override method setearLimites(){
+		
+	
+		
+		
+	}
+	
+	override method setearRecursos(){
+		
 
+		
+	
+		
+	}
+}
+
+object pruebaCambioMapa{
+	method cambiarMapa(texto){
+		game.boardGround(texto)
+	}
+}
+		
 
