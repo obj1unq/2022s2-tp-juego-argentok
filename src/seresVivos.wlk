@@ -65,16 +65,33 @@ class Heroe inherits Mortal {
 
 	// var property position = game.center()
 	// var property image = "hero.png"
-	const inventario = []
+	var inventario = []
 	const faime = [ 0, 0, 0, 0, 0 ] // fuerza, agilidad, inteligencia, mana, experiencia
 	var armaduraEquipada = null
 	var armaEquipada = null
-	var property oro
+	var property oro = 0
 
-	method interactuarConItem(item) {
-		item.serInteractuado(self)
+	
+	method interactuar() {
+		self.interactuables().forEach({cosa => cosa.serInteractuado(self)})
 	}
 
+	method interactuables() {
+		return game.getObjectsIn(self.position().right(1))		
+	}
+	
+	method comprar() {
+		self.interactuables().forEach({cosa => cosa.comprar(self)})
+	}	
+	
+	method vender() {
+		self.interactuables().forEach({cosa => cosa.vender(self)})
+	}
+	
+	method consultar() {
+		self.interactuables().forEach({cosa => cosa.consultarOro(self)})
+	}			
+	
 	override method mover(direccion) {
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
@@ -127,35 +144,42 @@ class Heroe inherits Mortal {
 		oro = +cantOro
 	}
 
+	method valorDelInventario(){
+		return inventario.sum({item => item.valor()})
+	}
+	
+	method vaciarInventario(){
+		inventario = []
+	}
 	// metodos para interactuar con las casas
 	method dejarItemEnUnaCasa(item, casa) {
 		inventario.remove(item)
 		casa.depositar(item)
 	}
 
-	method agarrarItemDeUnaCasa(item, casa) {
-		casa.retirar(item)
-		inventario.add(item)
+	method agregar(items) {
+		inventario.add(items)
 	}
 
-	method interactuarConLaCasa(personaje, casa) {
-		casa.puedeInteractuar(self)
-	}
 
-	method usarCasaDeMagia() {
+	method usarCasaDeMagia(casaDeMagia) {
 	// habilitar botones
 	}
 
-	method usarCasaDeArmaduras() {
+	method usarCasaDeArmaduras(casaDeArmadura) {
 	// deshabilitar botones, el mago no puede usar esta casa!
 	// mostrar mensaje de que no puede acceder
 	}
 
-	method usarBanco() {
+	method usarBanco(banco) {
 	// habilitar botones
+		game.say(self, "Bienvenido al Banco Central. Elige la opción deseada: 
+				1. Depositar oro
+				2. Retirar oro
+				3. Consultar oro")
 	}
 
-	method usarMercado() {
+	method usarMercado(mercado) {
 	// habilitar botones
 	}
 
@@ -171,15 +195,15 @@ class Heroe inherits Mortal {
  */
 }
 
-object guerrero inherits Heroe(oro = 0) {
+object guerrero inherits Heroe {
 
-	override method usarCasaDeMagia() {
+	override method usarCasaDeMagia(serVivo) {
 		// deshabilitar botones, el guerrero no puede usar esta casa!
 		// mostrar mensaje de que no puede acceder
 		game.say(self, "No podes usar esta casa")
 	}
 
-	override method usarCasaDeArmaduras() {
+	override method usarCasaDeArmaduras(serVivo) {
 		// habilitar botones
 		game.say(self, "Bienvenido a la Casa de Armaduras. Elija la opción deseada: 
 				1. Comprar ítems
@@ -193,30 +217,32 @@ object guerrero inherits Heroe(oro = 0) {
 				2. Retirar oro
 				3. Consultar oro")
 		configuracion.comandos(serVivo)
+		
 	}
 
-	override method usarMercado() {
+	override method usarMercado(serVivo) {
 	// habilitar botones
 	}
 
 }
 
-object mago inherits Heroe(oro = 0) {
+object mago inherits Heroe {
 
-	override method usarCasaDeMagia() {
+	override method usarCasaDeMagia(serVivo) {
 	// habilitar botones
 	}
 
-	override method usarCasaDeArmaduras() {
+	override method usarCasaDeArmaduras(serVivo) {
 	// deshabilitar botones, el mago no puede usar esta casa!
 	// mostrar mensaje de que no puede acceder
+	
 	}
 
-	override method usarBanco() {
+	override method usarBanco(serVivo) {
 	// habilitar botones
 	}
 
-	override method usarMercado() {
+	override method usarMercado(serVivo) {
 	// habilitar botones
 	}
 
