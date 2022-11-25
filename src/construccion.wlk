@@ -1,6 +1,7 @@
 
 import wollok.game.*
 import seresVivos.*
+import escenarios.*
 
 
 class Construccion inherits Solido {
@@ -24,7 +25,15 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 	
 	override method validarSerUtilizado(){
 		
+	
 	}
+	
+	override method accionAlSerColisionado(){
+		mapaActual.cambiarMapa(construccionBancoInterior)
+	}
+	
+	
+	
 }
 
 
@@ -38,6 +47,8 @@ object construccionMercado inherits Construccion (image = "Mercado.png", positio
 	override method validarSerUtilizado(){
 		
 	}
+	
+	
 }
 
 

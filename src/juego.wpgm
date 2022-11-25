@@ -2,6 +2,8 @@ import wollok.game.*
 import seresVivos.*
 import construccion.*
 import comandos.*
+import escenarios.*
+import escenarios.*
 
 
 
@@ -12,7 +14,10 @@ program juego {
 	
 	game.title("Argentok")	
 	pistaDePrueba.prueba1()
+	
+	
 	game.start()
+	
 
 
 }

@@ -7,9 +7,9 @@ class Recurso inherits Solido
 	
 	var vida
 	
-	method image()
+	override method image()
 	{
-		
+		return vida.nombreimg()
 	}
 	
 	/* 
@@ -39,6 +39,33 @@ class Recurso inherits Solido
 class Piedra inherits Recurso
 {
 	
+	
+	
+	
+	
+}
+
+object piedraVida1
+{
+	
+	const property nombreimg = "PiedraVida1.png"
+	
+}
+
+object piedraVida2
+{
+	const property nombreimg = "PiedraVida2.png"
+}
+
+
+object piedraVida3
+{
+	const property nombreimg = "PiedraVida3.png"
+}
+
+class Arbol inherits Recurso
+{
+	
 	//vida =	 vida1
 	
 	method vida()
@@ -50,20 +77,18 @@ class Piedra inherits Recurso
 	
 }
 
-object vida1
+object arbolVida0
 {
 	
-	const property nombreimg = "piedraVida1"
+	const property nombreimg = "ArbolVida0.png"
 	
 }
 
-object vida2
+object arbolVida1
 {
-	const property nombreimg = "piedraVida2"
+	const property nombreimg = "ArbolVida1.png"
 }
 
 
-object vida3
-{
-	const property nombreimg = "piedraVida3"
-}
+
+

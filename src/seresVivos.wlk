@@ -5,6 +5,12 @@ import escenarios.*
 
 class Solido {
 
+	
+	/*
+	No creo que este bien que mortal herede de solido, hay metodos que la mayorai de solidos no van a usar como validar los ejes o siguiente posicion es vacia.
+	Tambien mi idea es que cada solido pueda devolver .mapa() que me retorne de que mapa
+	*/
+
 	var property position = game.center()
 	var property image = "pepita.png"
 
@@ -16,6 +22,12 @@ class Solido {
 		return game.getObjectsIn(direccion.siguiente(self.position())).isEmpty()
 	}
 
+	
+	method objetosEnDireccion(direccion){
+		return game.getObjectsIn(direccion.siguiente(self.position()))
+	}
+	
+	
 	// los números finales a los siguientes metodos deben ser cambiados dependiendo el tamaño que tenga el mapa 
 	method validarEjeX(direccion) {
 		// return direccion.siguiente(self.position()).x() != -1 and direccion.siguiente(self.position()).x() != 10
@@ -27,13 +39,21 @@ class Solido {
 		return direccion.siguiente(position).y().between(0, 9)
 	}
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	
+	method accionAlSerColisionado(){
+		// no lo puedo hacer abstracto porque instancio varias veces a solido
+	}
+	
+
 }
 
 class Mortal inherits Solido {
 
 	var property vida = 0
 	var ultimaDireccion = derecha
+
 
 	method morir() {
 		if (vida <= 0) {
@@ -62,6 +82,9 @@ class Mortal inherits Solido {
 }
 
 class Heroe inherits Mortal {
+
+	
+	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta. Tampoco tiene sentido tener que instanciarlo varias veces 
 
 	// var property position = game.center()
 	// var property image = "hero.png"
@@ -93,9 +116,18 @@ class Heroe inherits Mortal {
 	}			
 	
 	override method mover(direccion) {
+		
+		
+		
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
 		}
+		else{
+			self.objetosEnDireccion(direccion).forEach({objeto => objeto.accionAlSerColisionado()})
+			
+		}
+		
+		
 		self.ultimaDireccion(direccion)
 	}
 
@@ -128,6 +160,7 @@ class Heroe inherits Mortal {
 		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
 	}
 
+
 	method reservarOro(cantOro) {
 		self.validarOroDisponible(cantOro)
 		oro = -cantOro
@@ -138,7 +171,8 @@ class Heroe inherits Mortal {
 		if (oro < cantOro) {
 			self.error("No tenes esa cantidad de oro para depositar")
 		}
-	}
+
+
 
 	method ganarOroPorVenta(cantOro) {
 		oro = +cantOro
@@ -193,6 +227,7 @@ class Heroe inherits Mortal {
  * 	}
  * }
  */
+
 }
 
 object guerrero inherits Heroe {

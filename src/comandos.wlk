@@ -16,6 +16,7 @@ object configuracion {
 		keyboard.num3().onPressDo({ heroe.consultar()})
 		//keyboard.p().onPressDo({ game.addVisual(tester.dummie())})
 	// keyboard.1().onPressDo({ heroe.reservarOro()}
+
 	}
 
 }
@@ -72,12 +73,19 @@ object tester {
 object pistaDePrueba {
 
 	method prueba1() {
-		const tito = new Heroe(image = "player.png", position = game.at(1, 2), armaEquipada = tester.espada(), oro = 100)
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		configuracion.comandos(tito)
+		game.cellSize(32)
+
 		game.addVisual(tito)
+
 		//game.addVisual(tester.dummie())
 		game.addVisual(tester.item())
 		game.addVisual(new Banco(position = game.at(2,5)))
+		//game.addVisual(enemigo)
+		mapaActual.mapa(explanada)
+		mapaActual.inicializarMapa()
+
 	}
 
 }
