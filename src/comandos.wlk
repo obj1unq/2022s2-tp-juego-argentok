@@ -1,24 +1,19 @@
 import wollok.game.*
 import items.*
 import seresVivos.*
-import escenarios.*
-
 
 object configuracion {
-	
-	const nuevoMago = new Heroe(faime=[15,18,30,0,0], image="Mago.png", oro = 0)
-	const nuevoGuerrero = new Heroe(faime=[20,18,15,0,0], image="Peleador.png", oro = 0) 
-	
+
 	method comandos(heroe) {
 		keyboard.left().onPressDo({ heroe.mover(izquierda)})
 		keyboard.right().onPressDo({ heroe.mover(derecha)})
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
-		keyboard.m().onPressDo({nuevoMago})
-		keyboard.g().onPressDo({nuevoGuerrero})
+		keyboard.f().onPressDo({ heroe.interactuar()})
+		keyboard.p().onPressDo({ game.addVisual(tester.dummie())})
+	// keyboard.1().onPressDo({ heroe.reservarOro()}
 	}
-
 
 }
 
@@ -55,36 +50,31 @@ object abajo {
 }
 
 object tester {
-//esto es para testar
 
+//esto es para testar
 	method espada() {
 		return new Arma(puntosDeDanio = 100)
 	}
-/*
+
 	method dummie() {
-		return new Enemigo(vida = 300)
+		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300)
 	}
-*/
+
+	method item() {
+		return new Item()
+	}
+
 }
 
 object pistaDePrueba {
 
 	method prueba1() {
-		game.cellSize(32)
-		
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
+		const tito = new Heroe(image = "player.png", position = game.at(1, 2), armaEquipada = tester.espada())
 		configuracion.comandos(tito)
 		game.addVisual(tito)
-		//game.addVisual(enemigo)
-		mapaActual.mapa(explanada)
-		mapaActual.inicializarMapa()
-		
-		
-		
-		
+		game.addVisual(tester.dummie())
+		game.addVisual(tester.item())
 	}
 
 }
-
-
 
