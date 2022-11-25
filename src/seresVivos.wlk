@@ -83,32 +83,80 @@ class Mortal inherits Solido {
 	
 }
 
-class Enemigo inherits Mortal {
+class Enemigo inherits Solido {
 	
 	const property direcciones = [derecha, izquierda, abajo, arriba]
-	var recibiDanio = false
 	
+	var property vida = 10
 	
-	override method recibirDanio(dmg) {
+	 method recibirDanio(dmg) {
 		vida -= dmg
-		if (vida <= 0) game.removeVisual(self)
+		self.morir()
 	}
 	
-	override method atacar(){
-		game.onTick(1000, "atacar" , direcciones.forEach({direccion => self.estaEnfrente(direccion).first().recibirDanio(self.danio())}))
+	method morir() {
+		if (vida <= 0) {
+			self.despawnear()		
+		}
+	}
+	
+	method despawnear() {
+		game.removeVisual(self)
+	}
+	
+	method atacar(){
+		
+		//game.onTick(1000, "atacar" , direcciones.forEach({direccion => self.estaEnfrente(direccion).first().recibirDanio(self.danio())}))
 	}
 	
 //	method atacarDirecciones(){
 //		 direcciones.forEach({direccion => self.estaEnfrente(direccion).first().recibirDanio(self.danio())})
 //	}
 	
-	override method danio(){
+	method danio(){
 		return 150
 	}
 	
-	method moverLineal()
-	// es para moverse en sentido de guardia
+	method moverse() 
 	
+}
+
+class EnemigoHorizontal inherits Enemigo {
+	
+	override method moverse() {
+		var anteriorPosicion = game.at(1, 0)
+		
+		if (position.x() == 14 or (position.x() > 0 and anteriorPosicion.x() > position.x())) {
+			anteriorPosicion = position
+			position = self.position().left(1)
+		} else {
+			anteriorPosicion = position
+			position = self.position().right(1)
+		}
+	}
+}
+
+class EnemigoVertical inherits Enemigo {
+
+	var anteriorPosicion = game.at(1, 0)
+
+	override method moverse() {
+		if (position.y() == 11 or (position.y() > 0 and anteriorPosicion.y() > position.y())) {
+			anteriorPosicion = position
+			position = self.position().down(1)
+		} else {
+			anteriorPosicion = position
+			position = self.position().up(1)
+		}
+	}
+
+}
+
+object boss inherits Enemigo {
+	
+	override method moverse(){
+		
+	}
 }
 
 class Heroe inherits Mortal {
