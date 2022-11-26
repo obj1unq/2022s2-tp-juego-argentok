@@ -12,7 +12,8 @@ object configuracion {
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
-		
+		keyboard.f().onPressDo({ heroe.interactuar()}
+		keyboard.p().onPressDo({game.addVisual(tester.dummie())})
 	}
 
 
@@ -56,11 +57,16 @@ object tester {
 	method espada() {
 		return new Arma(puntosDeDanio = 100)
 	}
-/*
+
 	method dummie() {
-		return new Enemigo(vida = 300)
+		return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300)
+		
 	}
-*/
+	
+	method item() {
+		return new Item()
+	}
+
 }
 
 object pistaDePrueba {
@@ -70,16 +76,14 @@ object pistaDePrueba {
 		
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 		game.addVisual(tito)
+		game.addVisual(tester.dummie())
+		game.addVisual(tester.item())
+
 		configuracion.comandos(tito)
 		//game.addVisual(enemigo)
 		mapaActual.mapa(explanada)
 		mapaActual.inicializarMapa()
-		
-		
-		
-		
 	}
-
 }
 
 

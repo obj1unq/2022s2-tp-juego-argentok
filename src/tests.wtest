@@ -6,16 +6,17 @@ import seresVivos.*
 
  
 describe "Prubas a Tito el heroe" {
-	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada())
-	
+	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada(), ultimaDireccion = derecha)
+	const enemigo = new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300)
 	method initialize() {
 		
 		game.width(5)
 		game.height(5)
 	}
+	
 /*
 	test "Tito tiene adelante a enemigo" {
-		assert.equals([enemigo], tito.estaEnfrente(derecha))
+		assert.equals([enemigo], tito.estaEnfrente())
 	}
 
 	test "Tito golpea a un Enemigo" {
