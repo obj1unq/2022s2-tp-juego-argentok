@@ -81,8 +81,8 @@ object pistaDePrueba {
 
 		configuracion.comandos(tito)
 		//game.addVisual(enemigo)
-		//mapaActual.mapa(explanada)
-		//mapaActual.inicializarMapa()
+		mapaActual.mapa(explanada)
+		mapaActual.inicializarMapa()
 	}
 }
 

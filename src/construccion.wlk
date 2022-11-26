@@ -7,11 +7,15 @@ import escenarios.*
 class Construccion {
 
 	const property baul = {}
-	const image = null
-	const position = null
+	const property image = null
+	const property position = null
 	method serUtilizado()
 	method validarSerUtilizado()
 	method solido() = true
+	method accionAlSerColisionado(){
+		// No es abstracto porque esta implementacion al final por ahi no la aplicamos
+	}
+	
 }
 
 
