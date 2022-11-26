@@ -12,8 +12,8 @@ object configuracion {
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
-		keyboard.f().onPressDo({ heroe.interactuar()}
-		keyboard.p().onPressDo({game.addVisual(tester.dummie())})
+		keyboard.f().onPressDo({ heroe.interactuarConTodos()})
+		//keyboard.p().onPressDo({game.addVisual(tester.dummie())})
 	}
 
 
@@ -75,14 +75,14 @@ object pistaDePrueba {
 		game.cellSize(32)
 		
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
-		game.addVisual(tito)
 		game.addVisual(tester.dummie())
 		game.addVisual(tester.item())
+		game.addVisual(tito)
 
 		configuracion.comandos(tito)
 		//game.addVisual(enemigo)
-		mapaActual.mapa(explanada)
-		mapaActual.inicializarMapa()
+		//mapaActual.mapa(explanada)
+		//mapaActual.inicializarMapa()
 	}
 }
 

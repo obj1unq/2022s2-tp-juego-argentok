@@ -8,12 +8,15 @@ class Item
 	var valor = 0
 	var property image = "wheat.png"
 	const property position = game.at(3,3)
-	
 	method solido() = false
 	
 	method serInteractuado(personaje){
 		personaje.agarrarItem(self)
 		game.removeVisual(self)
+	}
+	
+	method accionAlSerColisionado(){
+		// no lo puedo hacer abstracto porque instancio varias veces a solido
 	}
 }
 

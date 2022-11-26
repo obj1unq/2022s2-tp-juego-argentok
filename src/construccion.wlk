@@ -4,12 +4,14 @@ import seresVivos.*
 import escenarios.*
 
 
-class Construccion inherits Solido {
+class Construccion {
 
 	const property baul = {}
+	const image = null
+	const position = null
 	method serUtilizado()
 	method validarSerUtilizado()
-	
+	method solido() = true
 }
 
 
@@ -28,7 +30,7 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 	
 	}
 	
-	override method accionAlSerColisionado(){
+	method accionAlSerColisionado(){
 		mapaActual.cambiarMapa(construccionBancoInterior)
 	}
 	

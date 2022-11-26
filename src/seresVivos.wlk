@@ -9,10 +9,6 @@ class Mortal {
 
 	var property vida = 0
 	var ultimaDireccion = null
-	/*
-	No creo que este bien que mortal herede de solido, hay metodos que la mayorai de solidos no van a usar como validar los ejes o siguiente posicion es vacia.
-	Tambien mi idea es que cada solido pueda devolver .mapa() que me retorne de que mapa
-	*/
 	var property position = game.center()
 	var property image = "pepita.png"
 	
@@ -44,18 +40,10 @@ class Mortal {
 	}
 	
 	
-
-
-
-	
-	
-	
-	var property vida = 0
-	var ultimaDireccion = derecha
-	
 	method morir() {
 		if (vida <= 0) {
-			self.despawnear()		
+			self.despawnear()	
+			self.gameOver()	
 		}
 	}
 	
@@ -82,9 +70,6 @@ class Mortal {
 	method ultimaDireccion(direccion) {
 		ultimaDireccion = direccion
 	} 
-	
-	
-	
 }
 
 
@@ -103,19 +88,18 @@ class Heroe inherits Mortal {
 
 	
 	override method mover(direccion) {
-		
-		
-		
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
 		}
 		else{
-			self.objetosEnDireccion(direccion).forEach({objeto => objeto.accionAlSerColisionado()})
+			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
 			
 		}
-		
-		
 		self.ultimaDireccion(direccion)
+	}
+	
+	method arribaDe() {
+		return game.getObjectsIn(self.position())
 	}
 	
 	method armaEquipada(arma) {
@@ -129,6 +113,12 @@ class Heroe inherits Mortal {
 	method interactuar(cosa) {
 		cosa.serInteractuado(self)
 	}
+	
+	method interactuarConTodos() {
+		self.arribaDe().forEach({cosa => self.interactuar(cosa)})
+	}
+	
+	method serInteractuado(alguien){}
 	
 	method agarrarItem(item) {
 		inventario.add(item)
@@ -152,7 +142,7 @@ class Heroe inherits Mortal {
 
 
 		//estaEnfrente().recibirDanio(self.danio())
-		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
+		self.estaEnfrente().first().recibirDanio(self.danio())
 
 	}
 	
@@ -177,7 +167,6 @@ class Enemigo inherits Mortal {
 
 
 //esto esa asi solamente con fines de prueba
-object enemigo {
 
 	
 	
