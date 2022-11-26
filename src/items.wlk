@@ -1,9 +1,10 @@
+
 import wollok.game.*
 import seresVivos.*
 import comandos.*
 
-class Item  {
-	
+class Item  
+{
 	var valor = 0
 	var property image = "wheat.png"
 	const property position = game.at(3,3)
@@ -16,12 +17,14 @@ class Item  {
 	}
 }
 
-class Recurso inherits Item {
+class Recurso inherits Item 
+{
 	
 	
 }
 
-class Equipamento inherits Item {
+class Equipamento inherits Item 
+{
 	
 	
 }

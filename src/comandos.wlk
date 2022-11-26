@@ -1,6 +1,8 @@
 import wollok.game.*
 import items.*
 import seresVivos.*
+import escenarios.*
+
 
 object configuracion {
 
@@ -13,6 +15,7 @@ object configuracion {
 		keyboard.f().onPressDo({ heroe.interactuar()}
 		keyboard.p().onPressDo({game.addVisual(tester.dummie())})
 	}
+
 
 }
 
@@ -69,11 +72,19 @@ object tester {
 object pistaDePrueba {
 
 	method prueba1() {
-		const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada())
-		configuracion.comandos(tito)
+		game.cellSize(32)
+		
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 		game.addVisual(tito)
 		game.addVisual(tester.dummie())
 		game.addVisual(tester.item())
+
+		configuracion.comandos(tito)
+		//game.addVisual(enemigo)
+		mapaActual.mapa(explanada)
+		mapaActual.inicializarMapa()
 	}
 }
+
+
 

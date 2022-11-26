@@ -1,12 +1,18 @@
 import wollok.game.*
 import items.*
 import comandos.*
+import escenarios.*
 
 
 class Mortal {
 	
+
 	var property vida = 0
 	var ultimaDireccion = null
+	/*
+	No creo que este bien que mortal herede de solido, hay metodos que la mayorai de solidos no van a usar como validar los ejes o siguiente posicion es vacia.
+	Tambien mi idea es que cada solido pueda devolver .mapa() que me retorne de que mapa
+	*/
 	var property position = game.center()
 	var property image = "pepita.png"
 	
@@ -32,7 +38,20 @@ class Mortal {
 	method validarEjeY(direccion) {
 		return direccion.siguiente(position).y().between(0, 4)		
 	}
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	
+	method accionAlSerColisionado(){
+		// no lo puedo hacer abstracto porque instancio varias veces a solido
+	}
+	
+	
+
+
+
+	
+	
+	
+	var property vida = 0
+	var ultimaDireccion = derecha
 	
 	method morir() {
 		if (vida <= 0) {
@@ -64,10 +83,18 @@ class Mortal {
 		ultimaDireccion = direccion
 	} 
 	
+	
+	
 }
 
 
 class Heroe inherits Mortal {
+	
+	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta. Tampoco tiene sentido tener que instanciarlo varias veces 
+	
+	// var property position = game.center()
+	// var property image = "hero.png"
+	
 	
 	const inventario = []
 	const farim = [0,0,0,0,0] 
@@ -76,9 +103,18 @@ class Heroe inherits Mortal {
 
 	
 	override method mover(direccion) {
+		
+		
+		
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
 		}
+		else{
+			self.objetosEnDireccion(direccion).forEach({objeto => objeto.accionAlSerColisionado()})
+			
+		}
+		
+		
 		self.ultimaDireccion(direccion)
 	}
 	
@@ -113,12 +149,36 @@ class Heroe inherits Mortal {
 	
 	override method atacar() {
 		//acá va a ir el visual para el sprite de atacar
-		self.estaEnfrente().first().recibirDanio(self.danio())
+
+
+		//estaEnfrente().recibirDanio(self.danio())
+		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
+
 	}
+	
+	// METODOS DE CAMBIO DE MAPA
+	
+	// TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
+	
+	/* 
+	
+	method cambioDeMapa(direccion){
+		if (game.getObjectsIn(direccion.siguiente(self.position())) == #{}){
+			
+		
+	}
+	*/
+	
 }
 
 
 class Enemigo inherits Mortal {
+
+
+
+//esto esa asi solamente con fines de prueba
+object enemigo {
+
 	
 	
 	override method recibirDanio(dmg) {

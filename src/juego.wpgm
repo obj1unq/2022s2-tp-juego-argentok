@@ -1,11 +1,23 @@
 import wollok.game.*
 import seresVivos.*
+import construccion.*
 import comandos.*
+import escenarios.*
+import escenarios.*
+
 
 
 program juego {
 	
-	game.title("Argentok")
+	game.height(10)
+	game.width(15)
+	
+	game.title("Argentok")	
 	pistaDePrueba.prueba1()
+	
+	
 	game.start()
+	
+
+
 }
