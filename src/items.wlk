@@ -7,7 +7,7 @@ class Item
 {
 	var valor = 0
 	var property image = "wheat.png"
-	const property position = game.at(3,3)
+	const property position = game.at(7,4)
 	method solido() = false
 	
 	method serInteractuado(personaje){
@@ -18,6 +18,9 @@ class Item
 	method accionAlSerColisionado(){
 		// no lo puedo hacer abstracto porque instancio varias veces a solido
 	}
+	
+	method recibirDanio(dmg) {}
+	
 }
 
 class Recurso inherits Item 

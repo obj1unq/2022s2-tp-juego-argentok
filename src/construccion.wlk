@@ -16,6 +16,7 @@ class Construccion {
 		// No es abstracto porque esta implementacion al final por ahi no la aplicamos
 	}
 	
+	method recibirDanio(dmg) {}
 }
 
 
@@ -34,7 +35,7 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 	
 	}
 	
-	method accionAlSerColisionado(){
+	override method accionAlSerColisionado(){
 		mapaActual.cambiarMapa(construccionBancoInterior)
 	}
 	
