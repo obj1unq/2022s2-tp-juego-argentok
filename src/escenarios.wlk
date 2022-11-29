@@ -14,7 +14,7 @@ class Decoracion{ // que realmente no es una decoracion deberia llamarse "objeto
 		return true
 	}
 	
-
+	method recibirDanio(dmg) {}
 	
 }
 
@@ -81,7 +81,7 @@ class Escenario{
 		self.setearRecursos()
 	}
 	
-	
+	method recibirDanio(dmg) {}
 	 
 }
 
