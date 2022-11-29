@@ -18,12 +18,11 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 
 object mapaActual {
 	
-	method recibirDanio(dmg) {}
 	
-}
-
-
+	
 	var property mapa
+	
+	method recibirDanio(dmg) {}
 
 	method inicializarMapa() {
 		mapa.setearEsceneario()
@@ -83,10 +82,7 @@ class Escenario {
 class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 
 
-	
-	method recibirDanio(dmg) {}
-	 
-}
+
 	// Revisar si realmente los parametors mapaDelQUesLimtie y mapa se necesitan ambos
 	const property mapaDelQueEsLimite
 	const property mapa
@@ -95,6 +91,8 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 
 		mapaActual.cambiarMapa(_mapa)
 	}
+	
+	method recibirDanio(dmg) {} // RECIBIR DAÑO? POR QUE?
 
 	method accionAlSerColisionado() {
 		self.cambiarMapa(mapaDelQueEsLimite)
@@ -106,9 +104,9 @@ object explanada inherits Escenario (construcciones = #{ construccionBanco, cons
 
 	override method setearEsceneario() {
 		super()
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 300, inventario = [ piedra, madera, madera, piedra ])
-		game.addVisual(tito)
-		configuracion.comandos(tito)
+		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = espada, oro = 300, inventario = [ piedra, madera, madera, piedra ])
+		//game.addVisual(tito)
+		configuracion.comandos()
 		construcciones.forEach({ construccion => game.addVisual(construccion)})
 	}
 
@@ -164,9 +162,9 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 
 	override method setearEsceneario() {
 		super()
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada())
-		game.addVisual(tito)
-		configuracion.comandos(tito)
+		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = espada)
+		//game.addVisual(tito)
+		configuracion.comandos()
 		pruebaCambioMapa.cambiarMapa("Explanada2")
 
 			//
@@ -246,9 +244,9 @@ object construccionBancoInterior inherits Escenario (construcciones = #{}, image
 
 	override method setearEsceneario() {
 		super()
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(5, 0), armaEquipada = tester.espada())
-		game.addVisual(tito)
-		configuracion.comandos(tito)
+		//const tito = new Heroe(image = "MagoSur.png", position = game.at(5, 0), armaEquipada = tester.espada())
+		//game.addVisual(tito)
+		configuracion.comandos()
 	}
 
 	override method setearDecoraciones() {

@@ -9,14 +9,15 @@ class Construccion {
 	var property inventario = [ baculo ]
 	var property boveda = 0
 
-	method serInteractuado(personaje)
-
 	// method validarSerUtilizado()
 	// lo comento porque no creo que vayamos a usarlo-Agus
+	
+	const property baul = #{}
+	const property image
+	const property position
+	
 	method comprar(serVivo)
-	const property baul = {}
-	const property image = null
-	const property position = null
+	method serInteractuado(personaje)
 	method serUtilizado()
 	method validarSerUtilizado()
 	method solido() = true
@@ -25,9 +26,7 @@ class Construccion {
 	}
 	
 	method recibirDanio(dmg) {}
-}
-
-
+	
 	method vender(serVivo)
 
 	method montoACobrar() {
@@ -68,18 +67,16 @@ class Construccion {
 
 }
 
-object construccionBanco inherits Construccion (image = "Banco.png", position = game.at(2, 8)) {
+object construccionBanco inherits Construccion (image = "Banco.png", position = game.at(2, 8), position = game.at(6,2)) {
 
 	// Esto deberia de estar en clase construccion e invocarlo con un new supongo
 	override method serInteractuado(personaje) {
 		personaje.usarBanco(self)
 	}
+	
+	override method serUtilizado(){}
+	override method validarSerUtilizado() {}
 
-//	override method validarSerUtilizado() {
-//	}
-	override method accionAlSerColisionado() {
-		mapaActual.cambiarMapa(construccionBancoInterior)
-	}
 
 	override method consultar(serVivo) {
 		game.say(self, "Tenes " + serVivo.oro() + " monedas de oro")
@@ -120,6 +117,10 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 
 object construccionMercado inherits Construccion (image = "Mercado.png", position = game.at(1, 2)) {
 
+	override method serUtilizado(){}
+	override method validarSerUtilizado() {}
+	
+	
 	override method serInteractuado(personaje) {
 		personaje.usarMercado(self)
 	}
@@ -166,9 +167,16 @@ object construccionMercado inherits Construccion (image = "Mercado.png", positio
 
 object construccionMagia inherits Construccion (image = "Magia.png", position = game.at(9, 8)) {
 
+	override method serUtilizado(){}
 	override method serInteractuado(personaje) {
 		personaje.usarCasaDeMagia(self)
 	}
+	
+	override method validarSerUtilizado() {}
+	
+	
+
+	
 
 	override method comprar(serVivo) { // comprar baculo
 		self.validarOpcionUno(serVivo)
@@ -221,6 +229,10 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	override method serInteractuado(personaje) {
 		personaje.usarCasaDeArmaduras(self)
 	}
+	
+	override method serUtilizado(){}
+	override method validarSerUtilizado() {}
+	
 
 	override method comprar(serVivo) { // comprar espada
 		self.validarOpcionUno(serVivo)
