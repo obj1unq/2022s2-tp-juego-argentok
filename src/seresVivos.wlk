@@ -198,7 +198,8 @@ class Heroe inherits Mortal {
 	method usarCasaDeArmaduras(casaDeArmadura) {
 		game.say(self, "Bienvenido a la Casa de Armaduras. Elige la opción deseada: 
 				1. Comprar espada
-				2. Mejorar arma")
+				2. Mejorar arma
+				3. Consultar stock")
 	}
 
 	// deshabilitar botones, el mago no puede usar esta casa!

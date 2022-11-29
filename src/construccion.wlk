@@ -5,7 +5,7 @@ import items.*
 
 class Construccion inherits Solido {
 
-	var property inventario = [ baculo, hechizo ]
+	var property inventario = [ baculo ]
 	var property boveda = 0
 
 	method serInteractuado(personaje)
@@ -152,31 +152,27 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 		personaje.usarCasaDeMagia(self)
 	}
 
-	override method comprar(serVivo) { // comprar hechizo
-		self.validarOpcionUno(serVivo)
-		const ganancia = self.valorDeLosItems(hechizo)
-		serVivo.oro(serVivo.oro() - self.valorDeLosItems(hechizo))
-		boveda = +ganancia
-		serVivo.agregar(self.todosLosItemsDelTipo(hechizo))
-		game.say(self, "Compraste " + self.todosLosItemsDelTipo(hechizo).size() + " hechizos")
-		self.borrarTodosLosItemsDelTipo(hechizo)
-	}
-
-	override method vender(serVivo) { // comprar baculo 
+	override method comprar(serVivo) { // comprar baculo
 		self.validarOpcionDos(serVivo)
-		serVivo.oro(serVivo.oro() - self.valorDeLosItems(baculo))
-		const ganancia = self.valorDeLosItems(baculo)
+		serVivo.oro(serVivo.oro() - baculo.valor())
+		const ganancia = baculo.valor()
 		boveda = +ganancia
 		serVivo.agregar(self.todosLosItemsDelTipo(baculo))
-		game.say(self, "Compraste un báculo!")
+		game.say(self, "Compraste un báculo! Gastaste " + ganancia + " monedas de oro")
 		self.borrarTodosLosItemsDelTipo(baculo)
 	}
 
+	override method vender(serVivo) { // mejorar arma
+		self.validarOpcionUno(serVivo)
+		self.validarOpcionTres(serVivo)
+		const nuevoDanio = self.mejorarDanio(serVivo)
+		serVivo.oro(serVivo.oro() - 300)
+		game.say(self, "El poder de daño de tu arma subió! Ahora es " + nuevoDanio)
+	}
+
 	override method validarOpcionUno(serVivo) {
-		if (serVivo.oro() < hechizo.valor()) {
-			self.error("No tenes suficiente oro para comprar hechizos")
-		} else if (self.todosLosItemsDelTipo(hechizo).size() < 1) {
-			self.error("No hay más hechizos disponibles")
+		if (serVivo.armaActual() == null) {
+			self.error("No tenes arma para mejorar")
 		}
 	}
 
@@ -188,18 +184,8 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 		}
 	}
 
-	override method consultar(serVivo) { // mejorar arma
-		self.validarArma(serVivo)
-		self.validarOpcionTres(serVivo)
-		const nuevoDanio = self.mejorarDanio(serVivo)
-		serVivo.oro(serVivo.oro() - 300)
-		game.say(self, "El poder de daño de tu arma subió! Ahora es " + nuevoDanio)
-	}
-
-	method validarArma(serVivo) {
-		if (serVivo.armaActual() == null) {
-			self.error("No tenes arma para mejorar")
-		}
+	override method consultar(serVivo) {
+		game.say(self, "Tenemos en stock: " + self.inventario().toString())
 	}
 
 	method mejorarDanio(serVivo) {
