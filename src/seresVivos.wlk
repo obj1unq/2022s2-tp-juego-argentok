@@ -9,7 +9,7 @@ class Mortal {
 
 	var property vida = 0
 	var ultimaDireccion = null
-	var property position = game.center()
+	var property position = game.at(1,0)
 	var property image = "pepita.png"
 	
 	method solido() = true
@@ -28,11 +28,11 @@ class Mortal {
 	
 	// los números finales a los siguientes metodos deben ser cambiados dependiendo el tamaño que tenga el mapa 
 	method validarEjeX(direccion) {
-		return direccion.siguiente(position).x().between(0, 15)
+		return direccion.siguiente(position).x().between(0, 14)
 	}
 
 	method validarEjeY(direccion) {
-		return direccion.siguiente(position).y().between(0, 10)		
+		return direccion.siguiente(position).y().between(0, 9)		
 	}
 	
 	method accionAlSerColisionado(){
@@ -93,7 +93,6 @@ class Heroe inherits Mortal {
 		}
 		else{
 			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
-			
 		}
 		self.ultimaDireccion(direccion)
 	}
@@ -162,20 +161,4 @@ class Heroe inherits Mortal {
 }
 
 
-class Enemigo inherits Mortal {
 
-
-
-//esto esa asi solamente con fines de prueba
-
-	
-	
-	override method recibirDanio(dmg) {
-		super(dmg)
-		self.morir() 
-	}
-	
-	override method mover(asd){}
-	override method atacar(){}
-	override method danio() {}
-}

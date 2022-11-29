@@ -7,7 +7,7 @@ import escenarios.*
 
 
 
-program juego {
+/*program juego {
 	
 	game.height(10)
 	game.width(15)
@@ -20,4 +20,17 @@ program juego {
 	
 
 
+}*/
+
+program juego{
+	game.height(10)
+	game.width(15)
+	
+	game.title("Argentok")	
+	pistaDePrueba.prueba2()
+	
+	
+	game.start()
+	
+	
 }

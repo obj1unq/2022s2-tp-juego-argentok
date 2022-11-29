@@ -2,7 +2,7 @@ import wollok.game.*
 import items.*
 import seresVivos.*
 import escenarios.*
-
+import enemigos.*
 
 object configuracion {
 
@@ -59,7 +59,7 @@ object tester {
 	}
 
 	method dummie() {
-		return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300)
+		return new EnemigoHorizontal(image = "pepita.png", position = game.at(2,2),vida = 300)
 		
 	}
 	
@@ -76,14 +76,41 @@ object pistaDePrueba {
 		
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 		game.addVisual(tester.dummie())
-		game.addVisual(tester.item())
+		//game.addVisual(tester.item())
 		game.addVisual(tito)
+		//game.onTick(600, "moverse", {tester.dummie().moverse()})
 
 		configuracion.comandos(tito)
 		//game.addVisual(enemigo)
-		mapaActual.mapa(explanada)
-		mapaActual.inicializarMapa()
+		//mapaActual.mapa(explanada)
+		//mapaActual.inicializarMapa()
+		}
+		method prueba2(){
+		game.cellSize(32)
+		
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300)
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(2,6), armaEquipada = tester.espada())
+		game.addVisual(malito)
+		game.addVisual(tito)
+		game.onTick(500, "moverse", {malito.moverse()})
+		configuracion.comandos(tito)
 	}
+}
+
+object pistaDePrueba2 {
+	
+	method prueba2(){
+		game.cellSize(32)
+		
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300)
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(2,6), armaEquipada = tester.espada())
+		game.addVisual(malito)
+		game.addVisual(tito)
+		game.onTick(500, "moverse", {malito.moverse()})
+		configuracion.comandos(tito)
+	}
+	
+	
 }
 
 
