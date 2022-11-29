@@ -2,6 +2,7 @@ import wollok.game.*
 import items.*
 import comandos.*
 import escenarios.*
+import estadisticas.*
 
 
 class Mortal {
@@ -9,8 +10,8 @@ class Mortal {
 
 	var property vida = 0
 	var ultimaDireccion = null
-	var property position = game.center()
-	var property image = "pepita.png"
+	var property position = null
+	var property image = null
 	
 	method solido() = true
 	
@@ -86,11 +87,10 @@ class Heroe inherits Mortal {
 	
 	
 	const inventario = []
-	const farim = [0,0,0,0,0] 
-	var armaduraEquipada = null
 	var armaEquipada = null
 	var experiencia = 0
 	var nivel = 1
+	const stats = [fuerza, agilidad, inteligencia, salud, manaMax]
 
 	
 	override method mover(direccion) {
@@ -120,20 +120,36 @@ class Heroe inherits Mortal {
 	method subirNivel() {
 		if (self.expNecesariaPorNivel() <= experiencia) {
 			nivel += 1
+			self.subirStats()
 			game.say(self, "Subi de nivel")
+			
 		}
 	}
 	
+	method decirStats() {
+		return "Fue=" + fuerza.valor().toString() +
+			   "     Agi=" + agilidad.valor().toString() + 
+			   "  Int=" + inteligencia.valor().toString()
+	}
+	
+	method decirVida() {
+		return "Vida      " + vida.toString() + "/" + salud.valor().toString()
+	}
+	
+	method decirNivelYExp() {
+		return "Nivel=" + nivel.toString() + "  XP=" + experiencia.toString() + "/" + self.expNecesariaPorNivel().toString()
+	}
+	
+	method decirMana()
+	
+	method subirStats()
+	
 	method expNecesariaPorNivel() {
-		return 1000 * nivel
+		return (100 - nivel) * nivel * nivel
 	}
 	
-	method armaEquipada(arma) {
+	method equiparArma(arma) {
 		armaEquipada = arma 
-	}
-	
-	method armaduraEquipada(armadura) {
-		armaduraEquipada = armadura 
 	}
 
 	method interactuar(cosa) {
@@ -149,6 +165,10 @@ class Heroe inherits Mortal {
 	method agarrarItem(item) {
 		inventario.add(item)
 	}
+	
+	method curarse(cantidad) {
+		vida = (vida + cantidad).min(salud.valor())
+	}
 	 
 	method inventario() = inventario
 	
@@ -157,11 +177,11 @@ class Heroe inherits Mortal {
 	}
 	
 	override method danio() {
-		return armaEquipada.puntosDeDanio() + 10 * self.tipoDeDanio()
+		return armaEquipada.puntosDeDanio() + 10 * self.tipoDeDanio().valor()
 	}
 	
 	method armadura() {
-		return armaduraEquipada.puntosDeArmadura() + 5 * farim.get(2)
+		return 5 * agilidad.valor()
 	}
 	
 	method tipoDeDanio()
@@ -199,15 +219,54 @@ class Heroe inherits Mortal {
 	}
 }
 
-class Mago inherits Heroe {
+object mago inherits Heroe {
+
+	var mana = 0
+	
 	override method tipoDeDanio() {
-		return farim.get(4)
+		return stats.get(3)
+	}
+	
+	override method subirStats() {
+		 agilidad.subirStat(5)
+		 salud.subirStat(10)
+		 inteligencia.subirStat(5)
+		 manaMax.subirStat(15)
+	}
+	
+	override method decirMana() {
+		return "Mana      " + mana.toString() + "/" + manaMax.valor().toString()
+	}
+	
+	method regenerarMana(cantidad) {
+		mana = (mana+ cantidad).min(manaMax.valor())
+	}
+	
+	override method mover(direccion) {
+		super(direccion)
+		image = "Mago_" + ultimaDireccion.toString() + ".png"
 	}
 }
 
-class Guerrero inherits Heroe {
+object guerrero inherits Heroe {
+	
 	override method tipoDeDanio() {
-		return farim.first()	
+		return stats.first()	
+	}
+	
+	override method subirStats() {
+		 fuerza.subirStat(5)
+		 salud.subirStat(25)
+		 agilidad.subirStat(5)
+	}
+	
+	override method decirMana() {
+		return "Los Guerreros no usamos Mana"
+	}
+	
+	override method mover(direccion) {
+		super(direccion)
+		image = "Guerrero_" + ultimaDireccion.toString() + ".png"
 	}
 }
 
@@ -217,9 +276,9 @@ class Enemigo inherits Mortal {
 
 //esto esa asi solamente con fines de prueba
 
-	const expEntregada = 500
+	const expEntregadaBase = 50
 	
-	var heroe = null
+	const heroe = null
 	
 	override method recibirDanio(dmg) {
 		super(dmg)
@@ -227,7 +286,11 @@ class Enemigo inherits Mortal {
 	}
 	
 	override method entregarExp() {
-		heroe.ganarExp(expEntregada)
+		heroe.ganarExp(self.expEntregada())
+	}
+	
+	method expEntregada() {
+		return (expEntregadaBase / heroe.nivel()).roundUp()
 	}
 	
 	override method gameOver(){}
