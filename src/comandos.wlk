@@ -4,7 +4,6 @@ import seresVivos.*
 import escenarios.*
 import estadisticas.*
 
-
 object configuracion {
 
 	var heroe = null
@@ -17,6 +16,13 @@ object configuracion {
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
+	// keyboard.f().onPressDo({ heroe.interactuar()})
+		keyboard.num1().onPressDo({ heroe.comprar()})
+		keyboard.num2().onPressDo({ heroe.vender()})
+		keyboard.num3().onPressDo({ heroe.consultar()})
+	// keyboard.p().onPressDo({ game.addVisual(tester.dummie())})
+	// keyboard.1().onPressDo({ heroe.reservarOro()}
+
 		keyboard.f().onPressDo({ heroe.interactuarConTodos()})
 		keyboard.p().onPressDo({game.say(heroe, heroe.decirNivelYExp())})
 		keyboard.u().onPressDo({game.say(heroe, heroe.decirStats())})
@@ -39,6 +45,7 @@ object configuracion {
 		crear.mago_()
 		juegoIniciado = true
 		}
+
 	}
 	
 	method inicioDelJuegoGuerrero() {
@@ -50,8 +57,6 @@ object configuracion {
 		}
 	}
 }
-
-
 
 object derecha {
 
@@ -85,6 +90,18 @@ object abajo {
 
 }
 
+/*
+object tester {
+
+//esto es para testar
+	method espada() {
+		return new Arma(puntosDeDanio = 100)
+	}
+
+//	method dummie() {
+//		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300)
+//	}
+*/
 
 object crear {
 		
@@ -132,7 +149,7 @@ object tester {
 		return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300, heroe = _heroe)
 		
 	}
-	
+
 	method item() {
 		return new Item()
 	}
@@ -142,7 +159,18 @@ object tester {
 object pistaDePrueba {
 
 	method prueba1() {
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
+		configuracion.comandos(tito)
 		game.cellSize(32)
+/*
+		game.addVisual(tito)
+			// game.addVisual(tester.dummie())
+		game.addVisual(tester.item())
+			// me.addVisual(new Banco(position = game.at(6, 6)))
+			// game.addVisual(enemigo)
+		mapaActual.mapa(explanada)
+		mapaActual.inicializarMapa()
+*/
 		
 		//const tito = new Guerrero(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 		//game.addVisual(tester.dummie(tito))
@@ -155,6 +183,4 @@ object pistaDePrueba {
 		//mapaActual.inicializarMapa()
 	}
 }
-
-
 

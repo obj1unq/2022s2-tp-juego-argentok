@@ -4,7 +4,6 @@ import comandos.*
 import escenarios.*
 import estadisticas.*
 
-
 class Mortal {
 	
 
@@ -22,11 +21,16 @@ class Mortal {
 	method noHaySolidosAdelante(direccion) {
 		return self.losSolidos(game.getObjectsIn(direccion.siguiente(self.position()))).isEmpty()
 	}
+
+	method objetosEnDireccion(direccion) {
+		return game.getObjectsIn(direccion.siguiente(self.position()))
+	}
 	
 	method losSolidos(lista) {
 		return lista.filter({cosa => cosa.solido()})
 	}
 	
+
 	// los números finales a los siguientes metodos deben ser cambiados dependiendo el tamaño que tenga el mapa 
 	method validarEjeX(direccion) {
 		return direccion.siguiente(position).x().between(0, 14)
@@ -48,7 +52,7 @@ class Mortal {
 			self.gameOver()	
 		}
 	}
-	
+
 	method despawnear() {
 		game.removeVisual(self)
 	}
@@ -60,24 +64,25 @@ class Mortal {
 	method recibirDanio(dmg) {
 		vida -= dmg
 	}
-	
+
 	method atacar()
-	
+
 	method danio()
 	
 	method estaEnfrente() {
 		return game.getObjectsIn(ultimaDireccion.siguiente(self.position()))
 	}
-	
+
 	method mover(direccion)
-	
 	method ultimaDireccion(direccion) {
 		ultimaDireccion = direccion
 	} 
 }
 
+}
 
 class Heroe inherits Mortal {
+
 	
 	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta.
 	// Tampoco tiene sentido tener que instanciarlo varias veces 
@@ -89,15 +94,16 @@ class Heroe inherits Mortal {
 	const inventario = []
 	var armaEquipada = null
 	var experiencia = 0
+  var property oro = 0
 	var nivel = 1
 	const stats = [fuerza, agilidad, inteligencia, salud, manaMax]
-
-	
+  
 	override method mover(direccion) {
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
-		}
-		else{
+		} else {
+			self.objetosEnDireccion(direccion).forEach({ objeto => objeto.accionAlSerColisionado()})
+		}else{
 			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
 			
 		}
@@ -173,16 +179,22 @@ class Heroe inherits Mortal {
 	method inventario() = inventario
 	
 	method equiparItem(item) {
-	 
 	}
+
 	
 	override method danio() {
 		return armaEquipada.puntosDeDanio() + 10 * self.tipoDeDanio().valor()
 	}
-	
+
 	method armadura() {
-		return 5 * agilidad.valor()
+  	return 5 * agilidad.valor()
 	}
+
+	method puntosDeDanioDelArmaActual() {
+		return self.armaActual().puntosDeDanio()
+	}
+
+	
 	
 	method tipoDeDanio()
 	
@@ -197,9 +209,59 @@ class Heroe inherits Mortal {
 		}
 		
 		//y aca tiene que ir una rama ELSE con el sprite de ataque (si se quiere)
-		
 
+	method ganarOroPorVenta(cantOro) {
+		oro = self.oro() + cantOro
 	}
+
+	method valorDelInventario() {
+		return inventario.sum({ item => item.valor() })
+	}
+
+	method vaciarInventario() {
+		inventario.clear()
+	}
+
+	// metodos para interactuar con las casas
+	method poseePiedras() {
+		return inventario.contains(piedra)
+	}
+
+	method poseeMadera() {
+		return inventario.contains(madera)
+	}
+
+	method gananciaPorItemsVendidos(_item) {
+		return inventario.count({ item => item == _item }) * _item.valor()
+	}
+
+	method borrarItems(_item) {
+		inventario.removeAllSuchThat({ item => item == _item})
+	}
+
+	method dejarItemEnUnaCasa(item, casa) {
+		inventario.remove(item)
+		casa.depositar(item)
+	}
+
+	method agregar(items) {
+		inventario.add(items)
+	}
+
+	method usarCasaDeMagia(casaDeMagia) {
+		game.say(self, "Bienvenido a la Casa de Magias. Elige la opción deseada: 
+				1. Comprar un báculo
+				2. Mejorar arma
+				3. Consultar stock")
+	}
+	// habilitar botones
+	method usarCasaDeArmaduras(casaDeArmadura) {
+		game.say(self, "Bienvenido a la Casa de Armaduras. Elige la opción deseada: 
+				1. Comprar espada
+				2. Mejorar arma
+				3. Consultar stock")
+	}
+
 	// METODOS DE CAMBIO DE MAPA
 	
 	// TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
@@ -216,6 +278,29 @@ class Heroe inherits Mortal {
 	
 	override method gameOver(){
 		//aca tiene que ir la pantalla de Game Over
+	}
+  
+  
+  /*
+	method interactuar() {
+		self.interactuables().forEach({ cosa => cosa.serInteractuado(self)})
+	}
+*/
+
+	method interactuables() {
+		return game.getObjectsIn(self.position().up(1))
+	}
+
+	method comprar() {
+		self.interactuables().forEach({ cosa => cosa.comprar(self)})
+	}
+
+	method vender() {
+		self.interactuables().forEach({ cosa => cosa.vender(self)})
+	}
+
+	method consultar() {
+		self.interactuables().forEach({ cosa => cosa.consultar(self)})
 	}
 }
 
@@ -270,10 +355,80 @@ object guerrero inherits Heroe {
 	}
 }
 
+	// deshabilitar botones, el mago no puede usar esta casa!
+	// mostrar mensaje de que no puede acceder
+	method usarBanco(banco) {
+		// habilitar botones
+		game.say(self, "Bienvenido al Banco Central. Elige la opción deseada: 
+				1. Depositar oro
+				2. Retirar oro
+				3. Consultar oro")
+	}
+
+
+	method usarMercado(mercado) {
+		game.say(self, "Bienvenido al ArgenMercado.
+						1. Vender piedra
+						2. Vender madera")
+	}
 
 class Enemigo inherits Mortal {
 
 
+// METODOS DE CAMBIO DE MAPA
+// TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
+/* 
+ * 
+ * method cambioDeMapa(direccion){
+ * 	if (game.getObjectsIn(direccion.siguiente(self.position())) == #{}){
+ * 		
+ * 	}
+ * }
+ */
+}
+
+//
+//object guerrero inherits Heroe {
+//
+//	override method usarCasaDeMagia(serVivo) {
+//		// deshabilitar botones, el guerrero no puede usar esta casa!
+//		// mostrar mensaje de que no puede acceder
+//		game.say(self, "No podes usar esta casa")
+//	}
+//
+//	override method usarCasaDeArmaduras(serVivo) {
+//		// habilitar botones
+//		game.say(self, "Bienvenido a la Casa de Armaduras. Elija la opción deseada: 
+//				1. Comprar ítems
+//				2. Vender ítems")
+//	}
+//
+//}
+
+//object mago inherits Heroe {
+//
+//	override method usarCasaDeMagia(serVivo) {
+//		// habilitar botones
+//		game.say(self, "Bienvenido a la Casa de Magias. Elija la opción deseada: 
+//				1. Comprar hechizos
+//				2. Comprar un báculo
+//				3. Mejorar arma equipada")
+//	}
+//
+//	override method usarCasaDeArmaduras(serVivo) {
+//	// deshabilitar botones, el mago no puede usar esta casa!
+//	// mostrar mensaje de que no puede acceder
+//	}
+//
+//	override method usarBanco(serVivo) {
+//	// habilitar botones
+//	}
+//
+//	override method usarMercado(serVivo) {
+//	// habilitar botones
+//	}
+//
+//}
 //esto esa asi solamente con fines de prueba
 
 	const expEntregadaBase = 50
