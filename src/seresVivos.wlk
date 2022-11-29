@@ -78,7 +78,7 @@ class Heroe inherits Mortal {
 	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta. Tampoco tiene sentido tener que instanciarlo varias veces 
 	// var property position = game.center()
 	// var property image = "hero.png"
-	var inventario = []
+	var property inventario = []
 	const faime = [ 0, 0, 0, 0, 0 ] // fuerza, agilidad, inteligencia, mana, experiencia
 	var armaduraEquipada = null
 	var armaEquipada = null
@@ -101,7 +101,7 @@ class Heroe inherits Mortal {
 	}
 
 	method consultar() {
-		self.interactuables().forEach({ cosa => cosa.consultarOro(self)})
+		self.interactuables().forEach({ cosa => cosa.consultar(self)})
 	}
 
 	override method mover(direccion) {
@@ -142,20 +142,14 @@ class Heroe inherits Mortal {
 		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
 	}
 
-	method reservarOro(cantOro) {
-		self.validarOroDisponible(cantOro)
-		oro = -cantOro
-	// guardar el oro en el banco
-	}
-
-	method validarOroDisponible(cantOro) {
-		if (oro < cantOro) {
-			self.error("No tenes esa cantidad de oro para depositar")
+	method validarOroDisponible() {
+		if (oro == 0) {
+			self.error("No tenes oro para depositar!")
 		}
 	}
 
 	method ganarOroPorVenta(cantOro) {
-		oro = +cantOro
+		oro = self.oro() + cantOro
 	}
 
 	method valorDelInventario() {
@@ -163,10 +157,26 @@ class Heroe inherits Mortal {
 	}
 
 	method vaciarInventario() {
-		inventario = []
+		inventario.clear()
 	}
 
 	// metodos para interactuar con las casas
+	method poseePiedras() {
+		return inventario.contains(piedra)
+	}
+
+	method poseeMadera() {
+		return inventario.contains(madera)
+	}
+
+	method gananciaPorItemsVendidos(_item) {
+		return inventario.count({ item => item == _item }) * _item.valor()
+	}
+
+	method borrarItems(_item) {
+		return inventario.removeAllSuchThat({ item => item == _item })
+	}
+
 	method dejarItemEnUnaCasa(item, casa) {
 		inventario.remove(item)
 		casa.depositar(item)
@@ -197,7 +207,6 @@ class Heroe inherits Mortal {
 		game.say(self, "Bienvenido al ArgenMercado.
 						1. Vender piedra
 						2. Vender madera")
-	// tanto el agua como la comida van a tener efectos en el faime del personaje
 	}
 
 // METODOS DE CAMBIO DE MAPA

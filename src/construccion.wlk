@@ -1,6 +1,7 @@
 import wollok.game.*
 import seresVivos.*
 import escenarios.*
+import items.*
 
 class Construccion inherits Solido {
 
@@ -17,6 +18,14 @@ class Construccion inherits Solido {
 	method montoACobrar() {
 		return inventario.sum({ item => item.valor() })
 	}
+
+	method validarAccion(serVivo)
+
+	method depositar(item) {
+		inventario.add(item)
+	}
+
+	method consultar(serVivo)
 
 }
 
@@ -35,11 +44,11 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 		mapaActual.cambiarMapa(construccionBancoInterior)
 	}
 
-	method consultarOro(serVivo) {
+	method consultar(serVivo) {
 		game.say(self, "Tenes " + serVivo.oro() + " monedas de oro")
 	}
 
-	method validarRetiro() {
+	override method validarAccion(serVivo) {
 		if (self.boveda() == 0) {
 			self.error("No tenes oro para retirar")
 		}
@@ -47,13 +56,14 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 
 	// SE DEPOSITA/RETIRA TODO EL ORO
 	override method comprar(serVivo) { // equivalente a depositar
+		serVivo.validarOroDisponible()
 		boveda = +serVivo.oro()
 		serVivo.oro(0)
 		game.say(self, "Depositaste " + boveda + " oro")
 	}
 
 	override method vender(serVivo) { // equivalente a retirar
-		self.validarRetiro()
+		self.validarAccion(serVivo)
 		game.say(self, "Retiraste " + boveda + " oro")
 		serVivo.oro(self.boveda())
 		boveda = 0
@@ -68,11 +78,36 @@ object construccionMercado inherits Construccion (image = "Mercado.png", positio
 		personaje.usarMercado(self)
 	}
 
+	override method validarAccion(serVivo) {
+		if (!serVivo.poseePiedras()) {
+			self.error("Parece que no tenes piedras para vender!")
+		}
+	}
+
+	method validarMadera(serVivo) {
+		if (!serVivo.poseeMadera()) {
+			self.error("Parece que no tenes madera para vender!")
+		}
+	}
+
 	override method comprar(serVivo) { // opcion 1
-		serVivo.oro() - 15
+		self.validarAccion(serVivo)
+		const ganancia = serVivo.gananciaPorItemsVendidos(piedra)
+		serVivo.borrarItems(piedra)
+		serVivo.ganarOroPorVenta(ganancia)
+		game.say(self, "Ganaste " + ganancia + " monedas de oro por tus piedras!")
 	}
 
 	override method vender(serVivo) { // opcion 2
+		self.validarMadera(serVivo)
+		const ganancia = serVivo.gananciaPorItemsVendidos(madera)
+		serVivo.ganarOroPorVenta(ganancia)
+		serVivo.borrarItems(madera)
+		game.say(self, "Ganaste " + ganancia + " monedas de oro por tu madera!")
+	}
+
+	override method consultar(serVivo) {
+		game.say(self, serVivo.inventario().toString())
 	}
 
 //	override method validarSerUtilizado() {

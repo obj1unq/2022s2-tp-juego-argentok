@@ -9,7 +9,7 @@ class Item {
 	method solido() = false
 
 	method serInteractuado(personaje) {
-		// personaje.agarrarItem(self) este metodo se reemplaza por agarrarItemdeUnaCasa
+		personaje.agarrarItem(self)
 		game.removeVisual(self)
 	}
 
@@ -182,6 +182,22 @@ object hechizo inherits Item {
 }
 
 object baculo inherits Item {
+
+}
+
+object piedra inherits Item {
+
+	override method valor() {
+		return 25
+	}
+
+}
+
+object madera inherits Item {
+
+	override method valor() {
+		return 80
+	}
 
 }
 

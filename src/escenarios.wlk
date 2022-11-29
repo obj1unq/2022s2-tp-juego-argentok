@@ -3,6 +3,7 @@ import wollok.game.*
 import seresVivos.*
 import recursos.*
 import comandos.*
+import items.*
 
 class Decoracion { // que realmente no es una decoracion deberia llamarse "objetoSolido"  ES CONVENIENTE POR EJEMPLO QUE LOS LIMITES DE MAPA TAMBIEN HEREDEN DE POR ENDE YO CREO QUE DEBERIA LLAMARSE OBJETO SOLIDO
 
@@ -12,8 +13,6 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 	method solido() {
 		return true
 	}
-
-	method accionAlSerColisionado()
 
 }
 
@@ -96,7 +95,7 @@ object explanada inherits Escenario (construcciones = #{ construccionBanco, cons
 
 	override method setearEsceneario() {
 		super()
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada())
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 150, inventario = [ piedra, piedra, madera, piedra ])
 		game.addVisual(tito)
 		configuracion.comandos(tito)
 		construcciones.forEach({ construccion => game.addVisual(construccion)})
