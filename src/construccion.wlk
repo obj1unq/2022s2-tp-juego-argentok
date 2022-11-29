@@ -3,7 +3,8 @@ import seresVivos.*
 import escenarios.*
 import items.*
 
-class Construccion inherits Solido {
+class Construccion {
+
 
 	var property inventario = [ baculo ]
 	var property boveda = 0
@@ -13,6 +14,19 @@ class Construccion inherits Solido {
 	// method validarSerUtilizado()
 	// lo comento porque no creo que vayamos a usarlo-Agus
 	method comprar(serVivo)
+	const property baul = {}
+	const property image = null
+	const property position = null
+	method serUtilizado()
+	method validarSerUtilizado()
+	method solido() = true
+	method accionAlSerColisionado(){
+		// No es abstracto porque esta implementacion al final por ahi no la aplicamos
+	}
+	
+	method recibirDanio(dmg) {}
+}
+
 
 	method vender(serVivo)
 

@@ -2,12 +2,17 @@ import seresVivos.*
 import wollok.game.*
 
 
-class Recurso inherits Solido
+class Recurso
 {
-	
+	var property position
 	var vida
 	
-	override method image()
+	method solido(){
+		return true
+	}
+
+	
+	method image()
 	{
 		return vida.nombreimg()
 	}

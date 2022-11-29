@@ -2,61 +2,65 @@ import wollok.game.*
 import items.*
 import comandos.*
 import escenarios.*
+import estadisticas.*
 
-class Solido {
+class Mortal {
+	
 
-	/*
-	 * No creo que este bien que mortal herede de solido, hay metodos que la mayorai de solidos no van a usar como validar los ejes o siguiente posicion es vacia.
-	 * Tambien mi idea es que cada solido pueda devolver .mapa() que me retorne de que mapa
-	 */
-	var property position = game.center()
-	var property image = "pepita.png"
-
+	var property vida = 0
+	var ultimaDireccion = null
+	var property position = null
+	var property image = null
+	
+	method solido() = true
+	
 	method puedoPasar(direccion) {
-		return self.siguientePosicionEsVacia(direccion) and self.validarEjeX(direccion) and self.validarEjeY(direccion)
+		return self.noHaySolidosAdelante(direccion) and self.validarEjeX(direccion) and self.validarEjeY(direccion)
 	}
 
-	method siguientePosicionEsVacia(direccion) {
-		return game.getObjectsIn(direccion.siguiente(self.position())).isEmpty()
+	method noHaySolidosAdelante(direccion) {
+		return self.losSolidos(game.getObjectsIn(direccion.siguiente(self.position()))).isEmpty()
 	}
 
 	method objetosEnDireccion(direccion) {
 		return game.getObjectsIn(direccion.siguiente(self.position()))
 	}
+	
+	method losSolidos(lista) {
+		return lista.filter({cosa => cosa.solido()})
+	}
+	
 
 	// los números finales a los siguientes metodos deben ser cambiados dependiendo el tamaño que tenga el mapa 
 	method validarEjeX(direccion) {
-		// return direccion.siguiente(self.position()).x() != -1 and direccion.siguiente(self.position()).x() != 10
 		return direccion.siguiente(position).x().between(0, 14)
 	}
 
 	method validarEjeY(direccion) {
-		// return direccion.siguiente(self.position()).y() != -1 and direccion.siguiente(self.position()).y() != 10
-		return direccion.siguiente(position).y().between(0, 9)
+		return direccion.siguiente(position).y().between(0, 9)		
 	}
-
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	method accionAlSerColisionado() {
-	// no lo puedo hacer abstracto porque instancio varias veces a solido
+	
+	method accionAlSerColisionado(){
+		// no lo puedo hacer abstracto porque instancio varias veces a solido
 	}
-
-}
-
-class Mortal inherits Solido {
-
-	var property vida = 0
-	var ultimaDireccion = derecha
-
+	
+	
 	method morir() {
 		if (vida <= 0) {
-			self.despawnear()
+			self.despawnear()	
+			self.entregarExp()
+			self.gameOver()	
 		}
 	}
 
 	method despawnear() {
 		game.removeVisual(self)
 	}
-
+	
+	method gameOver()
+	
+	method entregarExp()
+	
 	method recibirDanio(dmg) {
 		vida -= dmg
 	}
@@ -64,91 +68,147 @@ class Mortal inherits Solido {
 	method atacar()
 
 	method danio()
-
-	method estaEnfrente(direccion) {
-		return game.getObjectsIns(direccion.siguiente(self.position()))
+	
+	method estaEnfrente() {
+		return game.getObjectsIn(ultimaDireccion.siguiente(self.position()))
 	}
 
 	method mover(direccion)
+	method ultimaDireccion(direccion) {
+		ultimaDireccion = direccion
+	} 
+}
 
 }
 
 class Heroe inherits Mortal {
 
-	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta. Tampoco tiene sentido tener que instanciarlo varias veces 
+	
+	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta.
+	// Tampoco tiene sentido tener que instanciarlo varias veces 
+	
 	// var property position = game.center()
 	// var property image = "hero.png"
-	var property inventario = []
-	const faime = [ 2, 0, 0, 0, 0 ] // fuerza, agilidad, inteligencia, mana, experiencia
-	var armaduraEquipada = null
+	
+	
+	const inventario = []
 	var armaEquipada = null
-	var property oro = 0
-
-	method interactuar() {
-		self.interactuables().forEach({ cosa => cosa.serInteractuado(self)})
-	}
-
-	method interactuables() {
-		return game.getObjectsIn(self.position().up(1))
-	}
-
-	method comprar() {
-		self.interactuables().forEach({ cosa => cosa.comprar(self)})
-	}
-
-	method vender() {
-		self.interactuables().forEach({ cosa => cosa.vender(self)})
-	}
-
-	method consultar() {
-		self.interactuables().forEach({ cosa => cosa.consultar(self)})
-	}
-
+	var experiencia = 0
+  var property oro = 0
+	var nivel = 1
+	const stats = [fuerza, agilidad, inteligencia, salud, manaMax]
+  
 	override method mover(direccion) {
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
 		} else {
 			self.objetosEnDireccion(direccion).forEach({ objeto => objeto.accionAlSerColisionado()})
+		}else{
+			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
+			
 		}
 		self.ultimaDireccion(direccion)
 	}
-
-	method ultimaDireccion(direccion) {
-		ultimaDireccion = direccion
+	
+	method arribaDe() {
+		return game.getObjectsIn(self.position())
+	}
+	
+	method experiencia() = experiencia
+	
+	method nivel() = nivel
+	
+	method ganarExp(cantidad) {
+		experiencia += cantidad
+		self.subirNivel()
+	}
+	
+	method subirNivel() {
+		if (self.expNecesariaPorNivel() <= experiencia) {
+			nivel += 1
+			self.subirStats()
+			game.say(self, "Subi de nivel")
+			
+		}
+	}
+	
+	method decirStats() {
+		return "Fue=" + fuerza.valor().toString() +
+			   "     Agi=" + agilidad.valor().toString() + 
+			   "  Int=" + inteligencia.valor().toString()
+	}
+	
+	method decirVida() {
+		return "Vida      " + vida.toString() + "/" + salud.valor().toString()
+	}
+	
+	method decirNivelYExp() {
+		return "Nivel=" + nivel.toString() + "  XP=" + experiencia.toString() + "/" + self.expNecesariaPorNivel().toString()
+	}
+	
+	method decirMana()
+	
+	method subirStats()
+	
+	method expNecesariaPorNivel() {
+		return (100 - nivel) * nivel * nivel
+	}
+	
+	method equiparArma(arma) {
+		armaEquipada = arma 
 	}
 
-	method armaEquipada(arma) {
-		armaEquipada = arma
+	method interactuar(cosa) {
+		cosa.serInteractuado(self)
 	}
-
-	method armaActual() {
-		return armaEquipada
+	
+	method interactuarConTodos() {
+		self.arribaDe().forEach({cosa => self.interactuar(cosa)})
 	}
-
-	method armaduraEquipada(armadura) {
-		armaduraEquipada = armadura
+	
+	method serInteractuado(alguien){}
+	
+	method agarrarItem(item) {
+		inventario.add(item)
 	}
-
+	
+	method curarse(cantidad) {
+		vida = (vida + cantidad).min(salud.valor())
+	}
+	 
+	method inventario() = inventario
+	
 	method equiparItem(item) {
 	}
 
-	override method danio() { // daño que hace EL HEROE
-		return (armaEquipada.puntosDeDanio() + 10) * faime.first()
+	
+	override method danio() {
+		return armaEquipada.puntosDeDanio() + 10 * self.tipoDeDanio().valor()
 	}
 
 	method armadura() {
-		return armaduraEquipada.puntosDeArmadura() + 5 * faime.get(2)
+  	return 5 * agilidad.valor()
 	}
 
 	method puntosDeDanioDelArmaActual() {
 		return self.armaActual().puntosDeDanio()
 	}
 
+	
+	
+	method tipoDeDanio()
+	
+	override method entregarExp() {}
+	
+	
 	override method atacar() {
-		// acá va a ir el visual para el sprite de atacar
-		// estaEnfrente().recibirDanio(self.danio())
-		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
-	}
+		//acá va a ir el visual para el sprite de atacar
+
+		if (! self.estaEnfrente().isEmpty()) {
+			self.estaEnfrente().first().recibirDanio(self.danio())
+		}
+		
+		//y aca tiene que ir una rama ELSE con el sprite de ataque (si se quiere)
 
 	method ganarOroPorVenta(cantOro) {
 		oro = self.oro() + cantOro
@@ -194,7 +254,6 @@ class Heroe inherits Mortal {
 				2. Mejorar arma
 				3. Consultar stock")
 	}
-
 	// habilitar botones
 	method usarCasaDeArmaduras(casaDeArmadura) {
 		game.say(self, "Bienvenido a la Casa de Armaduras. Elige la opción deseada: 
@@ -202,6 +261,99 @@ class Heroe inherits Mortal {
 				2. Mejorar arma
 				3. Consultar stock")
 	}
+
+	// METODOS DE CAMBIO DE MAPA
+	
+	// TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
+	
+	/* 
+	
+	method cambioDeMapa(direccion){
+		if (game.getObjectsIn(direccion.siguiente(self.position())) == #{}){
+			
+		
+	}
+	*/
+	
+	
+	override method gameOver(){
+		//aca tiene que ir la pantalla de Game Over
+	}
+  
+  
+  /*
+	method interactuar() {
+		self.interactuables().forEach({ cosa => cosa.serInteractuado(self)})
+	}
+*/
+
+	method interactuables() {
+		return game.getObjectsIn(self.position().up(1))
+	}
+
+	method comprar() {
+		self.interactuables().forEach({ cosa => cosa.comprar(self)})
+	}
+
+	method vender() {
+		self.interactuables().forEach({ cosa => cosa.vender(self)})
+	}
+
+	method consultar() {
+		self.interactuables().forEach({ cosa => cosa.consultar(self)})
+	}
+}
+
+object mago inherits Heroe {
+
+	var mana = 0
+	
+	override method tipoDeDanio() {
+		return stats.get(3)
+	}
+	
+	override method subirStats() {
+		 agilidad.subirStat(5)
+		 salud.subirStat(10)
+		 inteligencia.subirStat(5)
+		 manaMax.subirStat(15)
+	}
+	
+	override method decirMana() {
+		return "Mana      " + mana.toString() + "/" + manaMax.valor().toString()
+	}
+	
+	method regenerarMana(cantidad) {
+		mana = (mana+ cantidad).min(manaMax.valor())
+	}
+	
+	override method mover(direccion) {
+		super(direccion)
+		image = "Mago_" + ultimaDireccion.toString() + ".png"
+	}
+}
+
+object guerrero inherits Heroe {
+	
+	override method tipoDeDanio() {
+		return stats.first()	
+	}
+	
+	override method subirStats() {
+		 fuerza.subirStat(5)
+		 salud.subirStat(25)
+		 agilidad.subirStat(5)
+	}
+	
+	override method decirMana() {
+		return "Los Guerreros no usamos Mana"
+	}
+	
+	override method mover(direccion) {
+		super(direccion)
+		image = "Guerrero_" + ultimaDireccion.toString() + ".png"
+	}
+}
 
 	// deshabilitar botones, el mago no puede usar esta casa!
 	// mostrar mensaje de que no puede acceder
@@ -213,11 +365,15 @@ class Heroe inherits Mortal {
 				3. Consultar oro")
 	}
 
+
 	method usarMercado(mercado) {
 		game.say(self, "Bienvenido al ArgenMercado.
 						1. Vender piedra
 						2. Vender madera")
 	}
+
+class Enemigo inherits Mortal {
+
 
 // METODOS DE CAMBIO DE MAPA
 // TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
@@ -248,7 +404,7 @@ class Heroe inherits Mortal {
 //	}
 //
 //}
-//
+
 //object mago inherits Heroe {
 //
 //	override method usarCasaDeMagia(serVivo) {
@@ -274,18 +430,29 @@ class Heroe inherits Mortal {
 //
 //}
 //esto esa asi solamente con fines de prueba
-object enemigo {
 
-	var property position = game.at(2, 2)
-	var vida = 300
-	var property image = "pepita.png"
-
-	method recibirDanio(dmg) {
-		vida -= dmg
-		if (vida <= 0) game.removeVisual(self)
+	const expEntregadaBase = 50
+	
+	const heroe = null
+	
+	override method recibirDanio(dmg) {
+		super(dmg)
+		self.morir() 
 	}
-
-	method vida() = vida
-
+	
+	override method entregarExp() {
+		heroe.ganarExp(self.expEntregada())
+	}
+	
+	method expEntregada() {
+		return (expEntregadaBase / heroe.nivel()).roundUp()
+	}
+	
+	override method gameOver(){}
+	
+	method heroe(_heroe) = _heroe
+	
+	override method mover(asd){}
+	override method atacar(){}
+	override method danio() {}
 }
-

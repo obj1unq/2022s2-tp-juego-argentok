@@ -17,6 +17,11 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 }
 
 object mapaActual {
+	
+	method recibirDanio(dmg) {}
+	
+}
+
 
 	var property mapa
 
@@ -54,6 +59,7 @@ class Escenario {
 	method colocarObjetoSolido(_image, _position) {
 		const objetoSolido = new Decoracion(image = _image, position = _position)
 		game.addVisual(objetoSolido)
+
 	}
 
 	method colocarLimite(_mapa, mapaLimite, _image, _position) {
@@ -72,16 +78,21 @@ class Escenario {
 		self.setearLimites()
 		self.setearRecursos()
 	}
-
 }
 
 class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 
+
+	
+	method recibirDanio(dmg) {}
+	 
+}
 	// Revisar si realmente los parametors mapaDelQUesLimtie y mapa se necesitan ambos
 	const property mapaDelQueEsLimite
 	const property mapa
 
 	method cambiarMapa(_mapa) {
+
 		mapaActual.cambiarMapa(_mapa)
 	}
 
@@ -157,6 +168,7 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		game.addVisual(tito)
 		configuracion.comandos(tito)
 		pruebaCambioMapa.cambiarMapa("Explanada2")
+
 			//
 			// Seteo Mar
 		self.colocarObjetoSolido("Mar.png", game.at(2, 0))
@@ -188,10 +200,12 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		self.colocarObjetoSolido("Elevacion.png", game.at(11, 9))
 		self.colocarObjetoSolido("Elevacion.png", game.at(12, 8))
 		self.colocarObjetoSolido("Elevacion.png", game.at(13, 9))
+
 	}
 
 	override method setearDecoraciones() {
 		// vallas
+
 		self.colocarObjetoSolido("Valla.png", game.at(1, 9))
 		self.colocarObjetoSolido("Valla.png", game.at(2, 9))
 		self.colocarObjetoSolido("Valla.png", game.at(3, 9))
@@ -214,6 +228,7 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 9))
 		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 10))
 		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 11))
+
 	}
 
 	override method setearRecursos() {

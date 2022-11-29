@@ -1,3 +1,4 @@
+
 import wollok.game.*
 
 class Item {
@@ -74,4 +75,3 @@ object madera inherits Item {
 	}
 
 }
-
