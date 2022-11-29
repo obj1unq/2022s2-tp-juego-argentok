@@ -191,7 +191,8 @@ class Heroe inherits Mortal {
 	method usarCasaDeMagia(casaDeMagia) {
 		game.say(self, "Bienvenido a la Casa de Magias. Elige la opción deseada: 
 				1. Comprar un báculo
-				2. Mejorar arma")
+				2. Mejorar arma
+				3. Consultar stock")
 	}
 
 	// habilitar botones

@@ -43,7 +43,7 @@ class Armadura inherits Equipamento {
 }
 
 //ITEMS
-object hechizo inherits Item {
+object espada inherits Item {
 
 	override method valor() {
 		return 100

@@ -48,6 +48,10 @@ class Construccion inherits Solido {
 		inventario.removeAllSuchThat({ item => item == _item})
 	}
 
+	method mejorarDanio(serVivo) {
+		return serVivo.puntosDeDanioDelArmaActual() * 10
+	}
+
 }
 
 object construccionBanco inherits Construccion (image = "Banco.png", position = game.at(2, 8)) {
@@ -153,7 +157,7 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 	}
 
 	override method comprar(serVivo) { // comprar baculo
-		self.validarOpcionDos(serVivo)
+		self.validarOpcionUno(serVivo)
 		serVivo.oro(serVivo.oro() - baculo.valor())
 		const ganancia = baculo.valor()
 		boveda = +ganancia
@@ -163,7 +167,7 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 	}
 
 	override method vender(serVivo) { // mejorar arma
-		self.validarOpcionUno(serVivo)
+		self.validarOpcionDos(serVivo)
 		self.validarOpcionTres(serVivo)
 		const nuevoDanio = self.mejorarDanio(serVivo)
 		serVivo.oro(serVivo.oro() - 300)
@@ -171,25 +175,21 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 	}
 
 	override method validarOpcionUno(serVivo) {
+		if (serVivo.oro() < baculo.valor()) {
+			self.error("No tenes suficiente oro para comprar un báculo")
+		} else if (self.todosLosItemsDelTipo(baculo).size() < 1) {
+			self.error("No hay más báculos disponibles")
+		}
+	}
+
+	override method validarOpcionDos(serVivo) {
 		if (serVivo.armaActual() == null) {
 			self.error("No tenes arma para mejorar")
 		}
 	}
 
-	override method validarOpcionDos(serVivo) {
-		if (serVivo.oro() < baculo.valor()) {
-			self.error("No tenes suficiente oro para comprar un báculo")
-		} else if (self.todosLosItemsDelTipo(hechizo).size() < 1) {
-			self.error("No hay más báculos disponibles")
-		}
-	}
-
 	override method consultar(serVivo) {
 		game.say(self, "Tenemos en stock: " + self.inventario().toString())
-	}
-
-	method mejorarDanio(serVivo) {
-		return serVivo.puntosDeDanioDelArmaActual() * 10
 	}
 
 	override method validarOpcionTres(serVivo) { // validamos que tenga oro suficiente para mejorar el arma
@@ -208,24 +208,48 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 		personaje.usarCasaDeArmaduras(self)
 	}
 
-	override method comprar(serVivo) {
+	override method comprar(serVivo) { // comprar espada
+		self.validarOpcionUno(serVivo)
+		serVivo.oro(serVivo.oro() - espada.valor())
+		const ganancia = espada.valor()
+		boveda = +ganancia
+		serVivo.agregar(self.todosLosItemsDelTipo(espada))
+		game.say(self, "Compraste una espada! Gastaste " + ganancia + " monedas de oro")
+		self.borrarTodosLosItemsDelTipo(espada)
 	}
 
-	override method vender(serVivo) {
+	override method vender(serVivo) { // mejorar arma
+		self.validarOpcionDos(serVivo)
+		self.validarOpcionTres(serVivo)
+		const nuevoDanio = self.mejorarDanio(serVivo)
+		serVivo.oro(serVivo.oro() - 200)
+		game.say(self, "El poder de daño de tu arma subió! Ahora es " + nuevoDanio)
 	}
 
 //	override method validarSerUtilizado() {
 //	}
 	override method validarOpcionUno(serVivo) {
+		if (serVivo.oro() < espada.valor()) {
+			self.error("No tenes suficiente oro para comprar una espada")
+		} else if (self.todosLosItemsDelTipo(espada).size() < 1) {
+			self.error("No hay más espadas disponibles")
+		}
 	}
 
 	override method validarOpcionDos(serVivo) {
+		if (serVivo.armaActual() == null) {
+			self.error("No tenes arma para mejorar")
+		}
 	}
 
 	override method validarOpcionTres(serVivo) {
+		if (serVivo.oro() < 200) {
+			self.error("Se necesitan 200 monedas de oro para mejorar tu arma!")
+		}
 	}
 
 	override method consultar(serVivo) {
+		game.say(self, "Tenemos en stock: " + self.inventario().toString())
 	}
 
 }
