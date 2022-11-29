@@ -66,7 +66,7 @@ class Mortal inherits Solido {
 	method danio()
 
 	method estaEnfrente(direccion) {
-		return game.getObjectsIn(direccion.siguiente(self.position()))
+		return game.getObjectsIns(direccion.siguiente(self.position()))
 	}
 
 	method mover(direccion)
@@ -79,7 +79,7 @@ class Heroe inherits Mortal {
 	// var property position = game.center()
 	// var property image = "hero.png"
 	var property inventario = []
-	const faime = [ 0, 0, 0, 0, 0 ] // fuerza, agilidad, inteligencia, mana, experiencia
+	const faime = [ 2, 0, 0, 0, 0 ] // fuerza, agilidad, inteligencia, mana, experiencia
 	var armaduraEquipada = null
 	var armaEquipada = null
 	var property oro = 0
@@ -121,6 +121,10 @@ class Heroe inherits Mortal {
 		armaEquipada = arma
 	}
 
+	method armaActual() {
+		return armaEquipada
+	}
+
 	method armaduraEquipada(armadura) {
 		armaduraEquipada = armadura
 	}
@@ -128,24 +132,22 @@ class Heroe inherits Mortal {
 	method equiparItem(item) {
 	}
 
-	override method danio() {
-		return armaEquipada.puntosDeDanio() + 10 * faime.first()
+	override method danio() { // daño que hace EL HEROE
+		return (armaEquipada.puntosDeDanio() + 10) * faime.first()
 	}
 
 	method armadura() {
 		return armaduraEquipada.puntosDeArmadura() + 5 * faime.get(2)
 	}
 
+	method puntosDeDanioDelArmaActual() {
+		return self.armaActual().puntosDeDanio()
+	}
+
 	override method atacar() {
 		// acá va a ir el visual para el sprite de atacar
 		// estaEnfrente().recibirDanio(self.danio())
 		self.estaEnfrente(ultimaDireccion).first().recibirDanio(self.danio())
-	}
-
-	method validarOroDisponible() {
-		if (oro == 0) {
-			self.error("No tenes oro para depositar!")
-		}
 	}
 
 	method ganarOroPorVenta(cantOro) {
@@ -174,7 +176,7 @@ class Heroe inherits Mortal {
 	}
 
 	method borrarItems(_item) {
-		return inventario.removeAllSuchThat({ item => item == _item })
+		inventario.removeAllSuchThat({ item => item == _item})
 	}
 
 	method dejarItemEnUnaCasa(item, casa) {
@@ -187,14 +189,20 @@ class Heroe inherits Mortal {
 	}
 
 	method usarCasaDeMagia(casaDeMagia) {
-	// habilitar botones
+		game.say(self, "Bienvenido a la Casa de Magias. Elige la opción deseada: 
+				1. Comprar un báculo
+				2. Mejorar arma")
 	}
 
+	// habilitar botones
 	method usarCasaDeArmaduras(casaDeArmadura) {
+		game.say(self, "Bienvenido a la Casa de Armaduras. Elige la opción deseada: 
+				1. Comprar espada
+				2. Mejorar arma")
+	}
+
 	// deshabilitar botones, el mago no puede usar esta casa!
 	// mostrar mensaje de que no puede acceder
-	}
-
 	method usarBanco(banco) {
 		// habilitar botones
 		game.say(self, "Bienvenido al Banco Central. Elige la opción deseada: 
@@ -237,24 +245,16 @@ class Heroe inherits Mortal {
 //				2. Vender ítems")
 //	}
 //
-//	override method usarBanco(banco) {
-//		// habilitar botones
-//		game.say(self, "Bienvenido al Banco Central. Elige la opción deseada: 
-//				1. Depositar oro
-//				2. Retirar oro
-//				3. Consultar oro")
-//	}
-//
-//	override method usarMercado(serVivo) {
-//	// habilitar botones
-//	}
-//
 //}
 //
 //object mago inherits Heroe {
 //
 //	override method usarCasaDeMagia(serVivo) {
-//	// habilitar botones
+//		// habilitar botones
+//		game.say(self, "Bienvenido a la Casa de Magias. Elija la opción deseada: 
+//				1. Comprar hechizos
+//				2. Comprar un báculo
+//				3. Mejorar arma equipada")
 //	}
 //
 //	override method usarCasaDeArmaduras(serVivo) {

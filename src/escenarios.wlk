@@ -95,7 +95,7 @@ object explanada inherits Escenario (construcciones = #{ construccionBanco, cons
 
 	override method setearEsceneario() {
 		super()
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 150, inventario = [ piedra, piedra, madera, piedra ])
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 300, inventario = [ piedra, madera, madera, piedra ])
 		game.addVisual(tito)
 		configuracion.comandos(tito)
 		construcciones.forEach({ construccion => game.addVisual(construccion)})
