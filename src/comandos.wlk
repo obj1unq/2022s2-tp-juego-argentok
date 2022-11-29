@@ -1,6 +1,7 @@
 import wollok.game.*
 import items.*
 import seresVivos.*
+import escenarios.*
 
 object configuracion {
 
@@ -14,9 +15,8 @@ object configuracion {
 		keyboard.num1().onPressDo({ heroe.comprar()})
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
-		//keyboard.p().onPressDo({ game.addVisual(tester.dummie())})
+	// keyboard.p().onPressDo({ game.addVisual(tester.dummie())})
 	// keyboard.1().onPressDo({ heroe.reservarOro()}
-
 	}
 
 }
@@ -63,7 +63,6 @@ object tester {
 //	method dummie() {
 //		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300)
 //	}
-
 	method item() {
 		return new Item()
 	}
@@ -76,16 +75,13 @@ object pistaDePrueba {
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		configuracion.comandos(tito)
 		game.cellSize(32)
-
 		game.addVisual(tito)
-
-		//game.addVisual(tester.dummie())
+			// game.addVisual(tester.dummie())
 		game.addVisual(tester.item())
-		game.addVisual(new Banco(position = game.at(2,5)))
-		//game.addVisual(enemigo)
+			// me.addVisual(new Banco(position = game.at(6, 6)))
+			// game.addVisual(enemigo)
 		mapaActual.mapa(explanada)
 		mapaActual.inicializarMapa()
-
 	}
 
 }
