@@ -35,14 +35,6 @@ class Arma inherits Equipamento {
 
 }
 
-class Armadura inherits Equipamento {
-
-	var puntosDeArmadura
-
-	method puntosDeArmadura() = puntosDeArmadura
-
-}
-
 //ITEMS
 object espada inherits Item {
 

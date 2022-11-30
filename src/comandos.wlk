@@ -3,11 +3,11 @@ import items.*
 import seresVivos.*
 import escenarios.*
 import estadisticas.*
+import proyectil.*
 
 object configuracion {
 
 	var heroe = null
-	
 	var juegoIniciado = false
 
 	method comandos() {
@@ -15,40 +15,40 @@ object configuracion {
 		keyboard.right().onPressDo({ heroe.mover(derecha)})
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
-		keyboard.a().onPressDo({ heroe.atacar()})
-	    keyboard.f().onPressDo({ heroe.interactuar()})
 		keyboard.num1().onPressDo({ heroe.comprar()})
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
-
-		//keyboard.f().onPressDo({ heroe.interactuarConTodos()})
-		keyboard.p().onPressDo({game.say(heroe, heroe.decirNivelYExp())})
-		keyboard.u().onPressDo({game.say(heroe, heroe.decirStats())})
-		keyboard.q().onPressDo({game.say(heroe, heroe.decirVida())})
-		keyboard.w().onPressDo({game.say(heroe, heroe.decirMana())})
-		//keyboard.y().onPressDo({ game.addVisual(tester.dummie(heroe))})
-		keyboard.m().onPressDo({self.inicioDelJuegoMago()})
-		keyboard.n().onPressDo({self.inicioDelJuegoGuerrero()})
+		keyboard.q().onPressDo({ game.say(heroe, heroe.decirVida())})
+		keyboard.y().onPressDo({ game.addVisual(tester.dummie(heroe))})
+		keyboard.w().onPressDo({ game.say(heroe, heroe.decirMana())})
+		keyboard.a().onPressDo({ heroe.atacar()})
+		keyboard.s().onPressDo({ heroe.hechizo()})
+		keyboard.d().onPressDo({ heroe.defenderse()})
+		keyboard.f().onPressDo({ heroe.interactuar()})
+		keyboard.z().onPressDo({ game.say(heroe, heroe.decirOro())})
+		keyboard.x().onPressDo({ game.say(heroe, heroe.decirNivelYExp())})
+		keyboard.c().onPressDo({ game.say(heroe, heroe.decirStats())})
+		keyboard.v().onPressDo({ game.say(heroe, heroe.decirInventario())})
+		keyboard.m().onPressDo({ self.inicioDelJuegoMago()})
+		keyboard.n().onPressDo({ self.inicioDelJuegoGuerrero()})
 	}
-	
 
-	
 	method inicioDelJuegoMago() {
 		if (!juegoIniciado) {
-		heroe = mago
-		crear.mago_()
-		juegoIniciado = true
+			heroe = mago
+			crear.mago_()
+			juegoIniciado = true
 		}
-
 	}
-	
+
 	method inicioDelJuegoGuerrero() {
-		if (!juegoIniciado) {	
+		if (!juegoIniciado) {
 			heroe = guerrero
 			crear.guerrero_()
 			juegoIniciado = true
 		}
 	}
+
 }
 
 object derecha {
@@ -83,97 +83,95 @@ object abajo {
 
 }
 
-/*
-object tester {
-
-//esto es para testar
-	method espada() {
-		return new Arma(puntosDeDanio = 100)
-	}
-
-//	method dummie() {
-//		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300)
-//	}
-*/
-
 object crear {
-		
+
 	method guerrero_() {
 		fuerza.subirStat(25)
 		agilidad.subirStat(20)
 		salud.subirStat(250)
-		
 		guerrero.image("Guerrero_abajo.png")
-		guerrero.position(game.at(0,0))
-		guerrero.equiparArma(self.espada())
+		guerrero.position(game.at(0, 0))
+		guerrero.armaEquipada(self.espada_())
 		guerrero.curarse(250)
 		game.addVisual(guerrero)
 	}
-	
+
 	method mago_() {
 		inteligencia.subirStat(30)
 		agilidad.subirStat(10)
 		salud.subirStat(150)
 		manaMax.subirStat(250)
-		
 		mago.image("Mago_abajo.png")
-		mago.position(game.at(0,0))
-		mago.equiparArma(self.baculo())
+		mago.position(game.at(0, 0))
+		mago.armaEquipada(self.baculo_())
 		mago.curarse(150)
 		mago.regenerarMana(250)
 		game.addVisual(mago)
 	}
-	
-	method espada() {
+
+	method espada_() {
 		return new Arma(puntosDeDanio = 100)
 	}
-	
-	method baculo() {
+
+	method baculo_() {
 		return new Arma(puntosDeDanio = 75)
 	}
+
 }
 
 object tester {
+
 //esto es para testar
-
-	
-
 	method dummie(_heroe) {
-		//return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300, heroe = _heroe) NO FUNCIONA LA REFERENCIA HEROE
-		
+		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300, heroe = _heroe)
 	}
 
 	method item() {
 		return new Item()
 	}
+	
+	method proyectil(heroe) {
+		return new Proyectil(position = heroe.enFrente(), caster = heroe )
+	}
+	
+	method hechizo(heroe){
+		game.addVisual(self.proyectil(heroe))
+	}
+}
 
+
+object sprite {
+	
+	method deHeroe(heroe, tiempo, imagenCon, imagenSin) {
+		heroe.image(imagenCon)
+		game.schedule(tiempo, {heroe.image(imagenSin)})
+	}
 }
 
 object pistaDePrueba {
 
 	method prueba1() {
-		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
-		//configuracion.comandos(tito)
+		// const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
+		// configuracion.comandos(tito)
 		game.cellSize(32)
-/*
-		game.addVisual(tito)
-			// game.addVisual(tester.dummie())
-		game.addVisual(tester.item())
-			// me.addVisual(new Banco(position = game.at(6, 6)))
-			// game.addVisual(enemigo)
-		mapaActual.mapa(explanada)
-		mapaActual.inicializarMapa()
-*/
-		
-		//const tito = new Guerrero(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
-		//game.addVisual(tester.dummie(tito))
-		//game.addVisual(tester.item())
-		//game.addVisual(tito)
-
+			/*
+			 * 		game.addVisual(tito)
+			 * 			// game.addVisual(tester.dummie())
+			 * 		game.addVisual(tester.item())
+			 * 			// me.addVisual(new Banco(position = game.at(6, 6)))
+			 * 			// game.addVisual(enemigo)
+			 * 		mapaActual.mapa(explanada)
+			 * 		mapaActual.inicializarMapa()
+			 */
+			// const tito = new Guerrero(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
+			// game.addVisual(tester.dummie(tito))
+			// game.addVisual(tester.item())
+			// game.addVisual(tito)
 		configuracion.comandos()
-		//game.addVisual(enemigo)
-		//mapaActual.mapa(explanada)
-		//mapaActual.inicializarMapa()
+	// game.addVisual(enemigo)
+	// mapaActual.mapa(explanada)
+	// mapaActual.inicializarMapa()
 	}
+
 }
 
