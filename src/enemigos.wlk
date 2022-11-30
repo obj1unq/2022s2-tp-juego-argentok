@@ -41,6 +41,7 @@ class Enemigo inherits Mortal {
 	method sentidoActualEs(direccion){
 		return direccion == sentidoActual
 	}
+	method movimientoNulo(){}
 }
 
 class EnemigoHorizontal inherits Enemigo {
@@ -52,7 +53,9 @@ class EnemigoVertical inherits Enemigo {
 }
 
 class EnemigoEstatico inherits Enemigo{
-	
+	override method moverse(){
+		self.movimientoNulo()
+	}
 }
 
 object direccionOpuesta {
