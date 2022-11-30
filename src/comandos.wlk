@@ -3,6 +3,7 @@ import items.*
 import seresVivos.*
 import escenarios.*
 import estadisticas.*
+import seleccionDePersonajes.*
 
 
 object configuracion {
@@ -37,6 +38,7 @@ object configuracion {
 	
 	method inicioDelJuegoMago() {
 		if (!juegoIniciado) {
+			game.removeVisual(cambioDePersonaje)
 			heroe = mago
 			crear.mago_()
 			juegoIniciado = true
@@ -49,6 +51,7 @@ object configuracion {
 	
 	method inicioDelJuegoGuerrero() {
 		if (!juegoIniciado) {	
+			game.removeVisual(cambioDePersonaje)
 			heroe = guerrero
 			crear.guerrero_()
 			juegoIniciado = true
@@ -159,12 +162,13 @@ object tester {
 
 object pistaDePrueba {
 
+
 	method prueba1() {
 		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		//configuracion.comandos(tito)
 		game.cellSize(32)
 
-  		
+  		game.addVisual(cambioDePersonaje)
 		/*
 		game.addVisual(tito)
 			// game.addVisual(tester.dummie())
