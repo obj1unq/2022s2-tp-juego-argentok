@@ -41,21 +41,21 @@ class Enemigo inherits Mortal {
 	method sentidoActualEs(direccion){
 		return direccion == sentidoActual
 	}
-	method movimientoNulo(){}
 }
 
 class EnemigoHorizontal inherits Enemigo {
-	
+	override method gameOver(){}
+	override method entregarExp(){}
 }
 
 class EnemigoVertical inherits Enemigo {
-	
+	override method gameOver(){}
+	override method entregarExp(){}
 }
 
 class EnemigoEstatico inherits Enemigo{
-	override method moverse(){
-		self.movimientoNulo()
-	}
+	override method gameOver(){}
+	override method entregarExp(){}
 }
 
 object direccionOpuesta {

@@ -3,6 +3,7 @@ import items.*
 import comandos.*
 import escenarios.*
 import estadisticas.*
+import enemigos.*
 
 class Mortal {
 	
@@ -384,7 +385,7 @@ object guerrero inherits Heroe {
 	
 }
 
-class Enemigo inherits Mortal {
+/*class Enemigo inherits Mortal {
 
 	const expEntregadaBase = 50
 	
@@ -410,4 +411,4 @@ class Enemigo inherits Mortal {
 	override method mover(asd){}
 	override method atacar(){}
 	override method danio() {}
-}
+}*/

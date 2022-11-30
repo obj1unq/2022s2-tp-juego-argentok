@@ -167,8 +167,10 @@ object pistaDePrueba {
 	method prueba1() {
 		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		//configuracion.comandos(tito)
+		
 		game.cellSize(32)
-  	game.addVisual(cambioDePersonaje)
+  		game.addVisual(cambioDePersonaje)
+
 		/*
 		game.addVisual(tito)
 			// game.addVisual(tester.dummie())
@@ -191,7 +193,7 @@ object pistaDePrueba {
 	}
 }
 
-object pistaDePrueba2 {
+/*object pistaDePrueba2 {
 	
 	method prueba2(){
 		game.cellSize(32)
@@ -203,7 +205,7 @@ object pistaDePrueba2 {
 		game.onTick(500, "moverse", {malito.moverse()})
 		configuracion.comandos(tito)
 	}
-}
+}*/
 
 
 
