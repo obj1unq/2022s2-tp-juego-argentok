@@ -5,15 +5,7 @@ import seresVivos.*
 
 class Enemigo inherits Mortal {
 
-	var property sentidoActual = derecha
-	var property siguientePosicion = sentidoActual.siguiente(self.position())
-	
-//esto esa asi solamente con fines de prueba
-
-	
-/*method siguientePosicion(){
-		return sentidoActual.siguiente(self.position())
-	}*/
+	var property sentidoActual 
 	
 	override method recibirDanio(dmg) {
 		super(dmg)
@@ -25,10 +17,6 @@ class Enemigo inherits Mortal {
 			self.position(direccion.siguiente(self.position()))	
 		}
 		self.ultimaDireccion(direccion)
-	}
-	
-	method moverHacia(direccion){
-		game.onTick(500, "moverHacia", {self.mover(direccion)})
 	}
 	
 	 //Deberia ser abstracto//
@@ -44,66 +32,46 @@ class Enemigo inherits Mortal {
 			self.mover(sentidoActual)
 		}
 	}
-	method cambiarSiNoPuedePasar(){}
-	
-	/*method irHastaElFondoDerecha(){
-		if(self.puedoPasar(derecha)){
-			self.moverHacia(derecha)
-		} else{
-			game.removeTickEvent("moverHacia")
-			self.irHastaElFondoIzquierda()
+	method cambiarSiNoPuedePasar(){
+		if(!self.puedoPasar(sentidoActual)){
+			sentidoActual = direccionOpuesta.opuesto(self)
 		}
 	}
-	method irHastaElFondoIzquierda() {
-		if(self.puedoPasar(izquierda)){
-			self.moverHacia(izquierda)
-		} else{
-			game.removeTickEvent("moverHacia")
-			self.irHastaElFondoDerecha()
-		}
-	}*/
+	
+	method sentidoActualEs(direccion){
+		return direccion == sentidoActual
+	}
 }
 
 class EnemigoHorizontal inherits Enemigo {
+	
+}
 
-	override method cambiarSiNoPuedePasar(){
-		if(!self.puedoPasar(sentidoActual)){
-			//sentidoActual = izquierda
-			sentidoActual = direccionOpuesta.direccion(sentidoActual)
-		}
-		else if(!self.puedoPasar(izquierda)){
-			//sentidoActual = derecha
-			sentidoActual = direccionOpuesta.direccion(sentidoActual)
-		}
-	}
+class EnemigoVertical inherits Enemigo {
+	
+}
+
+class EnemigoEstatico inherits Enemigo{
 	
 }
 
 object direccionOpuesta {
 	
-	method direccion(direccion){
-		if(direccion == izquierda){
+	method opuesto(enemigo){
+		if(enemigo.sentidoActualEs(izquierda)){
 			return derecha
 		}
-		else if(direccion == derecha){
+		else if(enemigo.sentidoActualEs(derecha)){
 			return izquierda
+		}
+		else if(enemigo.sentidoActualEs(arriba)){
+			return abajo
+		}
+		else if(enemigo.sentidoActualEs(abajo)){
+			return arriba
 		}
 		else{
 			return null
 		}
 	}
-}
-
-class EnemigoVertical inherits Enemigo {
-
-	/*override method cambiarSiNoPuedePasar(){
-		if(!self.puedoPasar(sentidoActual)){
-			sentidoActual = abajo
-		}
-	}*/
-}
-
-class EnemigoEstatico inherits Enemigo{
-	
-		//Este enemigo ataca solo a la posicion hacia adelante//
 }

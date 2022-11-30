@@ -88,7 +88,7 @@ object pistaDePrueba {
 		method prueba2(){
 		game.cellSize(32)
 		
-		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300)
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300, sentidoActual = derecha)
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(2,6), armaEquipada = tester.espada())
 		game.addVisual(malito)
 		game.addVisual(tito)
@@ -102,7 +102,7 @@ object pistaDePrueba2 {
 	method prueba2(){
 		game.cellSize(32)
 		
-		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300)
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300, sentidoActual = derecha)
 		const tito = new Heroe(image = "MagoSur.png", position = game.at(2,6), armaEquipada = tester.espada())
 		game.addVisual(malito)
 		game.addVisual(tito)
