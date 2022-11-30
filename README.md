@@ -14,6 +14,7 @@
 ## Reglas de Juego / Instrucciones
 El juego consiste en juntar recursos y equiparse para pelear las batallas.	
 Es importante que tu arma equipada tenga una buena cantidad de puntos de daño para vencer a los enemigos.	
+
 Si un enemigo te ataca, vas a perder puntos de vida y probablemente morir :(	
 El juego se gana una vez que venciste a todos los enemigos y al enemigo mayor!		
 Para conseguir monedas de oro, debes conseguir recursos como madera o piedras, y venderlas en el mercado. 	
