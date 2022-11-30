@@ -4,9 +4,10 @@ import seresVivos.*
 import escenarios.*
 import estadisticas.*
 
+
 object configuracion {
 
-	var heroe = null
+	var property heroe = null 
 	
 	var juegoIniciado = false
 
@@ -20,7 +21,6 @@ object configuracion {
 		keyboard.num1().onPressDo({ heroe.comprar()})
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
-
 		//keyboard.f().onPressDo({ heroe.interactuarConTodos()})
 		keyboard.p().onPressDo({game.say(heroe, heroe.decirNivelYExp())})
 		keyboard.u().onPressDo({game.say(heroe, heroe.decirStats())})
@@ -31,14 +31,19 @@ object configuracion {
 		keyboard.n().onPressDo({self.inicioDelJuegoGuerrero()})
 	}
 	
-
+	method juegoIniciado(){
+		return juegoIniciado // pongo este getter porque necesito saber si el juego esta iniciali
+	}
 	
 	method inicioDelJuegoMago() {
 		if (!juegoIniciado) {
-		heroe = mago
-		crear.mago_()
-		juegoIniciado = true
+			heroe = mago
+			crear.mago_()
+			juegoIniciado = true
+			mapaActual.mapa(explanada)
+			mapaActual.inicializarMapa()
 		}
+
 
 	}
 	
@@ -47,7 +52,10 @@ object configuracion {
 			heroe = guerrero
 			crear.guerrero_()
 			juegoIniciado = true
+			mapaActual.mapa(explanada)
+			mapaActual.inicializarMapa()
 		}
+		
 	}
 }
 
@@ -155,7 +163,9 @@ object pistaDePrueba {
 		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		//configuracion.comandos(tito)
 		game.cellSize(32)
-/*
+
+  		
+		/*
 		game.addVisual(tito)
 			// game.addVisual(tester.dummie())
 		game.addVisual(tester.item())
@@ -176,4 +186,6 @@ object pistaDePrueba {
 		//mapaActual.inicializarMapa()
 	}
 }
+
+
 
