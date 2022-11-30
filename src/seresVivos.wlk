@@ -21,10 +21,6 @@ class Mortal {
 	method noHaySolidosAdelante(direccion) {
 		return self.losSolidos(game.getObjectsIn(direccion.siguiente(self.position()))).isEmpty()
 	}
-
-	method objetosEnDireccion(direccion) {
-		return game.getObjectsIn(direccion.siguiente(self.position()))
-	}
 	
 	method losSolidos(lista) {
 		return lista.filter({cosa => cosa.solido()})
@@ -93,7 +89,7 @@ class Heroe inherits Mortal {
 	const inventario = []
 	var armaEquipada = null
 	var experiencia = 0
-  var property oro = 0
+    var property oro = 0
 	var nivel = 1
 	const stats = [fuerza, agilidad, inteligencia, salud, manaMax]
   
@@ -102,7 +98,6 @@ class Heroe inherits Mortal {
 			position = direccion.siguiente(self.position())
 		} 
 		else {
-			self.objetosEnDireccion(direccion).forEach({ objeto => objeto.accionAlSerColisionado()})
 			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
 		}
 		self.ultimaDireccion(direccion)
@@ -156,13 +151,31 @@ class Heroe inherits Mortal {
 		armaEquipada = arma 
 	}
 
+	/* 
 	method interactuar(cosa) {
 		cosa.serInteractuado(self)
 	}
+	*/
 	
+	/* 
 	method interactuarConTodos() {
 		self.arribaDe().forEach({cosa => self.interactuar(cosa)})
 	}
+	*/
+	
+	
+	  
+	method interactuar() {
+		self.interactuables().forEach({ cosa => cosa.serInteractuado(self)})
+	}
+
+
+	method interactuables() {
+		return game.getObjectsIn(self.position().up(1))
+	}
+	 
+	
+	
 	
 	method serInteractuado(alguien){}
 	
@@ -208,6 +221,7 @@ class Heroe inherits Mortal {
 	}
 		
 		//y aca tiene que ir una rama ELSE con el sprite de ataque (si se quiere)
+
 
 	method ganarOroPorVenta(cantOro){
 		oro = self.oro() + cantOro
@@ -260,6 +274,21 @@ class Heroe inherits Mortal {
 				2. Mejorar arma
 				3. Consultar stock")
 	}
+	
+	method usarBanco(banco) {
+		// habilitar botones
+		game.say(self, "Bienvenido al Banco Central. Elige la opción deseada: 
+				1. Depositar oro
+				2. Retirar oro
+				3. Consultar oro")
+	}
+
+
+	method usarMercado(mercado) {
+		game.say(self, "Bienvenido al ArgenMercado.
+						1. Vender piedra
+						2. Vender madera")
+	}
 
 	// METODOS DE CAMBIO DE MAPA
 	
@@ -280,15 +309,15 @@ class Heroe inherits Mortal {
 	}
   
   
-  /*
-	method interactuar() {
-		self.interactuables().forEach({ cosa => cosa.serInteractuado(self)})
-	}
-*/
+	/* 
 
 	method interactuables() {
 		return game.getObjectsIn(self.position().up(1))
 	}
+	 
+	*/
+	
+	
 
 	method comprar() {
 		self.interactuables().forEach({ cosa => cosa.comprar(self)})
@@ -345,7 +374,7 @@ object guerrero inherits Heroe {
 	}
 	
 	override method decirMana() {
-		return "Los Guerreros no usamos Mana"
+		return "Los Guerreros no usamos Mana pa"
 	}
 	
 	override method mover(direccion) {
@@ -353,89 +382,14 @@ object guerrero inherits Heroe {
 		image = "Guerrero_" + ultimaDireccion.toString() + ".png"
 	}
 
-	// deshabilitar botones, el mago no puede usar esta casa!
-	// mostrar mensaje de que no puede acceder
-	method usarBanco(banco) {
-		// habilitar botones
-		game.say(self, "Bienvenido al Banco Central. Elige la opción deseada: 
-				1. Depositar oro
-				2. Retirar oro
-				3. Consultar oro")
-	}
-
-
-	method usarMercado(mercado) {
-		game.say(self, "Bienvenido al ArgenMercado.
-						1. Vender piedra
-						2. Vender madera")
-	}
-
+	
 }
 
 class Enemigo inherits Mortal {
 
-
-// METODOS DE CAMBIO DE MAPA
-// TODAVIA NO SE COMO HACER PARA COMPARAR SI ESTA CON UN LIMITE, el problema viene porque quiero comparar una instancia a la lista de objetos posibles a colisionar
-/* 
- * 
- * method cambioDeMapa(direccion){
- * 	if (game.getObjectsIn(direccion.siguiente(self.position())) == #{}){
- * 		
- * 	}
- * }
- */
-
-
-//
-//object guerrero inherits Heroe {
-//
-//	override method usarCasaDeMagia(serVivo) {
-//		// deshabilitar botones, el guerrero no puede usar esta casa!
-//		// mostrar mensaje de que no puede acceder
-//		game.say(self, "No podes usar esta casa")
-//	}
-//
-//	override method usarCasaDeArmaduras(serVivo) {
-//		// habilitar botones
-//		game.say(self, "Bienvenido a la Casa de Armaduras. Elija la opción deseada: 
-//				1. Comprar ítems
-//				2. Vender ítems")
-//	}
-//
-//}
-
-//object mago inherits Heroe {
-//
-//	override method usarCasaDeMagia(serVivo) {
-//		// habilitar botones
-//		game.say(self, "Bienvenido a la Casa de Magias. Elija la opción deseada: 
-//				1. Comprar hechizos
-//				2. Comprar un báculo
-//				3. Mejorar arma equipada")
-//	}
-//
-//	override method usarCasaDeArmaduras(serVivo) {
-//	// deshabilitar botones, el mago no puede usar esta casa!
-//	// mostrar mensaje de que no puede acceder
-//	}
-//
-//	override method usarBanco(serVivo) {
-//	// habilitar botones
-//	}
-//
-//	override method usarMercado(serVivo) {
-//	// habilitar botones
-//	}
-//
-//}
-//esto esa asi solamente con fines de prueba
-
 	const expEntregadaBase = 50
 	
-	// const heroe = null NO PUEDE SER NULL
-	
-	// TIRA ERROR EL OVERRIDE 
+	const heroe = null 
 	
 	override method recibirDanio(dmg) {
 		super(dmg)
@@ -443,11 +397,11 @@ class Enemigo inherits Mortal {
 	}
 	
 	override method entregarExp() {
-		// heroe.ganarExp(self.expEntregada()) NO FUNCIONA LA REFERENCIA HEROE
+		heroe.ganarExp(self.expEntregada()) 
 	}
 	
 	method expEntregada() {
-		// return (expEntregadaBase / heroe.nivel()).roundUp() NO FUNCIONA LA REFERENCIA HEREO
+		return (expEntregadaBase / heroe.nivel()).roundUp() 
 	}
 	
 	override method gameOver(){}

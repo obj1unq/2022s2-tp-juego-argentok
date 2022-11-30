@@ -18,8 +18,6 @@ class Construccion {
 	
 	method comprar(serVivo)
 	method serInteractuado(personaje)
-	method serUtilizado()
-	method validarSerUtilizado()
 	method solido() = true
 	method accionAlSerColisionado(){
 		// No es abstracto porque esta implementacion al final por ahi no la aplicamos
@@ -73,9 +71,6 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 	override method serInteractuado(personaje) {
 		personaje.usarBanco(self)
 	}
-	
-	override method serUtilizado(){}
-	override method validarSerUtilizado() {}
 
 
 	override method consultar(serVivo) {
@@ -117,8 +112,6 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 
 object construccionMercado inherits Construccion (image = "Mercado.png", position = game.at(1, 2)) {
 
-	override method serUtilizado(){}
-	override method validarSerUtilizado() {}
 	
 	
 	override method serInteractuado(personaje) {
@@ -161,20 +154,14 @@ object construccionMercado inherits Construccion (image = "Mercado.png", positio
 	// diosbendigaelpolimorfismo
 	}
 
-//	override method validarSerUtilizado() {
-//	}
+
 }
 
 object construccionMagia inherits Construccion (image = "Magia.png", position = game.at(9, 8)) {
-
-	override method serUtilizado(){}
 	override method serInteractuado(personaje) {
 		personaje.usarCasaDeMagia(self)
 	}
-	
-	override method validarSerUtilizado() {}
-	
-	
+
 
 	
 
@@ -220,8 +207,7 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 		}
 	}
 
-//	override method validarSerUtilizado() {
-//	}
+
 }
 
 object construccionArmadura inherits Construccion (image = "Armaduras.png", position = game.at(12, 7)) {
@@ -229,9 +215,7 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	override method serInteractuado(personaje) {
 		personaje.usarCasaDeArmaduras(self)
 	}
-	
-	override method serUtilizado(){}
-	override method validarSerUtilizado() {}
+
 	
 
 	override method comprar(serVivo) { // comprar espada
@@ -252,8 +236,6 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 		game.say(self, "El poder de daño de tu arma subió! Ahora es " + nuevoDanio)
 	}
 
-//	override method validarSerUtilizado() {
-//	}
 	override method validarOpcionUno(serVivo) {
 		if (serVivo.oro() < espada.valor()) {
 			self.error("No tenes suficiente oro para comprar una espada")
