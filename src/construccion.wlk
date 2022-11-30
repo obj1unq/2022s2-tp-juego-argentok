@@ -65,7 +65,7 @@ class Construccion {
 
 }
 
-object construccionBanco inherits Construccion (image = "Banco.png", position = game.at(2, 8), position = game.at(6,2)) {
+object construccionBanco inherits Construccion (image = "Banco.png", position = game.at(2,8)) {
 
 	// Esto deberia de estar en clase construccion e invocarlo con un new supongo
 	override method serInteractuado(personaje) {
@@ -261,4 +261,7 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	}
 
 }
+
+
+
 
