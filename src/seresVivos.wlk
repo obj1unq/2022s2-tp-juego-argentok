@@ -77,7 +77,6 @@ class Mortal {
 	method ultimaDireccion(direccion) {
 		ultimaDireccion = direccion
 	} 
-}
 
 }
 
@@ -101,11 +100,10 @@ class Heroe inherits Mortal {
 	override method mover(direccion) {
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
-		} else {
+		} 
+		else {
 			self.objetosEnDireccion(direccion).forEach({ objeto => objeto.accionAlSerColisionado()})
-		}else{
 			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
-			
 		}
 		self.ultimaDireccion(direccion)
 	}
@@ -191,7 +189,7 @@ class Heroe inherits Mortal {
 	}
 
 	method puntosDeDanioDelArmaActual() {
-		return self.armaActual().puntosDeDanio()
+	//	return self.armaActual().puntosDeDanio() // ARMAACTUAL NO EXISTE
 	}
 
 	
@@ -207,10 +205,11 @@ class Heroe inherits Mortal {
 		if (! self.estaEnfrente().isEmpty()) {
 			self.estaEnfrente().first().recibirDanio(self.danio())
 		}
+	}
 		
 		//y aca tiene que ir una rama ELSE con el sprite de ataque (si se quiere)
 
-	method ganarOroPorVenta(cantOro) {
+	method ganarOroPorVenta(cantOro){
 		oro = self.oro() + cantOro
 	}
 
@@ -353,7 +352,6 @@ object guerrero inherits Heroe {
 		super(direccion)
 		image = "Guerrero_" + ultimaDireccion.toString() + ".png"
 	}
-}
 
 	// deshabilitar botones, el mago no puede usar esta casa!
 	// mostrar mensaje de que no puede acceder
@@ -372,6 +370,8 @@ object guerrero inherits Heroe {
 						2. Vender madera")
 	}
 
+}
+
 class Enemigo inherits Mortal {
 
 
@@ -385,7 +385,7 @@ class Enemigo inherits Mortal {
  * 	}
  * }
  */
-}
+
 
 //
 //object guerrero inherits Heroe {
@@ -433,7 +433,9 @@ class Enemigo inherits Mortal {
 
 	const expEntregadaBase = 50
 	
-	const heroe = null
+	// const heroe = null NO PUEDE SER NULL
+	
+	// TIRA ERROR EL OVERRIDE 
 	
 	override method recibirDanio(dmg) {
 		super(dmg)
@@ -441,11 +443,11 @@ class Enemigo inherits Mortal {
 	}
 	
 	override method entregarExp() {
-		heroe.ganarExp(self.expEntregada())
+		// heroe.ganarExp(self.expEntregada()) NO FUNCIONA LA REFERENCIA HEROE
 	}
 	
 	method expEntregada() {
-		return (expEntregadaBase / heroe.nivel()).roundUp()
+		// return (expEntregadaBase / heroe.nivel()).roundUp() NO FUNCIONA LA REFERENCIA HEREO
 	}
 	
 	override method gameOver(){}

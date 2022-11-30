@@ -28,7 +28,7 @@ object configuracion {
 		keyboard.u().onPressDo({game.say(heroe, heroe.decirStats())})
 		keyboard.q().onPressDo({game.say(heroe, heroe.decirVida())})
 		keyboard.w().onPressDo({game.say(heroe, heroe.decirMana())})
-		keyboard.y().onPressDo({ game.addVisual(tester.dummie(heroe))})
+		//keyboard.y().onPressDo({ game.addVisual(tester.dummie(heroe))})
 		keyboard.m().onPressDo({self.inicioDelJuegoMago()})
 		keyboard.n().onPressDo({self.inicioDelJuegoGuerrero()})
 	}
@@ -146,7 +146,7 @@ object tester {
 	
 
 	method dummie(_heroe) {
-		return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300, heroe = _heroe)
+		//return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300, heroe = _heroe) NO FUNCIONA LA REFERENCIA HEROE
 		
 	}
 
@@ -159,8 +159,8 @@ object tester {
 object pistaDePrueba {
 
 	method prueba1() {
-		const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
-		configuracion.comandos(tito)
+		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
+		//configuracion.comandos(tito)
 		game.cellSize(32)
 /*
 		game.addVisual(tito)
