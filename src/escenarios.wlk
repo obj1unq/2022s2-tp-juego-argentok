@@ -5,6 +5,7 @@ import recursos.*
 import comandos.*
 import items.*
 
+
 class Decoracion { // que realmente no es una decoracion deberia llamarse "objetoSolido"  ES CONVENIENTE POR EJEMPLO QUE LOS LIMITES DE MAPA TAMBIEN HEREDEN DE POR ENDE YO CREO QUE DEBERIA LLAMARSE OBJETO SOLIDO
 
 	var property image
@@ -13,12 +14,16 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 	method solido() {
 		return true
 	}
+	
+	method accionAlSerColisionado(){
+		
+	}
 
 }
 
 object mapaActual {
 	
-	
+
 	
 	var property mapa
 	
@@ -26,6 +31,7 @@ object mapaActual {
 
 	method inicializarMapa() {
 		mapa.setearEsceneario()
+		
 	}
 
 	method cambiarMapa(_mapa) {
@@ -42,6 +48,8 @@ class Escenario {
 	const decoraciones
 	const enemigos
 	const recursos
+
+	
 	var property positionAlComenzar = game.at(0, 1)
 	// const property decoraciones
 	var property image
@@ -70,13 +78,19 @@ class Escenario {
 
 	method setearEsceneario() {
 		game.clear()
-			// pruebaCambioMapa.cambiarMapa(self.image())
+		self.colocarHeroeEnEntradaMapa()
+		pruebaCambioMapa.cambiarMapa(self.image())
+		game.addVisual(configuracion.heroe())
 		game.boardGround(self.image())
 		self.setearRecursos()
 		self.setearDecoraciones()
 		self.setearLimites()
 		self.setearRecursos()
+		
 	}
+	
+	method colocarHeroeEnEntradaMapa()
+	method heroePositionAlComenzar()
 }
 
 class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
@@ -156,15 +170,27 @@ object explanada inherits Escenario (construcciones = #{ construccionBanco, cons
 	override method setearRecursos() {
 	}
 
+	override method colocarHeroeEnEntradaMapa(){
+		//configuracion.heroe().position(game.at(configuracion.heroe().position().y(),0) )
+		configuracion.heroe().position( self.heroePositionAlComenzar()	)
+	}
+	
+	override method heroePositionAlComenzar(){
+		if (!configuracion.juegoIniciado()){
+			return game.center()
+		}
+		else{
+			return 	game.at(14,configuracion.heroe().position().y())
+		}
+	}
 }
 
 object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
 
 	override method setearEsceneario() {
 		super()
-		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = espada)
-		//game.addVisual(tito)
 		configuracion.comandos()
+		
 		pruebaCambioMapa.cambiarMapa("Explanada2")
 
 			//
@@ -238,7 +264,18 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		game.addVisual(arbol1)
 	}
 
+	override method colocarHeroeEnEntradaMapa(){
+		configuracion.heroe().position(self.heroePositionAlComenzar())
+	}
+	
+	override method heroePositionAlComenzar(){
+		return game.at(0, configuracion.heroe().position().y())
+	}
+	
+	
 }
+
+/*
 
 object construccionBancoInterior inherits Escenario (construcciones = #{}, image = "Tienda1.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
 
@@ -258,7 +295,9 @@ object construccionBancoInterior inherits Escenario (construcciones = #{}, image
 	override method setearRecursos() {
 	}
 
-}
+} 
+
+*/
 
 object pruebaCambioMapa {
 

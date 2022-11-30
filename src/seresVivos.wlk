@@ -96,6 +96,7 @@ class Heroe inherits Mortal {
 	override method mover(direccion) {
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
+			
 		} 
 		else {
 			self.estaEnfrente().forEach({objeto => objeto.accionAlSerColisionado()})
