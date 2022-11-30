@@ -7,7 +7,7 @@ import seleccionDePersonajes.*
 
 
 
-program juego {
+/*program juego {
 	
 	game.height(10)
 	game.width(15)

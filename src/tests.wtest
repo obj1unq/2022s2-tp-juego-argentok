@@ -2,6 +2,8 @@ import wollok.game.*
 import items.*
 import comandos.*
 import seresVivos.*
+import enemigos.*
+
 
 /* 
  

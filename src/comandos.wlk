@@ -2,6 +2,8 @@ import wollok.game.*
 import items.*
 import seresVivos.*
 import escenarios.*
+import enemigos.*
+
 import estadisticas.*
 import seleccionDePersonajes.*
 
@@ -126,7 +128,6 @@ object crear {
 		agilidad.subirStat(10)
 		salud.subirStat(150)
 		manaMax.subirStat(250)
-		
 		mago.image("Mago_abajo.png")
 		mago.position(game.at(0,0))
 		mago.equiparArma(self.baculo())
@@ -167,8 +168,7 @@ object pistaDePrueba {
 		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		//configuracion.comandos(tito)
 		game.cellSize(32)
-
-  		game.addVisual(cambioDePersonaje)
+  	game.addVisual(cambioDePersonaje)
 		/*
 		game.addVisual(tito)
 			// game.addVisual(tester.dummie())
@@ -188,6 +188,20 @@ object pistaDePrueba {
 		//game.addVisual(enemigo)
 		//mapaActual.mapa(explanada)
 		//mapaActual.inicializarMapa()
+	}
+}
+
+object pistaDePrueba2 {
+	
+	method prueba2(){
+		game.cellSize(32)
+		
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300, sentidoActual = derecha)
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(2,6), armaEquipada = tester.espada())
+		game.addVisual(malito)
+		game.addVisual(tito)
+		game.onTick(500, "moverse", {malito.moverse()})
+		configuracion.comandos(tito)
 	}
 }
 

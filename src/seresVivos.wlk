@@ -82,8 +82,8 @@ class Heroe inherits Mortal {
 	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta.
 	// Tampoco tiene sentido tener que instanciarlo varias veces 
 	
-	// var property position = game.center()
-	// var property image = "hero.png"
+	//var property position = game.center()
+ 	//var property image = "hero.png"
 	
 	
 	const inventario = []
@@ -333,7 +333,6 @@ class Heroe inherits Mortal {
 }
 
 object mago inherits Heroe {
-
 	var mana = 0
 	
 	override method tipoDeDanio() {
