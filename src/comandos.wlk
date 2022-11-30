@@ -32,7 +32,7 @@ object configuracion {
 	}
 	
 	method juegoIniciado(){
-		return juegoIniciado // pongo este getter porque necesito saber si el juego esta iniciali
+		return juegoIniciado // pongo este getter porque necesito saber si el juego esta inicialia
 	}
 	
 	method inicioDelJuegoMago() {
