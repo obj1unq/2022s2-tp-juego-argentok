@@ -16,14 +16,12 @@ object configuracion {
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
 		keyboard.a().onPressDo({ heroe.atacar()})
-	// keyboard.f().onPressDo({ heroe.interactuar()})
+	    keyboard.f().onPressDo({ heroe.interactuar()})
 		keyboard.num1().onPressDo({ heroe.comprar()})
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
-	// keyboard.p().onPressDo({ game.addVisual(tester.dummie())})
-	// keyboard.1().onPressDo({ heroe.reservarOro()}
 
-		keyboard.f().onPressDo({ heroe.interactuarConTodos()})
+		//keyboard.f().onPressDo({ heroe.interactuarConTodos()})
 		keyboard.p().onPressDo({game.say(heroe, heroe.decirNivelYExp())})
 		keyboard.u().onPressDo({game.say(heroe, heroe.decirStats())})
 		keyboard.q().onPressDo({game.say(heroe, heroe.decirVida())})
@@ -33,14 +31,10 @@ object configuracion {
 		keyboard.n().onPressDo({self.inicioDelJuegoGuerrero()})
 	}
 	
-	method anularTeclasMN() {
-		keyboard.m().onPressDo({null})
-		keyboard.n().onPressDo({null})
-	}
+
 	
 	method inicioDelJuegoMago() {
 		if (!juegoIniciado) {
-		self.anularTeclasMN()
 		heroe = mago
 		crear.mago_()
 		juegoIniciado = true
@@ -49,8 +43,7 @@ object configuracion {
 	}
 	
 	method inicioDelJuegoGuerrero() {
-		if (!juegoIniciado) {
-			self.anularTeclasMN()		
+		if (!juegoIniciado) {	
 			heroe = guerrero
 			crear.guerrero_()
 			juegoIniciado = true
