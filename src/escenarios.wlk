@@ -299,7 +299,7 @@ object construccionBancoInterior inherits Escenario (construcciones = #{}, image
 */
 
 object pruebaCambioMapa {
-
+	
 	method cambiarMapa(texto) {
 		game.boardGround(texto)
 	}
