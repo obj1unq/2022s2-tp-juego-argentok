@@ -4,6 +4,7 @@ import seresVivos.*
 import recursos.*
 import comandos.*
 import items.*
+import enemigos.*
 
 class Decoracion { // que realmente no es una decoracion deberia llamarse "objetoSolido"  ES CONVENIENTE POR EJEMPLO QUE LOS LIMITES DE MAPA TAMBIEN HEREDEN DE POR ENDE YO CREO QUE DEBERIA LLAMARSE OBJETO SOLIDO
 
@@ -191,7 +192,9 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		configuracion.comandos()
 		
 		pruebaCambioMapa.cambiarMapa("Explanada2")
-
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(2,2),vida = 300, sentidoActual = derecha)
+		game.addVisual(malito)
+		game.onTick(500, "moverse", {malito.moverse()})
 			//
 			// Seteo Mar
 		self.colocarObjetoSolido("Mar.png", game.at(2, 0))
