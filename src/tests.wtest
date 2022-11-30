@@ -3,7 +3,7 @@ import items.*
 import comandos.*
 import seresVivos.*
 
-
+/* 
  
 describe "Prubas a Tito el heroe" {
 	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada(), ultimaDireccion = derecha)
@@ -14,7 +14,7 @@ describe "Prubas a Tito el heroe" {
 		game.height(5)
 	}
 	
-/*
+
 	test "Tito tiene adelante a enemigo" {
 		assert.equals([enemigo], tito.estaEnfrente())
 	}
@@ -23,6 +23,6 @@ describe "Prubas a Tito el heroe" {
 		tito.atacar()
 		assert.equals(200, enemigo.vida())
 	}
-*/
+
 	
-}
+}*/
