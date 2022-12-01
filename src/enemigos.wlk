@@ -13,6 +13,11 @@ class Enemigo inherits Mortal {
 	const oroEntregadoBase = 10
 	var sentidoActual
 	
+	override method entregarExp(){
+		// PONGO ESTE METODO EN BLANCO PORQUE SINO NO FUNCA BIEN, MORTAL TIENE ES METODO
+	}
+	
+	
 	override method entregarRecompensa() {
 		configuracion.heroe().ganarExp(self.expEntregada())
 		configuracion.heroe().ganarOro(self.oroEntregado())

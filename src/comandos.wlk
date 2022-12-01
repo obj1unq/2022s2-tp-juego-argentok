@@ -45,8 +45,7 @@ object configuracion {
 	method inicioDelJuego() {
 			if (!juegoIniciado) {	
 			juegoIniciado = true
-			//game.removeVisual(mapaActual)
-			//mapaActual.cambiarMapa(explanada)
+			
 		}
 	}
 	
@@ -54,12 +53,16 @@ object configuracion {
 			self.inicioDelJuego()
 			heroe = mago
 			crear.mago_()
+			game.removeVisual(mapaActual)
+			mapaActual.cambiarMapa(explanada)
 	}
 
 	method inicioDelJuegoGuerrero() {	
 			self.inicioDelJuego()
 			heroe = guerrero
 			crear.guerrero_()
+			game.removeVisual(mapaActual)
+			mapaActual.cambiarMapa(explanada)
 	}
 }
 
@@ -190,12 +193,16 @@ object pistaDePrueba {
 
 	method prueba1() {
 		
+		game.cellSize(32)
 		game.height(10)
 		game.width(15)
+  		game.addVisual(mapaActual)
+  		
+		
 		game.title("Argentok")	
 			
 		configuracion.comandos()
-		tester.dummie()
+		// tester.dummie()
 		// mapaActual.mapa(explanada)
 		//mapaActual.inicializarMapa()
 	}
