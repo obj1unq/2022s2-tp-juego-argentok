@@ -3,15 +3,16 @@ import items.*
 import seresVivos.*
 import escenarios.*
 import enemigos.*
-
 import estadisticas.*
+import proyectil.*
 
 
 
 object configuracion {
 
+
 	var property heroe = null 
-	
+
 	var juegoIniciado = false
 
 	method comandos() {
@@ -19,19 +20,22 @@ object configuracion {
 		keyboard.right().onPressDo({ heroe.mover(derecha)})
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
 		keyboard.down().onPressDo({ heroe.mover(abajo)})
-		keyboard.a().onPressDo({ heroe.atacar()})
-	    keyboard.f().onPressDo({ heroe.interactuar()})
 		keyboard.num1().onPressDo({ heroe.comprar()})
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
-		//keyboard.f().onPressDo({ heroe.interactuarConTodos()})
-		keyboard.p().onPressDo({game.say(heroe, heroe.decirNivelYExp())})
-		keyboard.u().onPressDo({game.say(heroe, heroe.decirStats())})
-		keyboard.q().onPressDo({game.say(heroe, heroe.decirVida())})
-		keyboard.w().onPressDo({game.say(heroe, heroe.decirMana())})
-		//keyboard.y().onPressDo({ game.addVisual(tester.dummie(heroe))})
-		keyboard.m().onPressDo({self.inicioDelJuegoMago()})
-		keyboard.n().onPressDo({self.inicioDelJuegoGuerrero()})
+		keyboard.q().onPressDo({ game.say(heroe, heroe.decirVida())})
+		keyboard.y().onPressDo({ game.addVisual(tester.dummie(heroe))})
+		keyboard.w().onPressDo({ game.say(heroe, heroe.decirMana())})
+		keyboard.a().onPressDo({ heroe.atacar()})
+		keyboard.s().onPressDo({ heroe.hechizo()})
+		keyboard.d().onPressDo({ heroe.defenderse()})
+		keyboard.f().onPressDo({ heroe.interactuar()})
+		keyboard.z().onPressDo({ game.say(heroe, heroe.decirOro())})
+		keyboard.x().onPressDo({ game.say(heroe, heroe.decirNivelYExp())})
+		keyboard.c().onPressDo({ game.say(heroe, heroe.decirStats())})
+		keyboard.v().onPressDo({ game.say(heroe, heroe.decirInventario())})
+		keyboard.m().onPressDo({ self.inicioDelJuegoMago()})
+		keyboard.n().onPressDo({ self.inicioDelJuegoGuerrero()})
 	}
 	
 	method juegoIniciado(){
@@ -45,15 +49,9 @@ object configuracion {
 			game.removeVisual(mapaActual)
 			mapaActual.cambiarMapa(explanada)
 			crear.mago_()
-			
-			
-			
-			
 		}
-
-
 	}
-	
+
 	method inicioDelJuegoGuerrero() {
 		if (!juegoIniciado) {	
 			juegoIniciado = true
@@ -61,10 +59,7 @@ object configuracion {
 			game.removeVisual(mapaActual)
 			mapaActual.cambiarMapa(explanada)
 			crear.guerrero_()
-			
-			
 		}
-		
 	}
 }
 
@@ -100,70 +95,54 @@ object abajo {
 
 }
 
-/*
-object tester {
-
-//esto es para testar
-	method espada() {
-		return new Arma(puntosDeDanio = 100)
-	}
-
-//	method dummie() {
-//		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300)
-//	}
-*/
-
 object crear {
-		
+
 	method guerrero_() {
 		fuerza.subirStat(25)
 		agilidad.subirStat(20)
 		salud.subirStat(250)
-		
 		guerrero.image("Guerrero_abajo.png")
-		guerrero.position(game.at(0,0))
-		guerrero.equiparArma(self.espada())
+		guerrero.position(game.at(0, 0))
+		guerrero.armaEquipada(espada)
 		guerrero.curarse(250)
 		//game.addVisual(guerrero) agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
 	}
-	
+
 	method mago_() {
 		inteligencia.subirStat(30)
 		agilidad.subirStat(10)
 		salud.subirStat(150)
 		manaMax.subirStat(250)
 		mago.image("Mago_abajo.png")
-		mago.position(game.at(0,0))
-		mago.equiparArma(self.baculo())
+		mago.position(game.at(0, 0))
+		mago.armaEquipada(baculo)
 		mago.curarse(150)
 		mago.regenerarMana(250)
 		//game.addVisual(mago) agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
 	}
 	
-	method espada() {
-		return new Arma(puntosDeDanio = 100)
-	}
-	
-	method baculo() {
-		return new Arma(puntosDeDanio = 75)
+	method hechizo(heroe){
+		return new Proyectil(position = heroe.enFrente(), caster = heroe )
 	}
 }
 
 object tester {
+
 //esto es para testar
-
-	
-
 	method dummie(_heroe) {
-		//return new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300, heroe = _heroe) NO FUNCIONA LA REFERENCIA HEROE
-		
+		return new Enemigo(image = "pepita.png", position = game.center(), vida = 300, heroe = _heroe, ultimaDireccion = derecha, sentidoActual = derecha)
 	}
-
-	method item() {
-		return new Item()
-	}
-
 }
+
+
+object sprite {
+	
+	method deHeroe(heroe, tiempo, imagenCon, imagenSin) {
+		heroe.image(imagenCon)
+		game.schedule(tiempo, {heroe.image(imagenSin)})
+	}
+}
+
 
 object pistaDePrueba {
 
@@ -174,7 +153,6 @@ object pistaDePrueba {
 		
 		game.cellSize(32)
   		game.addVisual(mapaActual)
-
 		/*
 		game.addVisual(tito)
 			// game.addVisual(tester.dummie())
@@ -185,15 +163,23 @@ object pistaDePrueba {
 		mapaActual.inicializarMapa()
 */
 		
-		//const tito = new Guerrero(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
-		//game.addVisual(tester.dummie(tito))
-		//game.addVisual(tester.item())
-		//game.addVisual(tito)
-
+		game.height(10)
+		game.width(15)
+		game.title("Argentok")	
+			
+ 		// me.addVisual(new Banco(position = game.at(6, 6)))
+  		// game.addVisual(enemigo)
+  		//mapaActual.mapa(explanada)
+  		//mapaActual.inicializarMapa()
+ 
+			// const tito = new Guerrero(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
+			// game.addVisual(tester.dummie(tito))
+			// game.addVisual(tester.item())
+			// game.addVisual(tito)
 		configuracion.comandos()
-		//game.addVisual(enemigo)
-		//mapaActual.mapa(explanada)
-		//mapaActual.inicializarMapa()
+		//tester.dummie(mago).atacar()
+		 mapaActual.mapa(explanada)
+		 mapaActual.inicializarMapa()
 	}
 }
 

@@ -4,12 +4,37 @@ import comandos.*
 import seresVivos.*
 
 class Enemigo inherits Mortal {
-
+	
+	
+	const expEntregadaBase = 50
+	const oroEntregadoBase = 10
+	const heroe = null
 	var property sentidoActual 
 	
-	override method recibirDanio(dmg) {
-		super(dmg)
-		self.morir() 
+	override method entregarRecompensa() {
+		heroe.ganarExp(self.expEntregada())
+		heroe.ganarOro(self.oroEntregado())
+	}
+
+	method expEntregada() {
+		return (expEntregadaBase / heroe.nivel()).roundUp()
+	}
+
+	method oroEntregado() {
+		return oroEntregadoBase 
+	}
+
+	override method gameOver() {
+	}
+
+	method heroe(_heroe) = _heroe
+
+	override method atacar() {
+		game.onTick(750, "disparar", {crear.hechizo(self).serInvocado(150, self.danio())})			
+	}
+
+	override method danio() {
+		return 100
 	}
 	
 	override method mover(direccion){
@@ -18,10 +43,6 @@ class Enemigo inherits Mortal {
 		}
 		self.ultimaDireccion(direccion)
 	}
-	
-	 //Deberia ser abstracto//
-	override method atacar(){}
-	override method danio() {}
 	
 	method moverse(){
 		if(self.puedoPasar(sentidoActual)){
@@ -45,17 +66,14 @@ class Enemigo inherits Mortal {
 
 class EnemigoHorizontal inherits Enemigo {
 	override method gameOver(){}
-	override method entregarExp(){}
 }
 
 class EnemigoVertical inherits Enemigo {
 	override method gameOver(){}
-	override method entregarExp(){}
 }
 
 class EnemigoEstatico inherits Enemigo{
 	override method gameOver(){}
-	override method entregarExp(){}
 }
 
 object direccionOpuesta {
