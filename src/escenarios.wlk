@@ -15,6 +15,10 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 		return true
 	}
 	
+	method serInteractuado(personaje){
+		
+	}
+	
 	method accionAlSerColisionado(){
 		
 	}
@@ -94,9 +98,13 @@ class Escenario {
 	}
 	
 	method setearEnemigos()
-	method setearRecursos()
 	method setearLimites()
 	method setearDecoraciones()
+	
+	method setearRecursos(){
+		recursos.forEach({recurso => game.addVisual(recurso)})
+		recursos.forEach({recurso => recurso.verSiFueMinado()})
+	}
 	
 	method setearConstrucciones(){
 		construcciones.forEach({ construccion => game.addVisual(construccion)})
@@ -222,7 +230,7 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 
 
 //========== Explanada2
-object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", recursos = #{}) {
+object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", recursos = #{arbol1, arbol2, arbol3}) {
 
 	override method setearEsceneario() {
 		super()
@@ -289,14 +297,7 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		
 	}
 
-	override method setearRecursos() {
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(8, 8))
-		game.addVisual(arbol1)
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(5, 0))
-		game.addVisual(arbol1)
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(3, 9))
-		game.addVisual(arbol1)
-	}
+
 
 	override method colocarHeroeEnEntradaMapa(){
 		configuracion.heroe().position(self.heroePositionAlComenzar())
@@ -322,7 +323,7 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 
 
 //========== Explanada3
-object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada3.png", recursos = #{}) {
+object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada3.png", recursos = #{arbol4, arbol5, arbol6}) {
 	
 	override method setearEsceneario() {
 		super()
@@ -367,14 +368,7 @@ object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada
 		
 	}
 	
-	override method setearRecursos(){
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(13, 6))
-		game.addVisual(arbol1)
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(10, 1))
-		game.addVisual(arbol1)
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(3, 5))
-		game.addVisual(arbol1)
-	}
+	
 	
 	override method setearLimites(){
 		self.setearLimitesIzquierda(explanada2)
@@ -478,8 +472,25 @@ object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", re
 	}
 	
 	override method heroePositionAlComenzar(){
-		return game.at(configuracion.heroe().position().x(), 0)
+		return game.at(7, 0)
 	}
+	
+}
+
+object finDeLaPartida inherits Escenario ( construcciones = #{ }, image = "FinDeLaPartida.png", recursos = #{}) {
+	
+	
+	override method setearEnemigos(){}
+	
+	override method setearRecursos(){}
+	
+	override method setearLimites(){}
+	
+	override method setearDecoraciones(){}
+	
+	override method colocarHeroeEnEntradaMapa(){}
+	
+	override method heroePositionAlComenzar(){}
 	
 }
 

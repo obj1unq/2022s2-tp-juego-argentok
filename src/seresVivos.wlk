@@ -42,6 +42,13 @@ class Mortal {
 		game.removeVisual(self)
 	}
 
+	
+	method gameOver(){
+		mapaActual.cambiarMapa("FinDeLaPartida.png")
+	}
+	
+	method entregarExp() // ESTE METODO SE UTILIZA? REVISAR
+
 	method recibirDanio(dmg) {
 		vida -= dmg
 		self.morir()
@@ -72,7 +79,6 @@ class Mortal {
 		}
 	}
 
-	method gameOver()
 
 	method danio()
 
