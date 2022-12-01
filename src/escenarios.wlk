@@ -22,6 +22,11 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 	method accionAlSerColisionado(){
 		
 	}
+	
+	method recibirDanio(dmg){
+		
+	}
+	
 
 }
 
@@ -88,11 +93,12 @@ class Escenario {
 		mapaActual.image(self.image())
 		game.addVisual(mapaActual)
 		game.addVisual(configuracion.heroe())
-		self.setearRecursos()
+		self.setearPiso()
 		self.setearEnemigos()
 		self.setearDecoraciones()
 		self.setearLimites()
 		self.setearConstrucciones()
+		self.setearRecursos()
 		configuracion.comandos()
 		
 	}
@@ -100,6 +106,7 @@ class Escenario {
 	method setearEnemigos()
 	method setearLimites()
 	method setearDecoraciones()
+	method setearPiso()
 	
 	method setearRecursos(){
 		recursos.forEach({recurso => game.addVisual(recurso)})
@@ -204,6 +211,10 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 		self.colocarObjetoSolido("Barril.png", game.at(0, 1))
 	
 	}
+	
+	override method setearPiso(){
+		
+	}
 
 	override method setearLimites() {
 		self.setearLimitesDerecha(explanada2)
@@ -230,12 +241,10 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 
 
 //========== Explanada2
-object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", recursos = #{arbol1, arbol2, arbol3}) {
+object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", recursos = #{arbol1, arbol2, arbol3, piedra1, piedra2, piedra3, cofre1}) {
 
-	override method setearEsceneario() {
-		super()
-
-		
+	
+	override method setearPiso(){
 			// Seteo Mar
 		self.colocarObjetoSolido("Mar.png", game.at(1, 0))
 		self.colocarObjetoSolido("Mar.png", game.at(2, 0))
@@ -271,9 +280,8 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		// seteo decoracionPlantaSolida
 		
 		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(4, 2))
-		
-
 	}
+	
 
 	override method setearEnemigos(){
 		self.setearEnemigo(game.at(7,2), derecha)
@@ -323,10 +331,9 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 
 
 //========== Explanada3
-object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada3.png", recursos = #{arbol4, arbol5, arbol6}) {
+object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada3.png", recursos = #{arbol4, arbol5, arbol6, piedra4, piedra5, piedra6, cofre2}) {
 	
-	override method setearEsceneario() {
-		super()
+	override method setearPiso(){
 		
 		// seteo elevacion
 		self.colocarObjetoSolido("Elevacion.png", game.at(5, 3))
@@ -362,6 +369,7 @@ object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada
 		self.colocarObjetoSolido("Bandera.png", game.at(4, 3))
 		self.colocarObjetoSolido("Bandera.png", game.at(8, 3))
 		
+	
 	}
 	
 	override method setearEnemigos(){
@@ -399,10 +407,9 @@ object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada
 
 
 //========== CUEVA
-object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", recursos = #{}) {
+object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", recursos = #{cofre3, cofre4, cofre5}) {
 	
-	override method setearEsceneario(){
-		super()
+	override method setearPiso(){
 		
 		//seteo mar
 		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(4, 0))
@@ -442,16 +449,13 @@ object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", re
 		self.colocarObjetoSolido("Elevacion.png", game.at(14, 6))
 		
 		self.colocarObjetoSolido("Elevacion.png", game.at(4, 6))
-			
+		
 	}
 	
 	override method setearEnemigos(){
 		
 	}
 	
-	override method setearRecursos(){
-		
-	}
 	
 	override method setearLimites(){
 		self.colocarLimite(self, explanada3, "Transparente32Bits.png", game.at(5, -1))
@@ -479,6 +483,7 @@ object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", re
 
 object finDeLaPartida inherits Escenario ( construcciones = #{ }, image = "FinDeLaPartida.png", recursos = #{}) {
 	
+	override method setearPiso(){}
 	
 	override method setearEnemigos(){}
 	
