@@ -4,27 +4,91 @@ import comandos.*
 import seresVivos.*
 import enemigos.*
 
-
 /* 
- 
-describe "Prubas a Tito el heroe" {
-	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada(), ultimaDireccion = derecha)
-	const enemigo = new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300)
+ *  
+ * describe "Prubas a Tito el heroe" {
+ * 	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada(), ultimaDireccion = derecha)
+ * 	const enemigo = new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300)
+ * 	method initialize() {
+ * 		
+ * 		game.width(5)
+ * 		game.height(5)
+ * 	}
+ * 	
+
+ * 	test "Tito tiene adelante a enemigo" {
+ * 		assert.equals([enemigo], tito.estaEnfrente())
+ * 	}
+
+ * 	test "Tito golpea a un Enemigo" {
+ * 		tito.atacar()
+ * 		assert.equals(200, enemigo.vida())
+ * 	}
+
+ * 	
+ }*/
+describe "heroe y enemigos" {
+
 	method initialize() {
-		
-		game.width(5)
-		game.height(5)
-	}
-	
-
-	test "Tito tiene adelante a enemigo" {
-		assert.equals([enemigo], tito.estaEnfrente())
 	}
 
-	test "Tito golpea a un Enemigo" {
-		tito.atacar()
-		assert.equals(200, enemigo.vida())
+	test "El heroe recibe daño de un enemigo y pierde puntos de vida" {
+	// recibirDanio()
 	}
 
-	
-}*/
+	test "El heroe mata a un enemigo y gana oro y exp" {
+	}
+
+}
+
+describe "Guerrero consigue recursos e interactua con las casas" {
+
+	test "el Guerrero consigue madera" {
+	}
+
+	test "el Guerrero consigue piedras" {
+	}
+
+	test "el Guerrero cambia su piedra y madera por oro en el Mercado" {
+	// el heroe deberia ganar 300 de oro 
+	}
+
+	test "el Guerrero compra una espada en la Casa de Armaduras" {
+	// el heroe tiene que tener por lo menos 100 de oro
+	// oro restante: 200
+	}
+
+	test "el Guerrero mejora su arma en la Casa de Armaduras" {
+	// el heroe tiene que tener por lo menos 200 de oro
+	// oro restante: 0
+	// los puntos de daño del arma se multiplican x 10
+	}
+
+}
+
+describe "Mago consigue recursos e interactua con las casas" {
+
+	test "el Mago consigue madera" {
+	}
+
+	test "el Mago consigue piedras" {
+	}
+
+	test "el Mago cambia su piedra y madera por oro en el Mercado" {
+	// el heroe deberia ganar 300 de oro 
+	}
+
+	test "el Mago compra una espada en la Casa de Armaduras" {
+	// el heroe tiene que tener por lo menos 100 de oro
+	// oro restante: 200
+	}
+
+	test "el Mago mejora su arma en la Casa de Armaduras" {
+	// el heroe tiene que tener por lo menos 200 de oro
+	// oro restante: 0
+	// los puntos de daño del arma se multiplican x 10
+	}
+
+}
+
+}
