@@ -5,7 +5,7 @@ import escenarios.*
 import enemigos.*
 
 import estadisticas.*
-import seleccionDePersonajes.*
+
 
 
 object configuracion {
@@ -40,12 +40,15 @@ object configuracion {
 	
 	method inicioDelJuegoMago() {
 		if (!juegoIniciado) {
-			game.removeVisual(cambioDePersonaje)
-			heroe = mago
-			crear.mago_()
 			juegoIniciado = true
-			mapaActual.mapa(explanada)
-			mapaActual.inicializarMapa()
+			heroe = mago
+			game.removeVisual(mapaActual)
+			mapaActual.cambiarMapa(explanada)
+			crear.mago_()
+			
+			
+			
+			
 		}
 
 
@@ -53,12 +56,13 @@ object configuracion {
 	
 	method inicioDelJuegoGuerrero() {
 		if (!juegoIniciado) {	
-			game.removeVisual(cambioDePersonaje)
-			heroe = guerrero
-			crear.guerrero_()
 			juegoIniciado = true
-			mapaActual.mapa(explanada)
-			mapaActual.inicializarMapa()
+			heroe = guerrero
+			game.removeVisual(mapaActual)
+			mapaActual.cambiarMapa(explanada)
+			crear.guerrero_()
+			
+			
 		}
 		
 	}
@@ -120,7 +124,7 @@ object crear {
 		guerrero.position(game.at(0,0))
 		guerrero.equiparArma(self.espada())
 		guerrero.curarse(250)
-		game.addVisual(guerrero)
+		//game.addVisual(guerrero) agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
 	}
 	
 	method mago_() {
@@ -133,7 +137,7 @@ object crear {
 		mago.equiparArma(self.baculo())
 		mago.curarse(150)
 		mago.regenerarMana(250)
-		game.addVisual(mago)
+		//game.addVisual(mago) agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
 	}
 	
 	method espada() {
@@ -169,7 +173,7 @@ object pistaDePrueba {
 		//configuracion.comandos(tito)
 		
 		game.cellSize(32)
-  		game.addVisual(cambioDePersonaje)
+  		game.addVisual(mapaActual)
 
 		/*
 		game.addVisual(tito)

@@ -26,6 +26,13 @@ object mapaActual {
 
 	
 	var property mapa
+	var property image = "ElegirPersonaje.png"
+	const property position = game.at(0,0)
+		
+	
+	method solido(){
+		return false
+	}
 	
 	method recibirDanio(dmg) {}
 
@@ -35,9 +42,10 @@ object mapaActual {
 	}
 
 	method cambiarMapa(_mapa) {
+		
 		self.mapa(_mapa)
 		self.inicializarMapa()
-	// self.setearMapa(mapa)
+	
 	}
 
 }
@@ -51,17 +59,10 @@ class Escenario {
 
 	
 	var property positionAlComenzar = game.at(0, 1)
-	// const property decoraciones
 	var property image
 	var property heroPrimeroPosicion
 
-	/*falta const de escenario, deco, recu y limi */
-	// esto se reutiliza, probablemente pueda definir el metodo aca
-	method setearDecoraciones()
 
-	method setearLimites()
-
-	method setearRecursos()
 
 	method colocarObjetoSolido(_image, _position) {
 		const objetoSolido = new Decoracion(image = _image, position = _position)
@@ -78,16 +79,24 @@ class Escenario {
 
 	method setearEsceneario() {
 		game.clear()
+		mapaActual.image(self.image())
+		
+		game.addVisual(mapaActual)
 		self.colocarHeroeEnEntradaMapa()
-		pruebaCambioMapa.cambiarMapa(self.image())
+		//game.removeVisual(configuracion.heroe())
 		game.addVisual(configuracion.heroe())
-		game.boardGround(self.image())
 		self.setearRecursos()
+		self.setearEnemigos()
 		self.setearDecoraciones()
 		self.setearLimites()
-		self.setearRecursos()
 		
 	}
+	
+	method setearEnemigos()
+	method setearRecursos()
+	method setearLimites()
+	method setearDecoraciones()
+	
 	
 	method colocarHeroeEnEntradaMapa()
 	method heroePositionAlComenzar()
@@ -114,16 +123,18 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 
 }
 
-object explanada inherits Escenario (construcciones = #{ construccionBanco, construccionMercado, construccionArmadura, construccionMagia }, image = "Explanada.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
+object explanada inherits Escenario ( construcciones = #{ construccionBanco, construccionMercado, construccionArmadura, construccionMagia }, image = "Explanada.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
 
 	override method setearEsceneario() {
 		super()
-		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = espada, oro = 300, inventario = [ piedra, madera, madera, piedra ])
-		//game.addVisual(tito)
 		configuracion.comandos()
 		construcciones.forEach({ construccion => game.addVisual(construccion)})
 	}
-
+	
+	override method setearEnemigos(){
+		
+	}
+	
 	override method setearDecoraciones() {
 		// Banderas al lado de armaduras
 		self.colocarObjetoSolido("Bandera.png", game.at(11, 7))
@@ -136,10 +147,10 @@ object explanada inherits Escenario (construcciones = #{ construccionBanco, cons
 		self.colocarObjetoSolido("Arbusto.png", game.at(4, 6))
 			// Decoracion al lado de Mercado
 		self.colocarObjetoSolido("Arbusto.png", game.at(3, 2))
-			// self.colocarObjetoSolido("Arbusto.png", game.at(0, 2))
+		self.colocarObjetoSolido("Arbusto.png", game.at(0, 2))
 		self.colocarObjetoSolido("EscaparateTienda.png", game.at(2, 2))
-	// self.colocarObjetoSolido("Barril.png", game.at(0, 1))
-	// comento esos elementos para poder poner al heroe a la derecha del mercado-agus
+		self.colocarObjetoSolido("Barril.png", game.at(0, 1))
+	
 	}
 
 	override method setearLimites() {
@@ -190,20 +201,21 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	override method setearEsceneario() {
 		super()
 		configuracion.comandos()
-		
-		pruebaCambioMapa.cambiarMapa("Explanada2")
+	
 		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(2,2),vida = 300, sentidoActual = derecha)
 		game.addVisual(malito)
 		game.onTick(500, "moverse", {malito.moverse()})
-			//
+		
+		
 			// Seteo Mar
+		self.colocarObjetoSolido("Mar.png", game.at(1, 0))
 		self.colocarObjetoSolido("Mar.png", game.at(2, 0))
 		self.colocarObjetoSolido("Mar.png", game.at(3, 0))
-		self.colocarObjetoSolido("Mar.png", game.at(4, 0))
+		self.colocarObjetoSolido("Mar.png", game.at(2, 1))
+		self.colocarObjetoSolido("Mar.png", game.at(2, 2))
 		self.colocarObjetoSolido("Mar.png", game.at(3, 1))
-		self.colocarObjetoSolido("Mar.png", game.at(4, 1))
 		self.colocarObjetoSolido("Mar.png", game.at(3, 2))
-		self.colocarObjetoSolido("Mar.png", game.at(4, 2))
+		self.colocarObjetoSolido("Mar.png", game.at(2, 3))
 		self.colocarObjetoSolido("Mar.png", game.at(3, 3))
 		self.colocarObjetoSolido("Mar.png", game.at(4, 3))
 		self.colocarObjetoSolido("Mar.png", game.at(5, 3))
@@ -217,24 +229,27 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		self.colocarObjetoSolido("Mar.png", game.at(13, 1))
 		self.colocarObjetoSolido("Mar.png", game.at(13, 0))
 			// seteo montaña comienzo
-		self.colocarObjetoSolido("Elevacion.png", game.at(5, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(4, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(5, 8))
 		self.colocarObjetoSolido("Elevacion.png", game.at(6, 8))
-		self.colocarObjetoSolido("Elevacion.png", game.at(7, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(7, 9))
 		self.colocarObjetoSolido("Elevacion.png", game.at(8, 9))
 		self.colocarObjetoSolido("Elevacion.png", game.at(9, 9))
 		self.colocarObjetoSolido("Elevacion.png", game.at(10, 9))
-		self.colocarObjetoSolido("Elevacion.png", game.at(11, 9))
-		self.colocarObjetoSolido("Elevacion.png", game.at(12, 8))
-		self.colocarObjetoSolido("Elevacion.png", game.at(13, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(11, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(12, 9))
 
 	}
 
+	override method setearEnemigos(){
+		
+	}
+	
 	override method setearDecoraciones() {
 		// vallas
 
 		self.colocarObjetoSolido("Valla.png", game.at(1, 9))
 		self.colocarObjetoSolido("Valla.png", game.at(2, 9))
-		self.colocarObjetoSolido("Valla.png", game.at(3, 9))
 			// lapidas
 		self.colocarObjetoSolido("Lapida.png", game.at(7, 0))
 		self.colocarObjetoSolido("Lapida.png", game.at(8, 0))
@@ -262,7 +277,7 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		game.addVisual(arbol1)
 		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(5, 0))
 		game.addVisual(arbol1)
-		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(4, 9))
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(3, 9))
 		game.addVisual(arbol1)
 	}
 
@@ -277,36 +292,8 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	
 }
 
-/*
 
-object construccionBancoInterior inherits Escenario (construcciones = #{}, image = "Tienda1.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
 
-	override method setearEsceneario() {
-		super()
-		//const tito = new Heroe(image = "MagoSur.png", position = game.at(5, 0), armaEquipada = tester.espada())
-		//game.addVisual(tito)
-		configuracion.comandos()
-	}
 
-	override method setearDecoraciones() {
-	}
-
-	override method setearLimites() {
-	}
-
-	override method setearRecursos() {
-	}
-
-} 
-
-*/
-
-object pruebaCambioMapa {
-	
-	method cambiarMapa(texto) {
-		game.boardGround(texto)
-	}
-
-}
 
 
