@@ -56,7 +56,9 @@ class Mortal {
 		game.removeVisual(self)
 	}
 	
-	method gameOver()
+	method gameOver(){
+		mapaActual.cambiarMapa("")
+	}
 	
 	method entregarExp()
 	
