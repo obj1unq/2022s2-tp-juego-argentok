@@ -28,6 +28,7 @@ object configuracion {
 		keyboard.w().onPressDo({ game.say(heroe, heroe.decirMana())})
 		keyboard.a().onPressDo({ heroe.atacar()})
 		keyboard.s().onPressDo({ heroe.hechizo()})
+		keyboard.t().onPressDo({ teclas.cambiarImagen()})
 		keyboard.d().onPressDo({ heroe.defenderse()})
 		keyboard.f().onPressDo({ heroe.interactuar()})
 		keyboard.z().onPressDo({ game.say(heroe, heroe.decirOro())})
@@ -160,7 +161,7 @@ object crear {
 }
 
 object tester {
-
+	
 //esto es para testar
 	method dummie() {
 		const enemigo = self.unEnemigoVertical()

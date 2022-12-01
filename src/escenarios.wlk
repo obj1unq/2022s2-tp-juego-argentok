@@ -27,6 +27,7 @@ class Decoracion { // que realmente no es una decoracion deberia llamarse "objet
 		
 	}
 	
+	
 
 }
 
@@ -56,7 +57,37 @@ object mapaActual {
 		self.inicializarMapa()
 	
 	}
+		
 
+}
+
+object teclas{
+	
+	
+	const property position = game.at(3,2)
+	const property image = "Teclas.png"
+	var property mostrandoTeclas = false
+	
+	method solido(){
+		return false
+	}
+	
+	method recibirDanio(dmg) {}
+
+	method accionAlSerColicionado(){}
+
+	
+	method cambiarImagen(){
+		if (mostrandoTeclas == false){
+			mostrandoTeclas = true
+			game.addVisual(self)
+		}
+		else{
+			mostrandoTeclas = false
+			game.removeVisual(self)
+		}
+	}
+	
 }
 
 class Escenario {
@@ -482,6 +513,12 @@ object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", re
 }
 
 object finDeLaPartida inherits Escenario ( construcciones = #{ }, image = "FinDeLaPartida.png", recursos = #{}) {
+	
+	
+	override method setearEsceneario() {
+		game.clear()
+		mapaActual.image(self.image())
+	}
 	
 	override method setearPiso(){}
 	
