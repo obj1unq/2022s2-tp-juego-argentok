@@ -1,23 +1,25 @@
 import wollok.game.*
 import items.*
-import comandos.*
 import seresVivos.*
+import escenarios.*
+import estadisticas.*
+import comandos.*
+
 
 class Enemigo inherits Mortal {
 	
 	
 	const expEntregadaBase = 50
 	const oroEntregadoBase = 10
-	const heroe = null
-	var property sentidoActual 
+	var sentidoActual
 	
 	override method entregarRecompensa() {
-		heroe.ganarExp(self.expEntregada())
-		heroe.ganarOro(self.oroEntregado())
+		configuracion.heroe().ganarExp(self.expEntregada())
+		configuracion.heroe().ganarOro(self.oroEntregado())
 	}
 
 	method expEntregada() {
-		return (expEntregadaBase / heroe.nivel()).roundUp()
+		return (expEntregadaBase / configuracion.heroe().nivel()).roundUp()
 	}
 
 	method oroEntregado() {
@@ -26,11 +28,14 @@ class Enemigo inherits Mortal {
 
 	override method gameOver() {
 	}
-
-	method heroe(_heroe) = _heroe
-
-	override method atacar() {
-		game.onTick(750, "disparar", {crear.hechizo(self).serInvocado(150, self.danio())})			
+	
+	override method morir() {
+		super() 
+		game.removeTickEvent("atacar")
+	}
+	
+	method atacarCadaTanto() {
+		game.onTick(750, "atacar", {self.atacar()})
 	}
 
 	override method danio() {
@@ -44,55 +49,35 @@ class Enemigo inherits Mortal {
 		self.ultimaDireccion(direccion)
 	}
 	
+	method cambiarImagen() {
+		self.image(self.imagenActual()) 
+	}
+	
+	method imagenActual() {
+		return "esqueleto_" + sentidoActual.toString() + ".png" 
+	}
+	
+	method movimiento() {
+		game.onTick(1000, "moverse", {self.moverse()})
+	}
+	
 	method moverse(){
 		if(self.puedoPasar(sentidoActual)){
 			self.mover(sentidoActual)
 		}
 		else{
 			self.cambiarSiNoPuedePasar()
+			self.cambiarImagen()
 			self.mover(sentidoActual)
 		}
 	}
 	method cambiarSiNoPuedePasar(){
 		if(!self.puedoPasar(sentidoActual)){
-			sentidoActual = direccionOpuesta.opuesto(self)
+			sentidoActual = sentidoActual.opuesto()
 		}
 	}
 	
 	method sentidoActualEs(direccion){
 		return direccion == sentidoActual
-	}
-}
-
-class EnemigoHorizontal inherits Enemigo {
-	override method gameOver(){}
-}
-
-class EnemigoVertical inherits Enemigo {
-	override method gameOver(){}
-}
-
-class EnemigoEstatico inherits Enemigo{
-	override method gameOver(){}
-}
-
-object direccionOpuesta {
-	
-	method opuesto(enemigo){
-		if(enemigo.sentidoActualEs(izquierda)){
-			return derecha
-		}
-		else if(enemigo.sentidoActualEs(derecha)){
-			return izquierda
-		}
-		else if(enemigo.sentidoActualEs(arriba)){
-			return abajo
-		}
-		else if(enemigo.sentidoActualEs(abajo)){
-			return arriba
-		}
-		else{
-			return null
-		}
 	}
 }

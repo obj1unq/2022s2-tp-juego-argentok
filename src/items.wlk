@@ -44,7 +44,7 @@ object espada inherits Arma {
 
 }
 
-object baculo inherits Arma {
+object barita inherits Arma {
 
 	override method valor() {
 		return 150
