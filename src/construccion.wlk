@@ -6,7 +6,7 @@ import items.*
 class Construccion {
 
 
-	var property inventario = [ baculo ]
+	var property inventario = [ barita ]
 	var property boveda = 0
 
 	// method validarSerUtilizado()
@@ -167,12 +167,12 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 
 	override method comprar(serVivo) { // comprar baculo
 		self.validarOpcionUno(serVivo)
-		serVivo.oro(serVivo.oro() - baculo.valor())
-		const ganancia = baculo.valor()
+		serVivo.oro(serVivo.oro() - barita.valor())
+		const ganancia = barita.valor()
 		boveda = +ganancia
-		serVivo.agregar(self.todosLosItemsDelTipo(baculo))
+		serVivo.agregar(self.todosLosItemsDelTipo(barita))
 		game.say(self, "Compraste un báculo! Gastaste " + ganancia + " monedas de oro")
-		self.borrarTodosLosItemsDelTipo(baculo)
+		self.borrarTodosLosItemsDelTipo(barita)
 	}
 
 	override method vender(serVivo) { // mejorar arma
@@ -184,9 +184,9 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 	}
 
 	override method validarOpcionUno(serVivo) {
-		if (serVivo.oro() < baculo.valor()) {
+		if (serVivo.oro() < barita.valor()) {
 			self.error("No tenes suficiente oro para comprar un báculo")
-		} else if (self.todosLosItemsDelTipo(baculo).size() < 1) {
+		} else if (self.todosLosItemsDelTipo(barita).size() < 1) {
 			self.error("No hay más báculos disponibles")
 		}
 	}

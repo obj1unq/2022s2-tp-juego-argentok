@@ -111,9 +111,10 @@ class Escenario {
 	}
 	
 	method setearEnemigo(position, direccion){
-		const malito = new EnemigoHorizontal(image = "EsqueletoSur.png", position = position,vida = 300, sentidoActual = direccion)
+		const malito = new Enemigo(image = "EsqueletoSur.png", position = position,vida = 300, sentidoActual = direccion)
 		game.addVisual(malito)
-		game.onTick(500, "moverse", {malito.moverse()})
+		malito.movimiento()
+		//game.onTick(500, "moverse", {malito.moverse()})
 	}
 	
 	method colocarHeroeEnEntradaMapa()
@@ -169,7 +170,7 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 	
 	method recibirDanio(dmg) {} // RECIBIR DAÑO? POR QUE?
 
-	method accionAlSerColisionado() {
+	override method accionAlSerColisionado() {
 		mapaDelQueEsLimite.colocarHeroeEnEntradaMapa()
 		self.cambiarMapa(mapaDelQueEsLimite)
 	}
