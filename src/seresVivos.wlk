@@ -7,7 +7,7 @@ import estadisticas.*
 class Mortal {
 
 	var property vida = 0
-	var ultimaDireccion = abajo
+	var property ultimaDireccion = abajo
 	var property position = null
 	var property image = null
 
@@ -40,9 +40,9 @@ class Mortal {
 
 	method morir() {
 		if (vida <= 0) {
-			self.despawnear()
-			self.entregarRecompensa()
 			self.gameOver()
+			self.entregarRecompensa()
+			self.despawnear()
 		}
 	}
 
@@ -52,6 +52,7 @@ class Mortal {
 
 	method recibirDanio(dmg) {
 		vida -= dmg
+		self.morir()
 	}
 
 	method estaEnfrente() {
@@ -253,6 +254,7 @@ class Heroe inherits Mortal {
 
 	override method gameOver() {
 	// aca tiene que ir la pantalla de Game Over
+		game.schedule(2500, {game.stop()})
 	}
 
 	method comprar() {
@@ -270,11 +272,6 @@ class Heroe inherits Mortal {
 	method cambiarImagen(string) {
 		return self.toString() + "_" + ultimaDireccion.toString() + string + ".png" 
 	}
-	//method imagenDescanso()
-
-	method decirMana()
-
-	method tipoDeDanio()
 	
 	method defenderse() {
 		sprite.deHeroe(self, 500, self.cambiarImagen("_escudo"), self.cambiarImagen(""))
@@ -282,10 +279,9 @@ class Heroe inherits Mortal {
 		game.schedule(500,{defendiendo = false})
 	}
 	
-//	method dejarDeDefender(){
-//		sprite.deHeroe(self, self.cambiarImagen("_escudo"), self.cambiarImagen(""))
-//		defendiendo = false		
-//	}
+	method decirMana()
+
+	method tipoDeDanio()
 	
 	method hechizo()
 
@@ -299,6 +295,8 @@ class Heroe inherits Mortal {
 object mago inherits Heroe {
 
 	var mana = 0
+	
+	var hechizoEnCD = false
 
 	override method tipoDeDanio() {
 		return stats.get(3)
@@ -320,20 +318,40 @@ object mago inherits Heroe {
 	}
 	
 	override method hechizo() {
-		game.say(self, "PEW")
-		tester.hechizo(self)
+		self.verificarLanzarHechizo()
+		mana -= 20
+		hechizoEnCD = true
+		game.schedule(5000, {hechizoEnCD = false})	
+		
+		self.invocarHechizo()
 	}
 	
-	override method atacar() {}
+	method invocarHechizo() {
+		game.say(self, "PEW")
+		crear.hechizo(self).serInvocado(75, self.danioDeHechizo())
+	}
+	override method atacar() {
+		crear.hechizo(self).serInvocado(150, self.danio())
+	}
 	
-//	override method imagenDescanso() {
-//		return "Mago_" + ultimaDireccion.toString() + ".png"
-//	}
-//	
-//	override method imagenDefensa() {
-//		
-//	}
-
+	method verificarLanzarHechizo() {
+		self.verificarTengoMana()
+		self.verificarCD()
+	}
+	
+	method verificarTengoMana() {
+		if (mana < 20) {
+			self.error("No tengo suficiente Mana")
+		}
+	}
+	method verificarCD() {
+		if (hechizoEnCD) {
+			self.error("El hechizo se esta recargando")
+		}
+	}
+	method danioDeHechizo() {
+		return self.danio() * nivel
+	}
 }
 
 object guerrero inherits Heroe {
@@ -362,18 +380,7 @@ object guerrero inherits Heroe {
 			self.estaEnfrente().first().recibirDanio(self.danio())
 		}
 	}
-	
-//	method imagenAtaque(){
-//		return "Guerrero_" + ultimaDireccion.toString() + "_espada" + ".png" 
-//	}
-//	
-//	override method imagenDescanso(){
-//		return "Guerrero_" + ultimaDireccion.toString() + ".png"
-//	}
-//	
-//	override method imagenDefensa() {
-//		
-//	}
+
 }
 
 class Enemigo inherits Mortal {
@@ -382,10 +389,10 @@ class Enemigo inherits Mortal {
 	const oroEntregadoBase = 10
 	const heroe = null
 
-	override method recibirDanio(dmg) {
-		super(dmg)
-		self.morir()
-	}
+//	override method recibirDanio(dmg) {
+//		super(dmg)
+//		self.morir()
+//	}
 
 	override method entregarRecompensa() {
 		heroe.ganarExp(self.expEntregada())
@@ -409,7 +416,7 @@ class Enemigo inherits Mortal {
 	}
 
 	override method atacar() {
-			
+		game.onTick(750, "disparar", {crear.hechizo(self).serInvocado(150, self.danio())})			
 	}
 
 	override method danio() {

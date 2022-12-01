@@ -4,10 +4,6 @@ import wollok.game.*
 class Item {
 
 	var property valor = 0
-	var property image = "wheat.png"
-	const property position = game.at(3, 3)
-
-	method solido() = false
 
 	method serInteractuado(personaje) {
 		personaje.agarrarItem(self)
@@ -23,33 +19,38 @@ class Recurso inherits Item {
 
 }
 
-class Equipamento inherits Item {
+class Arma inherits Item {
 
-}
+	var danioBase = 50
 
-class Arma inherits Equipamento {
-
-	var puntosDeDanio
-
-	method puntosDeDanio() = puntosDeDanio
+	method puntosDeDanio() = danioBase + self.danioDeArma()
+	
+	method mejorarArma(mejora) {
+		danioBase += mejora
+	}
+	
+	method danioDeArma()
 
 }
 
 //ITEMS
-object espada inherits Item {
+object espada inherits Arma {
 
 	override method valor() {
 		return 100
 	}
+	
+	override method danioDeArma() = 50
 
 }
 
-object baculo inherits Item {
+object baculo inherits Arma {
 
 	override method valor() {
 		return 150
 	}
-
+	
+	override method danioDeArma() = 25
 }
 
 object piedra inherits Item {

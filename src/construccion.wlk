@@ -60,7 +60,7 @@ class Construccion {
 	}
 
 	method mejorarDanio(serVivo) {
-		return serVivo.puntosDeDanioDelArmaActual() * 10
+		return serVivo.puntosDeDanioDelArmaActual() + 15
 	}
 
 }

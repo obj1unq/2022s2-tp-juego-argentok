@@ -8,12 +8,7 @@ import escenarios.*
 
 program juego {
 	
-	game.height(10)
-	game.width(15)
-	
-	game.title("Argentok")	
 	pistaDePrueba.prueba1()
-	
 	
 	game.start()
 }

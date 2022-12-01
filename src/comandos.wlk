@@ -48,7 +48,6 @@ object configuracion {
 			juegoIniciado = true
 		}
 	}
-
 }
 
 object derecha {
@@ -91,7 +90,7 @@ object crear {
 		salud.subirStat(250)
 		guerrero.image("Guerrero_abajo.png")
 		guerrero.position(game.at(0, 0))
-		guerrero.armaEquipada(self.espada_())
+		guerrero.armaEquipada(espada)
 		guerrero.curarse(250)
 		game.addVisual(guerrero)
 	}
@@ -103,39 +102,22 @@ object crear {
 		manaMax.subirStat(250)
 		mago.image("Mago_abajo.png")
 		mago.position(game.at(0, 0))
-		mago.armaEquipada(self.baculo_())
+		mago.armaEquipada(baculo)
 		mago.curarse(150)
 		mago.regenerarMana(250)
 		game.addVisual(mago)
 	}
-
-	method espada_() {
-		return new Arma(puntosDeDanio = 100)
+	
+	method hechizo(heroe){
+		return new Proyectil(position = heroe.enFrente(), caster = heroe )
 	}
-
-	method baculo_() {
-		return new Arma(puntosDeDanio = 75)
-	}
-
 }
 
 object tester {
 
 //esto es para testar
 	method dummie(_heroe) {
-		return new Enemigo(image = "pepita.png", position = game.at(2, 2), vida = 300, heroe = _heroe)
-	}
-
-	method item() {
-		return new Item()
-	}
-	
-	method proyectil(heroe) {
-		return new Proyectil(position = heroe.enFrente(), caster = heroe )
-	}
-	
-	method hechizo(heroe){
-		game.addVisual(self.proyectil(heroe))
+		return new Enemigo(image = "pepita.png", position = game.center(), vida = 300, heroe = _heroe, ultimaDireccion = derecha)
 	}
 }
 
@@ -148,29 +130,31 @@ object sprite {
 	}
 }
 
+
 object pistaDePrueba {
 
 	method prueba1() {
 		// const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
 		// configuracion.comandos(tito)
 		game.cellSize(32)
-			/*
-			 * 		game.addVisual(tito)
-			 * 			// game.addVisual(tester.dummie())
-			 * 		game.addVisual(tester.item())
-			 * 			// me.addVisual(new Banco(position = game.at(6, 6)))
-			 * 			// game.addVisual(enemigo)
-			 * 		mapaActual.mapa(explanada)
-			 * 		mapaActual.inicializarMapa()
-			 */
+		
+		game.height(10)
+		game.width(15)
+		game.title("Argentok")	
+			
+ 		// me.addVisual(new Banco(position = game.at(6, 6)))
+  		// game.addVisual(enemigo)
+  		//mapaActual.mapa(explanada)
+  		//mapaActual.inicializarMapa()
+ 
 			// const tito = new Guerrero(image = "MagoSur.png", position = game.at(0,0), armaEquipada = tester.espada())
 			// game.addVisual(tester.dummie(tito))
 			// game.addVisual(tester.item())
 			// game.addVisual(tito)
 		configuracion.comandos()
-	// game.addVisual(enemigo)
-	// mapaActual.mapa(explanada)
-	// mapaActual.inicializarMapa()
+		//tester.dummie(mago).atacar()
+		 mapaActual.mapa(explanada)
+		 mapaActual.inicializarMapa()
 	}
 
 }
