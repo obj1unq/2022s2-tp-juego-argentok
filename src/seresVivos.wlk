@@ -15,6 +15,8 @@ class Mortal {
 	
 	method solido() = true
 	
+
+	
 	method puedoPasar(direccion) {
 		return self.noHaySolidosAdelante(direccion) and self.validarEjeX(direccion) and self.validarEjeY(direccion)
 	}

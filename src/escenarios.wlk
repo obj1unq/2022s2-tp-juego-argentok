@@ -53,14 +53,13 @@ object mapaActual {
 class Escenario {
 
 	const construcciones
-	const decoraciones
-	const enemigos
 	const recursos
-
+	//const enemigos, no lo hago como una lista porque para eso tengo qeu instanciar en objetos enemigos y es una clase, podria hacerlo en objetos pero no se que tanto sentido tiene
 	
 	var property positionAlComenzar = game.at(0, 1)
+	
 	var property image
-	var property heroPrimeroPosicion
+	//var property heroPrimeroPosicion podria usar un tipo de position
 
 
 
@@ -76,19 +75,21 @@ class Escenario {
 		const limite = new LimiteHaciaMapa(image = _image, position = _position, mapa = _mapa, mapaDelQueEsLimite = mapaLimite)
 		game.addVisual(limite)
 	}
+	
+
 
 	method setearEsceneario() {
 		game.clear()
-		mapaActual.image(self.image())
 		
+		mapaActual.image(self.image())
 		game.addVisual(mapaActual)
-		self.colocarHeroeEnEntradaMapa()
-		//game.removeVisual(configuracion.heroe())
 		game.addVisual(configuracion.heroe())
 		self.setearRecursos()
 		self.setearEnemigos()
 		self.setearDecoraciones()
 		self.setearLimites()
+		self.setearConstrucciones()
+		configuracion.comandos()
 		
 	}
 	
@@ -97,9 +98,52 @@ class Escenario {
 	method setearLimites()
 	method setearDecoraciones()
 	
+	method setearConstrucciones(){
+		construcciones.forEach({ construccion => game.addVisual(construccion)})
+	}
+	
+	method setearEnemigo(position, direccion){
+		const malito = new EnemigoHorizontal(image = "EsqueletoSur.png", position = position,vida = 300, sentidoActual = direccion)
+		game.addVisual(malito)
+		game.onTick(500, "moverse", {malito.moverse()})
+	}
 	
 	method colocarHeroeEnEntradaMapa()
 	method heroePositionAlComenzar()
+	
+	method setearLimitesIzquierda(limite){
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 0))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 1))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 2))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 3))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 4))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 5))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 6))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 7))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 8))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 9))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 10))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(-1, 11))
+	}
+	
+	method setearLimitesDerecha(limite){
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 0))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 1))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 2))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 3))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 4))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 5))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 6))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 7))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 8))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 9))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 10))
+		self.colocarLimite(self, limite, "Transparente32Bits.png", game.at(15, 11))
+	}
+	
+
+	
+	
 }
 
 class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
@@ -118,17 +162,20 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 	method recibirDanio(dmg) {} // RECIBIR DAÑO? POR QUE?
 
 	method accionAlSerColisionado() {
+		mapaDelQueEsLimite.colocarHeroeEnEntradaMapa()
 		self.cambiarMapa(mapaDelQueEsLimite)
 	}
 
 }
 
-object explanada inherits Escenario ( construcciones = #{ construccionBanco, construccionMercado, construccionArmadura, construccionMagia }, image = "Explanada.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
+
+
+//========== Explanada
+object explanada inherits Escenario ( construcciones = #{ construccionBanco, construccionMercado, construccionArmadura, construccionMagia }, image = "Explanada.png", recursos = #{}) {
 
 	override method setearEsceneario() {
 		super()
-		configuracion.comandos()
-		construcciones.forEach({ construccion => game.addVisual(construccion)})
+		
 	}
 	
 	override method setearEnemigos(){
@@ -154,28 +201,7 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 	}
 
 	override method setearLimites() {
-		// hacer bucle que vaya creando limites y sume uno a la variable 
-		/* 
-		 * var contador
-		 * while (contador /= 10){
-		 * 	const limite1 = new limiteHaciaMapa(mapaDelQueEsLimite = explanada2, position = game.at(14,0) ) // OJO EL 10 DEL GAME.AT ESA HARCODEADO R E V I S A R
-		 * 	contador =+ 1
-		 * }
-		 * 
-		 */
-		// (_mapa, mapaLimite, _image, _position) 
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 0))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 1))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 2))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 3))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 4))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 5))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 6))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 7))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 8))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 9))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 10))
-		self.colocarLimite(self, explanada2, "Transparente32Bits.png", game.at(15, 11))
+		self.setearLimitesDerecha(explanada2)
 	}
 
 	override method setearRecursos() {
@@ -188,7 +214,7 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 	
 	override method heroePositionAlComenzar(){
 		if (!configuracion.juegoIniciado()){
-			return game.center()
+			return game.at(5,5)
 		}
 		else{
 			return 	game.at(14,configuracion.heroe().position().y())
@@ -196,16 +222,14 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 	}
 }
 
-object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", heroPrimeroPosicion = game.at(2, 3), enemigos = #{}, decoraciones = #{}, recursos = #{}) {
+
+
+//========== Explanada2
+object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.png", recursos = #{}) {
 
 	override method setearEsceneario() {
 		super()
-		configuracion.comandos()
-	
-		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(2,2),vida = 300, sentidoActual = derecha)
-		game.addVisual(malito)
-		game.onTick(500, "moverse", {malito.moverse()})
-		
+
 		
 			// Seteo Mar
 		self.colocarObjetoSolido("Mar.png", game.at(1, 0))
@@ -242,34 +266,25 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	}
 
 	override method setearEnemigos(){
-		
+		self.setearEnemigo(game.at(5,5), derecha)
 	}
 	
 	override method setearDecoraciones() {
+		
 		// vallas
-
 		self.colocarObjetoSolido("Valla.png", game.at(1, 9))
 		self.colocarObjetoSolido("Valla.png", game.at(2, 9))
-			// lapidas
+		// lapidas
 		self.colocarObjetoSolido("Lapida.png", game.at(7, 0))
 		self.colocarObjetoSolido("Lapida.png", game.at(8, 0))
 		self.colocarObjetoSolido("Lapida.png", game.at(10, 0))
 	}
 
 	override method setearLimites() {
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 0))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 1))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 2))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 3))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 4))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 5))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 6))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 7))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 8))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 9))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 10))
-		self.colocarLimite(self, explanada, "Transparente32Bits.png", game.at(-1, 11))
-
+		
+		self.setearLimitesDerecha(explanada3)
+		self.setearLimitesIzquierda(explanada)
+		
 	}
 
 	override method setearRecursos() {
@@ -286,12 +301,97 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	}
 	
 	override method heroePositionAlComenzar(){
-		return game.at(0, configuracion.heroe().position().y())
+		if (mapaActual.mapa() == explanada){
+			
+			return game.at(-1, configuracion.heroe().position().y())
+		}
+		else{
+			
+			return game.at(15, configuracion.heroe().position().y())
+		}
+		
+		
+		//configuracion.heroe().opuestoPosition().x(), configuracion.heroe().position().y())
 	}
 	
 	
 }
 
+
+
+//========== Explanada3
+object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada3.png", recursos = #{}) {
+	
+	override method setearEnemigos(){
+		
+	}
+	
+	override method setearRecursos(){
+		
+	}
+	
+	override method setearLimites(){
+		self.setearLimitesIzquierda(explanada2)
+		self.colocarLimite(self, cueva, "Transparente32Bits.png", game.at(6, 9))
+	}
+	
+	override method setearDecoraciones(){
+		
+	}
+	
+	override method colocarHeroeEnEntradaMapa(){
+		configuracion.heroe().position(self.heroePositionAlComenzar())
+	}
+	
+	override method heroePositionAlComenzar(){
+		if (mapaActual.mapa() == explanada2){
+			
+			return game.at(0, configuracion.heroe().position().y())
+		}
+		else{
+			
+			return game.at(6, 8)
+		}
+	}
+	
+}
+
+
+
+//========== CUEVA
+object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", recursos = #{}) {
+	
+	override method setearEnemigos(){
+		
+	}
+	
+	override method setearRecursos(){
+		
+	}
+	
+	override method setearLimites(){
+		self.colocarLimite(self, explanada3, "Transparente32Bits.png", game.at(5, -1))
+		self.colocarLimite(self, explanada3, "Transparente32Bits.png", game.at(6, -1))
+		self.colocarLimite(self, explanada3, "Transparente32Bits.png", game.at(7, -1))
+		self.colocarLimite(self, explanada3, "Transparente32Bits.png", game.at(8, -1))
+		self.colocarLimite(self, explanada3, "Transparente32Bits.png", game.at(9, -1))
+		
+	
+	}
+	
+	override method setearDecoraciones(){
+		
+	}
+	
+	override method colocarHeroeEnEntradaMapa(){
+		configuracion.heroe().position(self.heroePositionAlComenzar())
+	}
+	
+	override method heroePositionAlComenzar(){
+		return game.at(configuracion.heroe().position().x(), 0)
+	}
+	
+}
 
 
 
