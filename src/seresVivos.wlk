@@ -298,6 +298,10 @@ object mago inherits Heroe {
 	var mana = 0
 	
 	var hechizoEnCD = false
+	
+	method entregarExp(){
+		// PONGO ESTE METODO EN BLANCO PORQUE SINO NO FUNCA BIEN, HEROE TIENE ES METODO
+	}
 
 	override method tipoDeDanio() {
 		return stats.get(3)
@@ -358,6 +362,11 @@ object mago inherits Heroe {
 
 object guerrero inherits Heroe {
 
+	method entregarExp(){
+		// PONGO ESTE METODO EN BLANCO PORQUE SINO NO FUNCA BIEN, HEROE TIENE ES METODO
+	}
+	
+	
 	override method tipoDeDanio() {
 		return stats.first()
 	}
