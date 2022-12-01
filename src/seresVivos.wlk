@@ -3,6 +3,7 @@ import items.*
 import comandos.*
 import escenarios.*
 import estadisticas.*
+import enemigos.*
 
 class Mortal {
 
@@ -79,7 +80,7 @@ class Mortal {
 
 }
 
-class Heroe inherits Mortal {
+class Heroe inherits Mortal(position = game.center()) {
 
 	const inventario = []
 	var property armaEquipada = null
@@ -293,7 +294,6 @@ class Heroe inherits Mortal {
 }
 
 object mago inherits Heroe {
-
 	var mana = 0
 	
 	var hechizoEnCD = false
@@ -383,7 +383,7 @@ object guerrero inherits Heroe {
 
 }
 
-class Enemigo inherits Mortal {
+/*class Enemigo inherits Mortal {
 
 	const expEntregadaBase = 50
 	const oroEntregadoBase = 10
@@ -412,6 +412,7 @@ class Enemigo inherits Mortal {
 
 	method heroe(_heroe) = _heroe
 
+
 	override method mover(asd) {
 	}
 
@@ -423,4 +424,8 @@ class Enemigo inherits Mortal {
 		return 100
 	}
 }
-
+	
+	override method mover(asd){}
+	override method atacar(){}
+	override method danio() {}
+}*/

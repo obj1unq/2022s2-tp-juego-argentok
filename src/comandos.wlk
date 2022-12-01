@@ -2,12 +2,18 @@ import wollok.game.*
 import items.*
 import seresVivos.*
 import escenarios.*
+import enemigos.*
+
 import estadisticas.*
 import proyectil.*
 
+
+
 object configuracion {
 
-	var heroe = null
+
+	var property heroe = null 
+
 	var juegoIniciado = false
 
 	method comandos() {
@@ -32,20 +38,28 @@ object configuracion {
 		keyboard.m().onPressDo({ self.inicioDelJuegoMago()})
 		keyboard.n().onPressDo({ self.inicioDelJuegoGuerrero()})
 	}
-
+	
+	method juegoIniciado(){
+		return juegoIniciado // pongo este getter porque necesito saber si el juego esta iniciali
+	}
+	
 	method inicioDelJuegoMago() {
 		if (!juegoIniciado) {
-			heroe = mago
-			crear.mago_()
 			juegoIniciado = true
+			heroe = mago
+			game.removeVisual(mapaActual)
+			mapaActual.cambiarMapa(explanada)
+			crear.mago_()
 		}
 	}
 
 	method inicioDelJuegoGuerrero() {
-		if (!juegoIniciado) {
-			heroe = guerrero
-			crear.guerrero_()
+		if (!juegoIniciado) {	
 			juegoIniciado = true
+			heroe = guerrero
+			game.removeVisual(mapaActual)
+			mapaActual.cambiarMapa(explanada)
+			crear.guerrero_()
 		}
 	}
 }
@@ -92,7 +106,7 @@ object crear {
 		guerrero.position(game.at(0, 0))
 		guerrero.armaEquipada(espada)
 		guerrero.curarse(250)
-		game.addVisual(guerrero)
+		//game.addVisual(guerrero) agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
 	}
 
 	method mago_() {
@@ -105,7 +119,7 @@ object crear {
 		mago.armaEquipada(baculo)
 		mago.curarse(150)
 		mago.regenerarMana(250)
-		game.addVisual(mago)
+		//game.addVisual(mago) agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
 	}
 	
 	method hechizo(heroe){
@@ -133,10 +147,22 @@ object sprite {
 
 object pistaDePrueba {
 
+
 	method prueba1() {
-		// const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
-		// configuracion.comandos(tito)
+		//const tito = new Heroe(image = "MagoSur.png", position = game.at(0, 0), armaEquipada = tester.espada(), oro = 100)
+		//configuracion.comandos(tito)
+		
 		game.cellSize(32)
+  		game.addVisual(mapaActual)
+		/*
+		game.addVisual(tito)
+			// game.addVisual(tester.dummie())
+		game.addVisual(tester.item())
+			// me.addVisual(new Banco(position = game.at(6, 6)))
+			// game.addVisual(enemigo)
+		mapaActual.mapa(explanada)
+		mapaActual.inicializarMapa()
+*/
 		
 		game.height(10)
 		game.width(15)
@@ -156,6 +182,21 @@ object pistaDePrueba {
 		 mapaActual.mapa(explanada)
 		 mapaActual.inicializarMapa()
 	}
-
 }
+
+/*object pistaDePrueba2 {
+	
+	method prueba2(){
+		game.cellSize(32)
+		
+		const malito = new EnemigoHorizontal(image = "pepita.png", position = game.at(1,0),vida = 300, sentidoActual = derecha)
+		const tito = new Heroe(image = "MagoSur.png", position = game.at(2,6), armaEquipada = tester.espada())
+		game.addVisual(malito)
+		game.addVisual(tito)
+		game.onTick(500, "moverse", {malito.moverse()})
+		configuracion.comandos(tito)
+	}
+}*/
+
+
 

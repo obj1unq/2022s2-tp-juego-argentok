@@ -5,10 +5,8 @@ import comandos.*
 import escenarios.*
 
 
-
 program juego {
 	
 	pistaDePrueba.prueba1()
-	
 	game.start()
 }
