@@ -11,22 +11,34 @@ class Proyectil{
 	var property position = null
 	var property image = "barril.png" //hay que buscar un Spell que sea redondo, para que no haya que poner uno por direccion
 	var velocidad = 50
-	const caster = null
 	var danio = 0
+	var property direccion = null
 	
 	method solido() = false
 	method recibirDanio(dmg) {}
 	
 	method despawnear(){
+		game.removeTickEvent("volar")		
 		game.removeVisual(self)
 	}
 	
-	method desplazarse(direccion) {
-		self.position(direccion.siguiente(self.position()))
+	method despawnearSi(){
+		if(!self.estaAdentro()) {
+			self.despawnear()
+		}
+	}
+	
+	method estaAdentro(){
+		return ejes.validarEjeX(direccion, position, -1, 15 ) and ejes.validarEjeY(direccion, position, -1, 10) 
+	}
+	
+	method desplazarse(_direccion) {
+		self.position(_direccion.siguiente(self.position()))
+		self.despawnearSi()
 	}
 	
 	method volar() {
-		game.onTick(velocidad, "volar", {self.desplazarse(caster.ultimaDireccion())})
+		game.onTick(velocidad, "volar", {self.desplazarse(direccion)})
 	}
 	
 	method daniar() {
@@ -40,13 +52,14 @@ class Proyectil{
 	
 	
 	method cambiarImagen(img) {
-		image = "proyectil_" + img.toString() + ".png"
+		image = "proyectil_" + img + ".png"
 	}
 	
-	method serInvocado(speed, dmg /*,img*/) {
+	method serInvocado(speed, dmg ,img, dir) {
 		velocidad = speed
 		danio = dmg
-		//self.cambiarImagen(img)
+		direccion = dir
+		self.cambiarImagen(img)
 		game.addVisual(self)
 		self.volar()
 		self.daniar()
