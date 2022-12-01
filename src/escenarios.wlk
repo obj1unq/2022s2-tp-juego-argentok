@@ -173,10 +173,6 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 //========== Explanada
 object explanada inherits Escenario ( construcciones = #{ construccionBanco, construccionMercado, construccionArmadura, construccionMagia }, image = "Explanada.png", recursos = #{}) {
 
-	override method setearEsceneario() {
-		super()
-		
-	}
 	
 	override method setearEnemigos(){
 		
@@ -262,11 +258,16 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		self.colocarObjetoSolido("Elevacion.png", game.at(10, 9))
 		self.colocarObjetoSolido("Elevacion.png", game.at(11, 8))
 		self.colocarObjetoSolido("Elevacion.png", game.at(12, 9))
+		
+		// seteo decoracionPlantaSolida
+		
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(4, 2))
+		
 
 	}
 
 	override method setearEnemigos(){
-		self.setearEnemigo(game.at(5,5), derecha)
+		self.setearEnemigo(game.at(7,2), derecha)
 	}
 	
 	override method setearDecoraciones() {
@@ -322,12 +323,56 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 //========== Explanada3
 object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada3.png", recursos = #{}) {
 	
+	override method setearEsceneario() {
+		super()
+		
+		// seteo elevacion
+		self.colocarObjetoSolido("Elevacion.png", game.at(5, 3))
+		self.colocarObjetoSolido("Elevacion.png", game.at(7, 3))
+		
+		self.colocarObjetoSolido("AntorchaTienda1.png", game.at(5, 5))
+		self.colocarObjetoSolido("AntorchaTienda1.png", game.at(7, 5))
+		self.colocarObjetoSolido("Elevacion.png", game.at(4, 5))
+		self.colocarObjetoSolido("Elevacion.png", game.at(8, 5))
+		
+		self.colocarObjetoSolido("Elevacion.png", game.at(3, 6))
+		self.colocarObjetoSolido("Elevacion.png", game.at(9, 6))
+		
+		self.colocarObjetoSolido("Elevacion.png", game.at(3, 7))
+		self.colocarObjetoSolido("Elevacion.png", game.at(10, 7))
+		
+		self.colocarObjetoSolido("Elevacion.png", game.at(2, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(10, 8))
+		
+		self.colocarObjetoSolido("Elevacion.png", game.at(1, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(11, 9))
+		
+		// seteo agua
+		
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(5, 4))
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(7, 4))
+		
+		// seteo antorchas
+		self.colocarObjetoSolido("AntorchaTienda1.png", game.at(7, 9))
+		self.colocarObjetoSolido("AntorchaTienda1.png", game.at(5, 9))
+		
+		// seteo estandartes
+		self.colocarObjetoSolido("Bandera.png", game.at(4, 3))
+		self.colocarObjetoSolido("Bandera.png", game.at(8, 3))
+		
+	}
+	
 	override method setearEnemigos(){
 		
 	}
 	
 	override method setearRecursos(){
-		
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(13, 6))
+		game.addVisual(arbol1)
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(10, 1))
+		game.addVisual(arbol1)
+		const arbol1 = new Arbol(vida = arbolVida1, position = game.at(3, 5))
+		game.addVisual(arbol1)
 	}
 	
 	override method setearLimites(){
@@ -360,6 +405,50 @@ object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada
 
 //========== CUEVA
 object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", recursos = #{}) {
+	
+	override method setearEsceneario(){
+		super()
+		
+		//seteo mar
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(4, 0))
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(3, 1))
+		self.colocarObjetoSolido("AguaCueva.png", game.at(2, 2))
+		self.colocarObjetoSolido("AguaCueva.png", game.at(1, 2))	
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(0, 3))
+		
+		
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(10, 0))	
+		self.colocarObjetoSolido("AguaCueva.png", game.at(11, 0))
+		self.colocarObjetoSolido("AguaCueva.png", game.at(12, 1))	
+		self.colocarObjetoSolido("Transparente32Bits.png", game.at(12, 2))
+		
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(13, 3))
+		self.colocarObjetoSolido("DecoracionMapaPasto.png", game.at(14, 3))		
+		
+				
+		// seteo elevaciones
+		
+		self.colocarObjetoSolido("Elevacion.png", game.at(0, 6))
+		self.colocarObjetoSolido("Elevacion.png", game.at(0, 7))
+		self.colocarObjetoSolido("Elevacion.png", game.at(1, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(2, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(3, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(4, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(5, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(6, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(7, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(8, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(9, 7))
+		self.colocarObjetoSolido("Elevacion.png", game.at(10, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(11, 9))
+		self.colocarObjetoSolido("Elevacion.png", game.at(12, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(13, 8))
+		self.colocarObjetoSolido("Elevacion.png", game.at(14, 7))
+		self.colocarObjetoSolido("Elevacion.png", game.at(14, 6))
+		
+		self.colocarObjetoSolido("Elevacion.png", game.at(4, 6))
+			
+	}
 	
 	override method setearEnemigos(){
 		
