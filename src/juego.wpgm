@@ -3,16 +3,13 @@ import seresVivos.*
 import construccion.*
 import comandos.*
 import escenarios.*
-import seleccionDePersonajes.*
-
-
 
 program juego {
 	
 	game.height(10)
 	game.width(15)
 	
-	game.boardGround("Explanada.png") //Gero lo hara
+	
 	game.title("Argentok")	
 	pistaDePrueba.prueba1()
 	

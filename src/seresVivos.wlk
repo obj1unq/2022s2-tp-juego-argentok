@@ -77,7 +77,7 @@ class Mortal {
 
 }
 
-class Heroe inherits Mortal {
+class Heroe inherits Mortal(position = game.center()) {
 
 	
 	// REVISAR, esto deberai de ser un objeto para que pueda mantener su informacion independientemente del mapa en el que esta.
