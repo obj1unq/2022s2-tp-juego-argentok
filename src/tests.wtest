@@ -141,31 +141,94 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 
 }
 
-/*
- * describe "Mago consigue recursos e interactua con las casas" {
 
- * 	test "el Mago consigue madera" {
- * 	}
+  describe "Mago consigue recursos e interactua con las casas" {
+	
+	method initialize() {
+		game.cellSize(32)
+		game.addVisual(mapaActual)
+		configuracion.inicioDelJuegoMago()
+		mapaActual.cambiarMapa(explanada2)
+		configuracion.comandos()
+	}
+	
+  	test "el Mago consigue madera" {
+ 		mago.position(game.at(8, 7)) // hay un arbol en 8,8 
+		mago.ultimaDireccion(arriba) // el mago mira hacia donde esta el arbol
+		mago.interactuar()
+		assert.that(mago.poseeMadera())
+  	}
 
- * 	test "el Mago consigue piedras" {
- * 	}
+ 	test "el Mago consigue piedras" {
+ 		mago.position(game.at(4, 0)) // hay una piedra en 4,1
+		mago.ultimaDireccion(arriba)
+		mago.interactuar()
+		assert.that(mago.poseePiedras())
+  	}
 
- * 	test "el Mago cambia su piedra y madera por oro en el Mercado" {
- * 	// el heroe deberia ganar 300 de oro 
- * 	}
+  	test "el Mago cambia su madera por oro en el Mercado" {
+ 		mapaActual.cambiarMapa(explanada)
+		mago.agregar(madera)
+		mago.position(game.at(1, 1)) // el mercado esta en 1,2 de explanada1
+		mago.ultimaDireccion(arriba)
+		// mago.interactuar()
+		construccionMercado.vender(mago)
+		assert.equals("Tengo 75 oro", mago.decirOro())// el heroe deberia ganar 300 de oro 
+  	}
+	
+	test "el Mago cambia su piedra por oro en el Mercado" {
+ 		mapaActual.cambiarMapa(explanada)
+		mago.agregar(piedra)
+		mago.position(game.at(1, 1)) // el mercado esta en 1,2 de explanada1
+		mago.ultimaDireccion(piedra)
+		// mago.interactuar()
+		construccionMercado.comprar(mago)
+		assert.equals("Tengo 50 oro", mago.decirOro())
+  	}
+  	
+  	test "el Mago intenta comprar una barita en la Casa de Magia, y no tiene suficiente oro" {
+  		mapaActual.cambiarMapa(explanada)
+		// el heroe tiene que tener por lo menos 100 de oro
+		mago.oro(100)
+		mago.position(game.at(12, 6)) // casa de armaduras esta en 12,7 de explanada1
+		mago.ultimaDireccion(arriba)
+		construccionMagia.inventario(#{ barita })
+		assert.throwsException({construccionMagia.comprar(mago)})
+		}
+		
+  	test "el Mago compra una barita en la Casa de Magia y la mejora" {
+  		mapaActual.cambiarMapa(explanada)
+		// el heroe tiene que tener por lo menos 100 de oro
+		mago.oro(450)
+		mago.position(game.at(12, 6)) // casa de armaduras esta en 12,7 de explanada1
+		mago.ultimaDireccion(arriba)
+		construccionMagia.inventario(#{ barita })
+		construccionMagia.comprar(mago)
+		construccionMagia.vender(mago)
+		const armaDelMago= mago.armaEquipada()
+		assert.equals(90, armaDelMago.puntosDeDanio())
+		}
+  }
+ 
+/*describe "Mago ataca enemigo"{
+ 	const jefe = crear.darUnBoss()
+ 	
+ 	method initialize() {
+ 		game.cellSize(32)
+		game.addVisual(mapaActual)
+		configuracion.inicioDelJuegoMago()
+		mapaActual.cambiarMapa(explanada)
+		configuracion.comandos()	
+	}
+	
+	test "mago ataca a enemigo y queda con..."{
+		
+		mago.position(game.at(5,5))
+		mago.ultimaDireccion(arriba)
+		mago.atacar()
+		assert.equals(2000, jefe.vida())
+	}
+ }*/
 
- * 	test "el Mago compra una espada en la Casa de Armaduras" {
- * 	// el heroe tiene que tener por lo menos 100 de oro
- * 	// oro restante: 200
- * 	}
 
- * 	test "el Mago mejora su arma en la Casa de Armaduras" {
- * 	// el heroe tiene que tener por lo menos 200 de oro
- * 	// oro restante: 0
- * 	// los puntos de daño del arma se multiplican x 10
- * 	}
 
- * }
-
- * }
- */
