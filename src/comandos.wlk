@@ -286,10 +286,10 @@ object sprite {
 	}
 }
 
-object pistaDePrueba {
+object argentok {
 
 
-	method prueba1() {
+	method inicializarJuego() {
 		
 		game.cellSize(32)
 		game.height(10)
