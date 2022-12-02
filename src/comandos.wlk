@@ -7,7 +7,6 @@ import estadisticas.*
 import proyectil.*
 
 
-
 object configuracion {
 
 
@@ -16,6 +15,7 @@ object configuracion {
 	var juegoIniciado = false
 
 	method comandos() {
+		
 		keyboard.left().onPressDo({ heroe.mover(izquierda)})
 		keyboard.right().onPressDo({ heroe.mover(derecha)})
 		keyboard.up().onPressDo({ heroe.mover(arriba)})
@@ -24,11 +24,10 @@ object configuracion {
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
 		keyboard.q().onPressDo({ game.say(heroe, heroe.decirVida())})
-		keyboard.y().onPressDo({ tester.dummie()})
 		keyboard.w().onPressDo({ game.say(heroe, heroe.decirMana())})
+		keyboard.t().onPressDo({ teclas.cambiarImagen()})
 		keyboard.a().onPressDo({ heroe.atacar()})
 		keyboard.s().onPressDo({ heroe.hechizo()})
-		keyboard.t().onPressDo({ teclas.cambiarImagen()})
 		keyboard.d().onPressDo({ heroe.defenderse()})
 		keyboard.f().onPressDo({ heroe.interactuar()})
 		keyboard.z().onPressDo({ game.say(heroe, heroe.decirOro())})
@@ -46,7 +45,6 @@ object configuracion {
 	method inicioDelJuego() {
 			if (!juegoIniciado) {	
 			juegoIniciado = true
-			
 		}
 	}
 	
@@ -69,17 +67,69 @@ object configuracion {
 	}
 }
 
+
+object teclas{
+	
+	
+	const property position = game.at(1,3)
+	const property image = "Teclas.png"
+	var property mostrandoTeclas = true
+	
+	method solido(){
+		return false
+	}
+	
+	method recibirDanio(dmg) {}
+
+	method accionAlSerColicionado(){}
+
+	
+	method cambiarImagen(){
+		if (!mostrandoTeclas){
+			mostrandoTeclas = true
+			game.addVisual(self)
+		}
+		else{
+			mostrandoTeclas = false
+			game.removeVisual(self)
+		}
+	}
+}
+
+object gameOverImg {
+	
+	var property image = "FinDeLaPartida_derrota.png"
+	var property position = game.at(0,0)
+	
+	method victoria() {
+		image = "FinDeLaPartida_victoria.png"
+	}
+}
+
+
 object derecha {
 
 	method siguiente(posicion) {
 		return posicion.right(1)
 	}
 	
-	method opuesto() = izquierda
+	method opuesta() = izquierda
 	
 	method siguiente() = abajo
 	
 	method anterior() = arriba
+	
+	method esDerecha(pos1, pos2) {
+		return pos1.x() == pos2.x() + 1 and pos1.y() == pos2.y()
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esDerecha(pos1, pos2)) {
+			self
+		} else {
+			izquierda.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object izquierda {
@@ -88,11 +138,23 @@ object izquierda {
 		return posicion.left(1)
 	}
 	
-	method opuesto() = derecha
+	method opuesta() = derecha
 	
 	method siguiente() = arriba
 	
 	method anterior() = abajo
+	
+	method esIzquierda(pos1, pos2) {
+		return pos1.x() == pos2.x() - 1 and pos1.y() == pos2.y()
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esIzquierda(pos1, pos2)) {
+			self
+		} else {
+			arriba.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object arriba {
@@ -101,11 +163,23 @@ object arriba {
 		return posicion.up(1)
 	}
 	
-	method opuesto() = abajo
+	method opuesta() = abajo
 	
 	method siguiente() = izquierda
 	
 	method anterior() = derecha
+	
+	method esArriba(pos1, pos2) {
+		return pos1.x() == pos2.x() and pos1.y() == pos2.y() + 1
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esArriba(pos1, pos2)) {
+			self
+		} else {
+			abajo.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object abajo {
@@ -114,19 +188,31 @@ object abajo {
 		return posicion.down(1)
 	}
 	
-	method opuesto() = arriba
+	method opuesta() = arriba
 	
 	method siguiente() = derecha
 	
 	method anterior() = izquierda
+	
+	method esAbajo(pos1, pos2) {
+		return pos1.x() == pos2.x() and pos1.y() == pos2.y() - 1
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esAbajo(pos1, pos2)) {
+			self
+		} else {
+			derecha.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object ejes {
-	method validarEjeX(direccion, posicion, xMin, xMax) {
+	method validarX(direccion, posicion, xMin, xMax) {
 		return direccion.siguiente(posicion).x().between(xMin, xMax)
 	}
 
-	method validarEjeY(direccion, posicion, yMin, yMax) {
+	method validarY(direccion, posicion, yMin, yMax) {
 		return direccion.siguiente(posicion).y().between(yMin, yMax)
 	}
 }
@@ -141,7 +227,7 @@ object crear {
 		guerrero.position(game.at(0, 0))
 		guerrero.armaEquipada(espada)
 		guerrero.curarse(250)
-		game.addVisual(guerrero) //agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
+		game.addVisual(guerrero) 
 	}
 
 	method mago_() {
@@ -154,33 +240,43 @@ object crear {
 		mago.armaEquipada(barita)
 		mago.curarse(150)
 		mago.regenerarMana(250)
-		game.addVisual(mago) //agrego visual cuando instancio el mapa (tengo que hacerlo asi porque cada vez que cambio de mapa tengo que sacar y poner el visual)
+		game.addVisual(mago) 
 	}
 	
 	method hechizo(heroe){
 		return new Proyectil(position = heroe.enFrente())
 	}
-}
-
-object tester {
 	
-//esto es para testar
-	method dummie() {
-		const enemigo = self.unEnemigoVertical()
+	method darUnEnemigoVertical(posX, posY) {
+		return new Enemigo(image = "esqueleto_abajo.png", position = game.at(posX, posY), vida = 1500, sentidoActual = abajo)
+	}
+	
+	method darUnEnemigoHorizontal(posX, posY) {
+		return new Enemigo(image = "esqueleto_derecha.png", position = game.at(posX, posY), vida = 1500, sentidoActual = derecha)
+	}
+	
+	method darUnBoss() {
+		return new Boss(image = "esqueleto_derecha.png", position = game.at(5, 6), vida = 2500, sentidoActual = derecha)
+	}
+	
+	method unEnemigoVertical(posX, posY) {
+		const enemigo = (self.darUnEnemigoVertical(posX, posY))
 		game.addVisual(enemigo)
-		//enemigo.atacar()
-		enemigo.movimiento()
+		enemigo.inicializar()
 	}
 	
-	method unEnemigoVertical() {
-		return new Enemigo(image = "esqueleto_abajo.png", position = game.at(9,5), vida = 2500, sentidoActual = abajo)
+	method unEnemigoHorizontal(posX, posY) {
+		const enemigo = (self.darUnEnemigoHorizontal(posX, posY))
+		game.addVisual(enemigo)
+		enemigo.inicializar()
 	}
 	
-	method unEnemigoHorizontal() {
-		return new Enemigo(image = "esqueleto_derecha.png", position = game.at(9,5), vida = 2500, sentidoActual = derecha)
+	method unBoss() {
+		const enemigo = self.darUnBoss()
+		game.addVisual(enemigo)
+		enemigo.inicializar()
 	}
 }
-
 
 object sprite {
 	
@@ -189,7 +285,6 @@ object sprite {
 		game.schedule(tiempo, {heroe.image(imagenSin)})
 	}
 }
-
 
 object pistaDePrueba {
 
@@ -205,12 +300,8 @@ object pistaDePrueba {
 		game.title("Argentok")	
 			
 		configuracion.comandos()
-		// tester.dummie()
-		// mapaActual.mapa(explanada)
-		//mapaActual.inicializarMapa()
 	}
 }
-
-
+	
 
 

@@ -58,11 +58,6 @@ class Construccion {
 	method borrarTodosLosItemsDelTipo(_item) {
 		inventario.removeAllSuchThat({ item => item == _item})
 	}
-
-	method mejorarDanio(serVivo) {
-		return serVivo.puntosDeDanioDelArmaActual() * 10
-	}
-
 }
 
 object construccionBanco inherits Construccion (image = "Banco.png", position = game.at(2,8)) {
@@ -178,8 +173,9 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 	override method vender(serVivo) { // mejorar arma
 		self.validarOpcionDos(serVivo)
 		self.validarOpcionTres(serVivo)
-		const nuevoDanio = self.mejorarDanio(serVivo)
+		const nuevoDanio = serVivo.armaEquipada().puntosDeDanio()
 		serVivo.oro(serVivo.oro() - 300)
+		serVivo.armaEquipada().mejorarArma(15)
 		game.say(self, "El poder de daño de tu arma subió! Ahora es " + nuevoDanio)
 	}
 
@@ -192,7 +188,7 @@ object construccionMagia inherits Construccion (image = "Magia.png", position = 
 	}
 
 	override method validarOpcionDos(serVivo) {
-		if (serVivo.armaActual() == null) {
+		if (serVivo.armaEquipada() == null) {
 			self.error("No tenes arma para mejorar")
 		}
 	}
@@ -231,8 +227,9 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	override method vender(serVivo) { // mejorar arma
 		self.validarOpcionDos(serVivo)
 		self.validarOpcionTres(serVivo)
-		const nuevoDanio = self.mejorarDanio(serVivo)
+		const nuevoDanio = serVivo.armaEquipada().puntosDeDanio()
 		serVivo.oro(serVivo.oro() - 200)
+		serVivo.armaEquipada().mejorarArma(10)
 		game.say(self, "El poder de daño de tu arma subió! Ahora es " + nuevoDanio)
 	}
 
@@ -245,7 +242,7 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	}
 
 	override method validarOpcionDos(serVivo) {
-		if (serVivo.armaActual() == null) {
+		if (serVivo.armaEquipada() == null) {
 			self.error("No tenes arma para mejorar")
 		}
 	}
@@ -259,7 +256,6 @@ object construccionArmadura inherits Construccion (image = "Armaduras.png", posi
 	override method consultar(serVivo) {
 		game.say(self, "Tenemos en stock: " + self.inventario().toString())
 	}
-
 }
 
 

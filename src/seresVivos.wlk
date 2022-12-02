@@ -15,7 +15,7 @@ class Mortal {
 	method solido() = true
 
 	method puedoPasar(direccion) {
-		return self.noHaySolidosAdelante(direccion) and ejes.validarEjeX(direccion, position, 0, 14 ) and ejes.validarEjeY(direccion, position, 0, 9)
+		return self.noHaySolidosAdelante(direccion) and ejes.validarX(direccion, position, 0, 14 ) and ejes.validarY(direccion, position, 0, 9)
 	}
 
 	method noHaySolidosAdelante(direccion) {
@@ -42,13 +42,6 @@ class Mortal {
 		game.removeVisual(self)
 	}
 
-	
-	method gameOver(){
-		mapaActual.cambiarMapa("FinDeLaPartida.png")
-	}
-	
-	method entregarExp() // ESTE METODO SE UTILIZA? REVISAR
-
 	method recibirDanio(dmg) {
 		vida -= dmg
 		self.morir()
@@ -62,8 +55,6 @@ class Mortal {
 		return ultimaDireccion.siguiente(self.position())
 	}
 
-	method mover(direccion)
-
 	method ultimaDireccion(direccion) {
 		ultimaDireccion = direccion
 	}
@@ -73,17 +64,21 @@ class Mortal {
 	}
 
 	method atacar() {
-		sprite.deAccion(self, 125, self.cambiarImagen("_espada"), self.cambiarImagen(""))
+		self.spriteDeAtaque()
 		if (!self.estaEnfrente().isEmpty()) {
 			self.estaEnfrente().first().recibirDanio(self.danio())
 		}
 	}
 
+	method mover(direccion) // ver por que existe esto
 
 	method danio()
 
 	method entregarRecompensa()
+	
+	method spriteDeAtaque()
 
+	method gameOver()
 }
 
 class Heroe inherits Mortal(position = game.center()) {
@@ -142,9 +137,8 @@ class Heroe inherits Mortal(position = game.center()) {
 	}
 	
 	method decirInventario() {
-		return "Inventario " + inventario.toString()
-		
-		// hay que cambiarlo y dejarlo mejor cuando los recursos esten bien definidos
+		return "Piedras =" + self.piedrasEnInventario() +
+			   " Maderas =" + self.maderasEnInventario()
 	}
 	
 	method decirOro() {
@@ -163,29 +157,28 @@ class Heroe inherits Mortal(position = game.center()) {
 		return game.getObjectsIn(self.position().up(1))
 	}
 
-	method serInteractuado(alguien) {
-	}
-
 	method curarse(cantidad) {
 		vida = (vida + cantidad).min(salud.valor())
 	}
 
 	override method danio() {
-		return armaEquipada.puntosDeDanio() + 10 * self.tipoDeDanio().valor()
+		return armaEquipada.puntosDeDanio() + self.tipoDeDanio().valor()
 	}
-
+	
 	method armadura() {
-		return 5 * agilidad.valor()
+		return agilidad.valor()
 	}
 	
 	override method recibirDanio(danio) {
 		if (! defendiendo) {
-			super(danio - self.armadura()) 
+			super( 10.max(danio - self.armadura())) 
 		}
 	}
 
-	method puntosDeDanioDelArmaActual() {
-	// return self.armaActual().puntosDeDanio() // ARMAACTUAL NO EXISTE
+	method defenderse() {
+		sprite.deAccion(self, 500, self.cambiarImagen("_escudo"), self.cambiarImagen(""))
+		defendiendo = true
+		game.schedule(500,{defendiendo = false})
 	}
 
 	method ganarOro(cantidad) {
@@ -204,7 +197,6 @@ class Heroe inherits Mortal(position = game.center()) {
 		inventario.clear()
 	}
 
-	// metodos para interactuar con las casas
 	method poseePiedras() {
 		return inventario.contains(piedra)
 	}
@@ -259,10 +251,13 @@ class Heroe inherits Mortal(position = game.center()) {
 						2. Vender madera")
 	}
 
-	override method gameOver() {
-	// aca tiene que ir la pantalla de Game Over
-		game.schedule(2500, {game.stop()})
+	method piedrasEnInventario() {
+		return inventario.occurrencesOf(piedra)
 	}
+	method maderasEnInventario() {
+		return inventario.occurrencesOf(madera)
+	}
+	
 
 	method comprar() {
 		self.interactuables().forEach({ cosa => cosa.comprar(self)})
@@ -276,11 +271,16 @@ class Heroe inherits Mortal(position = game.center()) {
 		self.interactuables().forEach({ cosa => cosa.consultar(self)})
 	}
 	
-	method defenderse() {
-		sprite.deAccion(self, 500, self.cambiarImagen("_escudo"), self.cambiarImagen(""))
-		defendiendo = true
-		game.schedule(500,{defendiendo = false})
+	override method gameOver() {
+		game.schedule(2500, {game.stop()})
+		game.addVisual(gameOverImg)
 	}
+	
+	method serInteractuado(alguien) {}
+	
+	override method entregarRecompensa() {}
+	
+	method regenerarMana(cantidad)
 	
 	method decirMana()
 
@@ -289,19 +289,12 @@ class Heroe inherits Mortal(position = game.center()) {
 	method hechizo()
 
 	method subirStats()
-	
-	override method entregarRecompensa() {
-	}
 }
 
 object mago inherits Heroe {
 	var mana = 0
 	
 	var hechizoEnCD = false
-	
-	method entregarExp(){
-		// PONGO ESTE METODO EN BLANCO PORQUE SINO NO FUNCA BIEN, HEROE TIENE ES METODO
-	}
 
 	override method tipoDeDanio() {
 		return stats.get(3)
@@ -318,7 +311,7 @@ object mago inherits Heroe {
 		return "Mana      " + mana.toString() + "/" + manaMax.valor().toString()
 	}
 
-	method regenerarMana(cantidad) {
+	override method regenerarMana(cantidad) {
 		mana = (mana + cantidad).min(manaMax.valor())
 	}
 	
@@ -326,7 +319,7 @@ object mago inherits Heroe {
 		self.verificarLanzarHechizo()
 		mana -= 20
 		hechizoEnCD = true
-		game.schedule(5000, {hechizoEnCD = false})	
+		game.schedule(2500, {hechizoEnCD = false})	
 		
 		self.invocarHechizo()
 	}
@@ -358,15 +351,14 @@ object mago inherits Heroe {
 	method danioDeHechizo() {
 		return self.danio() * nivel
 	}
+	
+	override method spriteDeAtaque(){
+		sprite.deAccion(self, 125, self.cambiarImagen("_barita"), self.cambiarImagen(""))
+	}
 }
 
 object guerrero inherits Heroe {
 
-	method entregarExp(){
-		// PONGO ESTE METODO EN BLANCO PORQUE SINO NO FUNCA BIEN, HEROE TIENE ES METODO
-	}
-	
-	
 	override method tipoDeDanio() {
 		return stats.first()
 	}
@@ -384,5 +376,11 @@ object guerrero inherits Heroe {
 	override method hechizo() {
 		game.say(self, "Los Guerreros no necesitamos hechizos")
 	}
+	
+	override method spriteDeAtaque() {
+		sprite.deAccion(self, 125, self.cambiarImagen("_espada"), self.cambiarImagen(""))
+	}
+	
+	override method regenerarMana(cantidad){}
 }
 

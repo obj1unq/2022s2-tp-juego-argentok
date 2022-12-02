@@ -11,12 +11,9 @@ class Enemigo inherits Mortal {
 	
 	const expEntregadaBase = 50
 	const oroEntregadoBase = 10
-	var sentidoActual
-	
-	override method entregarExp(){
-		// PONGO ESTE METODO EN BLANCO PORQUE SINO NO FUNCA BIEN, MORTAL TIENE ES METODO
-	}
-	
+	const danio = 25
+	var property velocidadDeMov = 750
+	var sentidoActual = derecha
 	
 	override method entregarRecompensa() {
 		configuracion.heroe().ganarExp(self.expEntregada())
@@ -30,21 +27,54 @@ class Enemigo inherits Mortal {
 	method oroEntregado() {
 		return oroEntregadoBase 
 	}
-
-	override method gameOver() {
+	
+	override method danio() {
+		return danio
 	}
 	
-	override method morir() {
-		super() 
-		game.removeTickEvent("atacar")
+	method atacarAlHeroe() {
+		if(self.heroeEstaCerca()) {
+			game.removeTickEvent("esquelet_se_mueve")
+			self.mover(derecha.darDireccion(self.dondeEstaElHeroe(), self.position()))
+			self.atacarCadaTanto()
+		}
+	}
+	
+	method dondeEstaElHeroe() {
+		return configuracion.heroe().position()
+	}
+	
+	method heroeEstaCerca() {
+		
+		const direcciones = [izquierda, derecha, abajo, arriba]
+		
+		return direcciones.any({direccion => self.dondeEstaElHeroe() == direccion.siguiente(self.position())})
 	}
 	
 	method atacarCadaTanto() {
-		game.onTick(750, "atacar", {self.atacar()})
+		game.onTick(750, "esqueleto_ataca", {self.atacar()})
 	}
 
-	override method danio() {
-		return 100
+	method cambiarImagen() {
+		self.image(self.imagenActual("")) 
+	}
+	
+	method imagenActual(string) {
+		return "esqueleto_" + self.ultimaDireccion().toString() + string + ".png" 
+	}
+	
+	override method spriteDeAtaque() {
+		self.image(self.imagenActual("_espada"))
+		game.schedule(125, {self.image(self.imagenActual(""))})
+	}
+	
+	method patrulla() {
+		self.moverse()
+		self.atacarAlHeroe()		
+	}
+	
+	method inicializar() {
+		game.onTick(velocidadDeMov, "esquelet_se_mueve", {self.patrulla()})
 	}
 	
 	override method mover(direccion){
@@ -52,18 +82,7 @@ class Enemigo inherits Mortal {
 			self.position(direccion.siguiente(self.position()))	
 		}
 		self.ultimaDireccion(direccion)
-	}
-	
-	method cambiarImagen() {
-		self.image(self.imagenActual()) 
-	}
-	
-	method imagenActual() {
-		return "esqueleto_" + sentidoActual.toString() + ".png" 
-	}
-	
-	method movimiento() {
-		game.onTick(1000, "moverse", {self.moverse()})
+		self.cambiarImagen()
 	}
 	
 	method moverse(){
@@ -72,17 +91,28 @@ class Enemigo inherits Mortal {
 		}
 		else{
 			self.cambiarSiNoPuedePasar()
-			self.cambiarImagen()
 			self.mover(sentidoActual)
 		}
 	}
+	
 	method cambiarSiNoPuedePasar(){
 		if(!self.puedoPasar(sentidoActual)){
-			sentidoActual = sentidoActual.opuesto()
+			sentidoActual = sentidoActual.opuesta()
 		}
 	}
 	
 	method sentidoActualEs(direccion){
 		return direccion == sentidoActual
+	}
+
+	override method gameOver() {}
+}
+
+class Boss inherits Enemigo (danio = 50) {
+	
+	override method gameOver() {
+		game.schedule(5000, {game.stop()})
+		gameOverImg.victoria()
+		game.addVisual(gameOverImg)
 	}
 }

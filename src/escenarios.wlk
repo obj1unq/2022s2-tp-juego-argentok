@@ -6,100 +6,48 @@ import comandos.*
 import items.*
 import enemigos.*
 
-class Decoracion { // que realmente no es una decoracion deberia llamarse "objetoSolido"  ES CONVENIENTE POR EJEMPLO QUE LOS LIMITES DE MAPA TAMBIEN HEREDEN DE POR ENDE YO CREO QUE DEBERIA LLAMARSE OBJETO SOLIDO
+class Decoracion { 
 
 	var property image
 	var property position
 
-	method solido() {
-		return true
-	}
+	method solido() = true
 	
-	method serInteractuado(personaje){
-		
-	}
+	method serInteractuado(personaje){}
 	
-	method accionAlSerColisionado(){
-		
-	}
+	method accionAlSerColisionado(){}
 	
-	method recibirDanio(dmg){
-		
-	}
-	
-	
-
+	method recibirDanio(dmg){}
 }
 
 object mapaActual {
-	
-
 	
 	var property mapa
 	var property image = "ElegirPersonaje.png"
 	const property position = game.at(0,0)
 		
 	
-	method solido(){
-		return false
-	}
+	method solido() = false
 	
 	method recibirDanio(dmg) {}
 
 	method inicializarMapa() {
 		mapa.setearEsceneario()
-		
 	}
 
 	method cambiarMapa(_mapa) {
 		
 		self.mapa(_mapa)
 		self.inicializarMapa()
-	
 	}
-		
-
-}
-
-object teclas{
-	
-	
-	const property position = game.at(1,3)
-	const property image = "Teclas.png"
-	var property mostrandoTeclas = true
-	
-	method solido(){
-		return false
-	}
-	
-	method recibirDanio(dmg) {}
-
-	method accionAlSerColicionado(){}
-
-	
-	method cambiarImagen(){
-		if (mostrandoTeclas == false){
-			mostrandoTeclas = true
-			game.addVisual(self)
-		}
-		else{
-			mostrandoTeclas = false
-			game.removeVisual(self)
-		}
-	}
-	
 }
 
 class Escenario {
 
 	const construcciones
 	const recursos
-	//const enemigos, no lo hago como una lista porque para eso tengo qeu instanciar en objetos enemigos y es una clase, podria hacerlo en objetos pero no se que tanto sentido tiene
-	
 	var property positionAlComenzar = game.at(0, 1)
-	
 	var property image
-	//var property heroPrimeroPosicion podria usar un tipo de position
 
 
 
@@ -110,8 +58,6 @@ class Escenario {
 	}
 
 	method colocarLimite(_mapa, mapaLimite, _image, _position) {
-		// revisar si podria reutilizar colocar solido, creo que no
-		// Revisar si realmente los parametors mapaDelQUesLimtie y mapa se necesitan ambos
 		const limite = new LimiteHaciaMapa(image = _image, position = _position, mapa = _mapa, mapaDelQueEsLimite = mapaLimite)
 		game.addVisual(limite)
 	}
@@ -149,10 +95,7 @@ class Escenario {
 	}
 	
 	method setearEnemigo(position, direccion){
-		const malito = new Enemigo(image = "EsqueletoSur.png", position = position,vida = 300, sentidoActual = direccion)
-		game.addVisual(malito)
-		malito.movimiento()
-		//game.onTick(500, "moverse", {malito.moverse()})
+		crear.unEnemigoVertical(6,6)
 	}
 	
 	method colocarHeroeEnEntradaMapa()
@@ -195,9 +138,6 @@ class Escenario {
 
 class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 
-
-
-	// Revisar si realmente los parametors mapaDelQUesLimtie y mapa se necesitan ambos
 	const property mapaDelQueEsLimite
 	const property mapa
 
@@ -206,7 +146,7 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 		mapaActual.cambiarMapa(_mapa)
 	}
 	
-	method recibirDanio(dmg) {} // RECIBIR DAÑO? POR QUE?
+	override method recibirDanio(dmg) {}
 
 	override method accionAlSerColisionado() {
 		mapaDelQueEsLimite.colocarHeroeEnEntradaMapa()
@@ -221,9 +161,7 @@ class LimiteHaciaMapa inherits Decoracion (image = "Transparente32Bits") {
 object explanada inherits Escenario ( construcciones = #{ construccionBanco, construccionMercado, construccionArmadura, construccionMagia }, image = "Explanada.png", recursos = #{}) {
 
 	
-	override method setearEnemigos(){
-		
-	}
+	override method setearEnemigos(){}
 	
 	override method setearDecoraciones() {
 		// Banderas al lado de armaduras
@@ -255,7 +193,6 @@ object explanada inherits Escenario ( construcciones = #{ construccionBanco, con
 	}
 
 	override method colocarHeroeEnEntradaMapa(){
-		//configuracion.heroe().position(game.at(configuracion.heroe().position().y(),0) )
 		configuracion.heroe().position( self.heroePositionAlComenzar()	)
 	}
 	
@@ -315,7 +252,9 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 	
 
 	override method setearEnemigos(){
-		self.setearEnemigo(game.at(7,2), derecha)
+		crear.unEnemigoHorizontal(7,2)
+		crear.unEnemigoHorizontal(6,6)
+		crear.unEnemigoVertical(13,8)
 	}
 	
 	override method setearDecoraciones() {
@@ -336,27 +275,18 @@ object explanada2 inherits Escenario (construcciones = #{}, image = "Explanada2.
 		
 	}
 
-
-
 	override method colocarHeroeEnEntradaMapa(){
 		configuracion.heroe().position(self.heroePositionAlComenzar())
 	}
 	
 	override method heroePositionAlComenzar(){
-		if (mapaActual.mapa() == explanada){
-			
+		if ((mapaActual.mapa() == explanada)){ 
 			return game.at(-1, configuracion.heroe().position().y())
 		}
 		else{
-			
-			return game.at(15, configuracion.heroe().position().y())
+			return game.at(14, configuracion.heroe().position().y())
 		}
-		
-		
-		//configuracion.heroe().opuestoPosition().x(), configuracion.heroe().position().y())
 	}
-	
-	
 }
 
 
@@ -404,7 +334,10 @@ object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada
 	}
 	
 	override method setearEnemigos(){
-		
+		crear.unEnemigoHorizontal(3,1)
+		crear.unEnemigoHorizontal(4,6)
+		crear.unEnemigoVertical(14,3)
+		crear.unEnemigoVertical(5,7)
 	}
 	
 	
@@ -423,16 +356,13 @@ object explanada3 inherits Escenario ( construcciones = #{ }, image = "Explanada
 	}
 	
 	override method heroePositionAlComenzar(){
-		if (mapaActual.mapa() == explanada2){
-			
+		if ((mapaActual.mapa() == explanada2)){ 
 			return game.at(0, configuracion.heroe().position().y())
 		}
 		else{
-			
 			return game.at(6, 8)
 		}
 	}
-	
 }
 
 
@@ -484,7 +414,11 @@ object cueva inherits Escenario ( construcciones = #{ }, image = "Cueva.png", re
 	}
 	
 	override method setearEnemigos(){
-		
+		crear.unBoss()
+		crear.unEnemigoHorizontal(6,4)
+		crear.unEnemigoHorizontal(4,4)
+		crear.unEnemigoVertical(13,6)
+		crear.unEnemigoVertical(5,7)
 	}
 	
 	
@@ -535,8 +469,3 @@ object finDeLaPartida inherits Escenario ( construcciones = #{ }, image = "FinDe
 	override method heroePositionAlComenzar(){}
 	
 }
-
-
-
-
-

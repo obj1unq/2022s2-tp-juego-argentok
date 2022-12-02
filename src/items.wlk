@@ -15,9 +15,9 @@ class Item {
 
 }
 
-class Recurso inherits Item {
-
-}
+//class Recurso inherits Item {
+//
+//}
 
 class Arma inherits Item {
 
@@ -56,7 +56,7 @@ object barita inherits Arma {
 object piedra inherits Item {
 
 	override method valor() {
-		return 25
+		return 50
 	}
 
 }
@@ -64,7 +64,7 @@ object piedra inherits Item {
 object madera inherits Item {
 
 	override method valor() {
-		return 80
+		return 75
 	}
 
 }

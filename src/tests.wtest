@@ -27,7 +27,7 @@ import enemigos.*
 
  * 	
  }*/
-describe "heroe y enemigos" {
+/*describe "heroe y enemigos" {
 
 	method initialize() {
 	}
@@ -92,3 +92,4 @@ describe "Mago consigue recursos e interactua con las casas" {
 }
 
 }
+*/

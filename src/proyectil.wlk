@@ -9,13 +9,12 @@ import comandos.*
 class Proyectil{
 	
 	var property position = null
-	var property image = "barril.png" //hay que buscar un Spell que sea redondo, para que no haya que poner uno por direccion
+	var property image = null
 	var velocidad = 50
 	var danio = 0
 	var property direccion = null
 	
 	method solido() = false
-	method recibirDanio(dmg) {}
 	
 	method despawnear(){
 		game.removeTickEvent("volar")		
@@ -29,7 +28,7 @@ class Proyectil{
 	}
 	
 	method estaAdentro(){
-		return ejes.validarEjeX(direccion, position, -1, 15 ) and ejes.validarEjeY(direccion, position, -1, 10) 
+		return ejes.validarX(direccion, position, -1, 15 ) and ejes.validarY(direccion, position, -1, 10) 
 	}
 	
 	method desplazarse(_direccion) {
@@ -50,7 +49,6 @@ class Proyectil{
 		self.despawnear()
 	}
 	
-	
 	method cambiarImagen(img) {
 		image = "proyectil_" + img + ".png"
 	}
@@ -64,6 +62,8 @@ class Proyectil{
 		self.volar()
 		self.daniar()
 	}
+
+	method recibirDanio(dmg) {}
 }
 
 
