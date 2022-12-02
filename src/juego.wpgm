@@ -6,7 +6,7 @@ import escenarios.*
 
 program juego {
 
-	pistaDePrueba.prueba1()
+	argentok.inicializarJuego()
 	
 	game.start()
 }
