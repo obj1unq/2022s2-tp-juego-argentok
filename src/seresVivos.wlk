@@ -26,9 +26,7 @@ class Mortal {
 		return lista.filter({ cosa => cosa.solido() })
 	}
 
-	method accionAlSerColisionado() {
-	// no lo puedo hacer abstracto porque instancio varias veces a solido
-	}
+	method accionAlSerColisionado() {}
 
 	method morir() {
 		if (vida <= 0) {
@@ -47,7 +45,7 @@ class Mortal {
 		self.morir()
 	}
 
-	method estaEnfrente() {
+	method estaEnFrente() {
 		return game.getObjectsIn(self.enFrente())
 	}
 	
@@ -65,8 +63,8 @@ class Mortal {
 
 	method atacar() {
 		self.spriteDeAtaque()
-		if (!self.estaEnfrente().isEmpty()) {
-			self.estaEnfrente().first().recibirDanio(self.danio())
+		if (!self.estaEnFrente().isEmpty()) {
+			self.estaEnFrente().first().recibirDanio(self.danio())
 		}
 	}
 
@@ -101,7 +99,7 @@ class Heroe inherits Mortal(position = game.center()) {
 		if (self.puedoPasar(direccion)) {
 			position = direccion.siguiente(self.position())
 		} else {
-			self.estaEnfrente().forEach({ objeto => objeto.accionAlSerColisionado()})
+			self.estaEnFrente().forEach({ objeto => objeto.accionAlSerColisionado()})
 		}
 		self.ultimaDireccion(direccion)
 		image =  self.cambiarImagen("")

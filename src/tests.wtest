@@ -7,36 +7,12 @@ import escenarios.*
 import recursos.*
 import construccion.*
 
-/* 
- *  
- * describe "Prubas a Tito el heroe" {
- * 	const tito = new Heroe(image = "player.png", position = game.at(1,2), armaEquipada = tester.espada(), ultimaDireccion = derecha)
- * 	const enemigo = new Enemigo(image = "pepita.png", position = game.at(2,2),vida = 300)
- * 	method initialize() {
- * 		
- * 		game.width(5)
- * 		game.height(5)
- * 	}
- * 	
-
- * 	test "Tito tiene adelante a enemigo" {
- * 		assert.equals([enemigo], tito.estaEnfrente())
- * 	}
-
- * 	test "Tito golpea a un Enemigo" {
- * 		tito.atacar()
- * 		assert.equals(200, enemigo.vida())
- * 	}
-
- * 	
- }*/
 describe "El heroe (mago) nos dice su estado" {
 
-	// const enemigo = crear.darUnEnemigoHorizontal(1, 0) // el enemigo aparece al lado del mago
 	method initialize() {
 		game.cellSize(32)
 		game.addVisual(mapaActual)
-		configuracion.inicioDelJuegoMago() // el mago arranca en posición 0.0
+		configuracion.inicioDelJuegoMago()
 	}
 
 	test "El heroe dice su mana" {
@@ -83,7 +59,6 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 		guerrero.position(game.at(8, 7)) // hay un arbol en 8,8 
 		guerrero.ultimaDireccion(arriba) // el guerrero mira hacia donde esta el arbol
 		guerrero.interactuar()
-		// assert.equals("Piedras =0 Maderas =1", guerrero.decirInventario())
 		assert.that(guerrero.poseeMadera())
 	}
 
@@ -109,7 +84,6 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 		guerrero.agregar(madera)
 		guerrero.position(game.at(1, 1)) // el mercado esta en 1,2 de explanada1
 		guerrero.ultimaDireccion(arriba)
-		// guerrero.interactuar()
 		construccionMercado.vender(guerrero)
 		assert.equals("Tengo 75 oro", guerrero.decirOro())
 	}
@@ -171,9 +145,8 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 		mago.agregar(madera)
 		mago.position(game.at(1, 1)) // el mercado esta en 1,2 de explanada1
 		mago.ultimaDireccion(arriba)
-		// mago.interactuar()
 		construccionMercado.vender(mago)
-		assert.equals("Tengo 75 oro", mago.decirOro())// el heroe deberia ganar 300 de oro 
+		assert.equals("Tengo 75 oro", mago.decirOro())
   	}
 	
 	test "el Mago cambia su piedra por oro en el Mercado" {
@@ -181,7 +154,6 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 		mago.agregar(piedra)
 		mago.position(game.at(1, 1)) // el mercado esta en 1,2 de explanada1
 		mago.ultimaDireccion(piedra)
-		// mago.interactuar()
 		construccionMercado.comprar(mago)
 		assert.equals("Tengo 50 oro", mago.decirOro())
   	}
@@ -198,7 +170,6 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 		
   	test "el Mago compra una barita en la Casa de Magia y la mejora" {
   		mapaActual.cambiarMapa(explanada)
-		// el heroe tiene que tener por lo menos 100 de oro
 		mago.oro(450)
 		mago.position(game.at(12, 6)) // casa de armaduras esta en 12,7 de explanada1
 		mago.ultimaDireccion(arriba)
@@ -210,25 +181,30 @@ describe "Guerrero consigue recursos e interactua con las casas" {
 		}
   }
  
-/*describe "Mago ataca enemigo"{
- 	const jefe = crear.darUnBoss()
+describe "Guerrero ataca enemigo"{
+ 	const enemigo = crear.darUnEnemigoVertical(5,6)
  	
  	method initialize() {
  		game.cellSize(32)
 		game.addVisual(mapaActual)
-		configuracion.inicioDelJuegoMago()
+		configuracion.inicioDelJuegoGuerrero()
 		mapaActual.cambiarMapa(explanada)
-		configuracion.comandos()	
+		configuracion.comandos()
+		guerrero.position(game.at(5,5))	
 	}
 	
-	test "mago ataca a enemigo y queda con..."{
-		
-		mago.position(game.at(5,5))
-		mago.ultimaDireccion(arriba)
-		mago.atacar()
-		assert.equals(2000, jefe.vida())
+	test "enemigo ataca a guerrero y queda con 240 de vida"{
+		enemigo.atacar()
+		assert.equals(240, guerrero.vida())
 	}
- }*/
+	
+	test "enemigo ataca a guerrero, se defiende y queda con 250 de vida"{
+		guerrero.defenderse()
+		enemigo.atacar()
+		assert.equals(250, guerrero.vida())
+	}
+	
+ }
 
 
 
