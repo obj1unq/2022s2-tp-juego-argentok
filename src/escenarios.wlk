@@ -64,9 +64,9 @@ object mapaActual {
 object teclas{
 	
 	
-	const property position = game.at(3,2)
+	const property position = game.at(1,3)
 	const property image = "Teclas.png"
-	var property mostrandoTeclas = false
+	var property mostrandoTeclas = true
 	
 	method solido(){
 		return false

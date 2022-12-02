@@ -56,6 +56,7 @@ object configuracion {
 			crear.mago_()
 			game.removeVisual(mapaActual)
 			mapaActual.cambiarMapa(explanada)
+			game.addVisual(teclas)
 	}
 
 	method inicioDelJuegoGuerrero() {	
@@ -64,6 +65,7 @@ object configuracion {
 			crear.guerrero_()
 			game.removeVisual(mapaActual)
 			mapaActual.cambiarMapa(explanada)
+			game.addVisual(teclas)
 	}
 }
 
