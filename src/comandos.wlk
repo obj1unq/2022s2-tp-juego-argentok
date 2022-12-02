@@ -24,7 +24,8 @@ object configuracion {
 		keyboard.num2().onPressDo({ heroe.vender()})
 		keyboard.num3().onPressDo({ heroe.consultar()})
 		keyboard.q().onPressDo({ game.say(heroe, heroe.decirVida())})
-		keyboard.y().onPressDo({ tester.dummie()})
+		keyboard.p().onPressDo({ tester.dummie(5,7)})
+		keyboard.o().onPressDo({ tester.dummie2(7,9)})
 		keyboard.w().onPressDo({ game.say(heroe, heroe.decirMana())})
 		keyboard.a().onPressDo({ heroe.atacar()})
 		keyboard.s().onPressDo({ heroe.hechizo()})
@@ -45,8 +46,8 @@ object configuracion {
 	method inicioDelJuego() {
 			if (!juegoIniciado) {	
 			juegoIniciado = true
-			//game.removeVisual(mapaActual)
-			//mapaActual.cambiarMapa(explanada)
+//			game.removeVisual(mapaActual)
+//			mapaActual.cambiarMapa(explanada)
 		}
 	}
 	
@@ -69,11 +70,23 @@ object derecha {
 		return posicion.right(1)
 	}
 	
-	method opuesto() = izquierda
+	method opuesta() = izquierda
 	
 	method siguiente() = abajo
 	
 	method anterior() = arriba
+	
+	method esDerecha(pos1, pos2) {
+		return pos1.x() == pos2.x() + 1 and pos1.y() == pos2.y()
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esDerecha(pos1, pos2)) {
+			self
+		} else {
+			izquierda.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object izquierda {
@@ -82,11 +95,23 @@ object izquierda {
 		return posicion.left(1)
 	}
 	
-	method opuesto() = derecha
+	method opuesta() = derecha
 	
 	method siguiente() = arriba
 	
 	method anterior() = abajo
+	
+	method esIzquierda(pos1, pos2) {
+		return pos1.x() == pos2.x() - 1 and pos1.y() == pos2.y()
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esIzquierda(pos1, pos2)) {
+			self
+		} else {
+			arriba.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object arriba {
@@ -95,11 +120,23 @@ object arriba {
 		return posicion.up(1)
 	}
 	
-	method opuesto() = abajo
+	method opuesta() = abajo
 	
 	method siguiente() = izquierda
 	
 	method anterior() = derecha
+	
+	method esArriba(pos1, pos2) {
+		return pos1.x() == pos2.x() and pos1.y() == pos2.y() + 1
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esArriba(pos1, pos2)) {
+			self
+		} else {
+			abajo.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object abajo {
@@ -108,19 +145,31 @@ object abajo {
 		return posicion.down(1)
 	}
 	
-	method opuesto() = arriba
+	method opuesta() = arriba
 	
 	method siguiente() = derecha
 	
 	method anterior() = izquierda
+	
+	method esAbajo(pos1, pos2) {
+		return pos1.x() == pos2.x() and pos1.y() == pos2.y() - 1
+	}
+	
+	method darDireccion(pos1, pos2) {
+		return if (self.esAbajo(pos1, pos2)) {
+			self
+		} else {
+			derecha.darDireccion(pos1, pos2)
+		}
+	}
 }
 
 object ejes {
-	method validarEjeX(direccion, posicion, xMin, xMax) {
+	method validarX(direccion, posicion, xMin, xMax) {
 		return direccion.siguiente(posicion).x().between(xMin, xMax)
 	}
 
-	method validarEjeY(direccion, posicion, yMin, yMax) {
+	method validarY(direccion, posicion, yMin, yMax) {
 		return direccion.siguiente(posicion).y().between(yMin, yMax)
 	}
 }
@@ -159,19 +208,24 @@ object crear {
 object tester {
 
 //esto es para testar
-	method dummie() {
-		const enemigo = self.unEnemigoVertical()
+	method dummie(pos1, pos2) {
+		const enemigo = self.unEnemigoVertical(pos1, pos2)
 		game.addVisual(enemigo)
-		//enemigo.atacar()
 		enemigo.movimiento()
 	}
 	
-	method unEnemigoVertical() {
-		return new Enemigo(image = "esqueleto_abajo.png", position = game.at(9,5), vida = 2500, sentidoActual = abajo)
+	method dummie2(pos1, pos2) {
+		const enemigo = self.unEnemigoHorizontal(pos1, pos2)
+		game.addVisual(enemigo)
+		enemigo.movimiento()
 	}
 	
-	method unEnemigoHorizontal() {
-		return new Enemigo(image = "esqueleto_derecha.png", position = game.at(9,5), vida = 2500, sentidoActual = derecha)
+	method unEnemigoVertical(pos1, pos2) {
+		return new Enemigo(image = "esqueleto_abajo.png", position = game.at(pos1,pos2), vida = 2500, sentidoActual = abajo)
+	}
+	
+	method unEnemigoHorizontal(pos1, pos2) {
+		return new Enemigo(image = "esqueleto_derecha.png", position = game.at(pos1, pos2), vida = 2500, sentidoActual = derecha)
 	}
 }
 
@@ -192,12 +246,15 @@ object pistaDePrueba {
 		
 		game.height(10)
 		game.width(15)
-		game.title("Argentok")	
-			
+		game.title("Argentok")
+		game.cellSize(32)
+				
+//		game.addVisual(mapaActual)	
 		configuracion.comandos()
-		tester.dummie()
-		// mapaActual.mapa(explanada)
-		//mapaActual.inicializarMapa()
+		tester.dummie(3,5)
+		tester.dummie2(7,9)
+//		mapaActual.mapa(explanada)
+//		mapaActual.inicializarMapa()
 	}
 }
 

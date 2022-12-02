@@ -29,7 +29,7 @@ class Proyectil{
 	}
 	
 	method estaAdentro(){
-		return ejes.validarEjeX(direccion, position, -1, 15 ) and ejes.validarEjeY(direccion, position, -1, 10) 
+		return ejes.validarX(direccion, position, -1, 15 ) and ejes.validarY(direccion, position, -1, 10) 
 	}
 	
 	method desplazarse(_direccion) {

@@ -15,7 +15,7 @@ class Mortal {
 	method solido() = true
 
 	method puedoPasar(direccion) {
-		return self.noHaySolidosAdelante(direccion) and ejes.validarEjeX(direccion, position, 0, 14 ) and ejes.validarEjeY(direccion, position, 0, 9)
+		return self.noHaySolidosAdelante(direccion) and ejes.validarX(direccion, position, 0, 14 ) and ejes.validarY(direccion, position, 0, 9)
 	}
 
 	method noHaySolidosAdelante(direccion) {
@@ -66,7 +66,7 @@ class Mortal {
 	}
 
 	method atacar() {
-		sprite.deAccion(self, 125, self.cambiarImagen("_espada"), self.cambiarImagen(""))
+		self.spriteDeAtaque()
 		if (!self.estaEnfrente().isEmpty()) {
 			self.estaEnfrente().first().recibirDanio(self.danio())
 		}
@@ -77,6 +77,8 @@ class Mortal {
 	method danio()
 
 	method entregarRecompensa()
+	
+	method spriteDeAtaque()
 
 }
 
@@ -326,8 +328,8 @@ object mago inherits Heroe {
 		crear.hechizo(self).serInvocado(25, self.danioDeHechizo(), "mago_grande", ultimaDireccion)
 	}
 	override method atacar() {
-		sprite.deAccion(self, 125, self.cambiarImagen("_barita"), self.cambiarImagen(""))
-		crear.hechizo(self).serInvocado(50, self.danio(), "mago_chiquito", ultimaDireccion)
+		self.spriteDeAtaque()		
+		crear.hechizo(self).serInvocado(5, 100000, "mago_chiquito", ultimaDireccion) // 50 self.danio()
 	}
 	
 	method verificarLanzarHechizo() {
@@ -347,6 +349,10 @@ object mago inherits Heroe {
 	}
 	method danioDeHechizo() {
 		return self.danio() * nivel
+	}
+	
+	override method spriteDeAtaque(){
+		sprite.deAccion(self, 125, self.cambiarImagen("_barita"), self.cambiarImagen(""))
 	}
 }
 
@@ -368,6 +374,10 @@ object guerrero inherits Heroe {
 	
 	override method hechizo() {
 		game.say(self, "Los Guerreros no necesitamos hechizos")
+	}
+	
+	override method spriteDeAtaque() {
+		sprite.deAccion(self, 125, self.cambiarImagen("_espada"), self.cambiarImagen(""))
 	}
 }
 
