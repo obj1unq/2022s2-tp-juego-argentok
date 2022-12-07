@@ -69,7 +69,7 @@ object construccionBanco inherits Construccion (image = "Banco.png", position = 
 
 
 	override method consultar(serVivo) {
-		game.say(self, "Tenes " + serVivo.oro() + " monedas de oro")
+		game.say(self, "Tenes " + boveda + " monedas de oro")
 	}
 
 	// SE DEPOSITA/RETIRA TODO EL ORO
