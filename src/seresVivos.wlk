@@ -68,7 +68,7 @@ class Mortal {
 		}
 	}
 
-	method mover(direccion) // ver por que existe esto
+	method mover(direccion) 
 
 	method danio()
 
